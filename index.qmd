@@ -1,14 +1,33 @@
-# Quarto Based OTTR Course {.unnumbered}
+---
+title: "Bioconductor for Genomics"
+format: html
+---
 
-This course is part of a series of courses for the [Informatics Technology for Cancer Research (ITCR)](https://itcr.cancer.gov/) called the Informatics Technology for Cancer Research Education Resource. This material was created by the ITCR Training Network (ITN)  which is a collaborative effort of researchers around the United States to support cancer informatics and data science training through resources, technology, and events. This initiative is funded by the following grant:  [National Cancer Institute (NCI)](https://www.cancer.gov/)  UE5 CA254170. Our courses feature tools developed by ITCR Investigators and make it easier for principal investigators, scientists, and analysts to integrate cancer informatics into their workflows. Please see our website at [www.itcrtraining.org](www.itcrtraining.org) for more information.
+This course will introduce you to the basic data structures and genomic data analysis in Bioconductor. Specifically, we will focus on the basics of RNAseq analysis, including differential expression, annotation, and gene set analysis. We will also focus on loading data and metadata into data structures such as `SummarizedExperiment`. By the end of this course, you should be familiar with a basic RNAseq analysis workflow utilizing RNAseq count data. 
 
+Please note that this course requires the Intro to R course as a prerequisite, or the equivalent course. Please note that this course does not cover RNAseq workflows such as MultiQC and alignment. 
 
-## Available Course Formats
+## Learning Objectives
 
-This course is available in multiple formats which allows you to take it in the way that best suites your needs. You can take it for certificate which can be for free or fee.
+- **Explain** and **Utilize** Bioconductor data structures such as `SummarizedExperiment` to integrate metadata and assay data in your analysis
+- **Explore** and clean a RNAseq dataset, including QC analysis
+- **Utilize** Differential Expression analysis on an RNAseq dataset using Bioconductor Packages
+- **Identify** and **Annotate** Gene Sets for downstream analysis
+- **Load** data from RNAseq experiments into Bioconductor
 
-- The material for this course can be viewed without login requirement on this [website](https://www.ottrproject.org/). This format might be most appropriate for you if you rely on screen-reader technology.
-- This course can be taken for [free certification through Leanpub](https://leanpub.com/).
-- This course can be taken on [Coursera for certification here](https://www.coursera.org/) (but it is not available for free on Coursera).
-- Our courses are open source, you can find the [source material for this course on GitHub](https://github.com/fhdsl/OTTR_Quarto).
+## Course Outline
 
+|Week|Topic|Video|Office Hours|
+|----|-----|-----|------------|
+|Week 1|Experimental Design / Bioconductor Data Structures / What you need to know about S4 classes| | |
+|Week 2|SummarizedExperiment / Assay Data / Metadata / Subsetting / QC| | |
+|Week 3| DESeq / Differential Expression | | |
+|Week 4| Gene sets and annotation| | |
+|Week 5| Installing Bioconductor Packages / Loading Data into Bioconductor Data Structures| | |
+|Week 6| Wrap up / Running Bioconductor at FH / Using fHR| | |
+
+## Acknowledgements
+
+This course is derived from the following sources:
+
+- [RNA-seqn analysis with Bioconductor](https://github.com/carpentries-incubator/bioc-rnaseq/tree/main)

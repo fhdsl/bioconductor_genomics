@@ -1,27 +1,25 @@
 project:
-  type: book
   output-dir: docs
+  render:
+    - "*.qmd"
+    - "!episodes/"
 
 book:
-  title: Quarto Based OTTR Course
+  title: Intro to SQL
   favicon: img/favicon.ico
-  bread-crumbs: false
+  bread-crumbs: true
 
   page-navigation: true
   search: true
-  repo-url: https://github.com/fhdsl/OTTR_Quarto
+  repo-url: https://github.com/fhdsl/bioconductor_for_genomics
   repo-actions: [edit] 
-  issue-url: https://docs.google.com/forms/d/e/1FAIpQLSfBvVELBg8lcynKj0TrzMlov1zil-Sbkh9VhMKRcSpeo1xo6g/viewform
-  
+
   chapters:
     - index.qmd
-    - intro.qmd
-    - part: "First Section"
-      chapters:
-        - first-section-new-chapter.qmd
-    - conclusion.qmd
-    - references.qmd
-  
+    - 00_concepts.qmd
+    - 01_introduction.qmd
+    - 02_week2.qmd
+
   sidebar: 
     logo: "img/logo.png"
     logo-href: "https://hutchdatascience.org/"
@@ -37,13 +35,13 @@ book:
       All other materials <a href= "https://creativecommons.org/licenses/by/4.0/" style="color: #fff;"> CC-BY </a> unless noted otherwise.
     right: 
       - icon: github
-        href: https://github.com/
+        href: https://github.com/fhdsl/intro_to_sql
       - icon: slack
         href: https://fhdata.slack.com/join/signup#/domain-signup
 
       
 
-bibliography: references.bib
+#bibliography: references.bib
 
 format:
   html:

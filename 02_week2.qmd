@@ -1,0 +1,7 @@
+---
+title: "02_week2"
+format: html
+---
+
+## Making our `DESeq2` Object
+
