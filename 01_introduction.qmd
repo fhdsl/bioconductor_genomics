@@ -1,5 +1,5 @@
 ---
-title: "Introduction: Experimental Design and S4 Objects"
+title: "Introduction: Bioconductor S4 Objects / `SummarizedExperiment`"
 format: html
 ---
 
@@ -27,8 +27,6 @@ In order to do this, we need *phenotype information* about the samples in our ex
 - conditions (Tissue type)
 - possible confounders (gender, time)
 
-
-
 ## Experimental Design of RNAseq Experiments
 
 When we design our RNAseq experiment, we want to be able to:
@@ -38,6 +36,8 @@ When we design our RNAseq experiment, we want to be able to:
 - Addressing **batch effects**
 
 The important thing to note is that if you're unsure about the experimental design, *contact the Bioinformatics Core*. They can help you design the experiment based on what samples you have.
+
+We'll talk much more about experimental design next week.
 
 ## What is Bioconductor?
 
@@ -60,12 +60,12 @@ whole.
 
 ## S4 Bioconductor Objects
 
-At the heart of Bioconductor are the [S4 Classes](https://bioconductor.org/help/course-materials/2017/Zurich/S4-classes-and-methods.html). You can think of these data structures as ways to package together:
+At the heart of Bioconductor are the [S4 Objects](https://bioconductor.org/help/course-materials/2017/Zurich/S4-classes-and-methods.html). You can think of these data structures as ways to package together:
 
 - Assay Data, such as an RNAseq count matrix
 - Metadata (data about the experiment), including Experimental Design
 
-Part of why Bioconductor works is this data packaging. We can write routines to act on the data in these S4 Objects as part of a processing *workflow*. As long as we output a Bioconductor S4 object, our routines can work as part of a pipeline.
+Part of why Bioconductor works is this data packaging. We can write routines to act on the data in these S4 Objects as part of a processing *workflow*. As long as we output a Bioconductor S4 object, our routines can work as part of a pipeline. These routines are called `methods()`, and may come from a variety of packages.
 
 You can think of the Bioconductor S4 objects as taking the place of `data.frame`s in `dplyr` pipelines - they are the common format that all of the Bioconductor methods work on. They allow Bioconductor methods to be `interoperable`.
 
@@ -89,24 +89,34 @@ The `checkDimnames` argument is critical. In order to do any work with an experi
 
 ## `SummarizedExperiment`
 
+The following diagram shows how the different *data slots* in the `SummarizedExperiment` relate to each other.
+
 ![](images/SE.svg)
 
 
 We'll take a look at data in a `SummarizedExperiment` object:
 
 ```{r}
-suppressPackageStartupMessages({
+#| warning: false
+#| message: false
 library(SummarizedExperiment)
-})
-  
+
 GSE96870 <- readRDS("data/GSE96870_se.rds")
 GSE96870
 ```
+
+In some ways, the `SummarizedExperiment` object is like a `data.frame`, but with extra metadata. For example, our object has column names, which correspond to sample identifiers:
+
 ```{r}
 colnames(GSE96870)
-
 ```
 
+And row names:
+
+```{r}
+rownames(GSE96870)[1:30]
+```
+So far, so good. 
 
 ## Assay Data
 
@@ -117,6 +127,8 @@ Each element of the Assay data list contains a `data.frame` with the following c
 - **Rows**: correspond to Gene Locus or possibly Transcripts
 - **Columns**: correspond to the samples used in your experiment.
 - **Values**: correspond to the actual data. In the case of RNAseq, these are the *counts* that map to each row.
+
+You can extract the assay data using the `assay()` method:
 
 ```{r}
 assay_data <- assay(GSE96870)
@@ -165,20 +177,38 @@ The `SummarizedExperiment` object does not act like the `data.frame`/`tibble` we
 
 The `tidySummarizedExperiment` package will be helpful for us to understand and visualize the `SummarizedExperiment` package. Once we do that, our `SummarizedExperiment` object will act more like a `data.frame`. 
 
-Basically, the output looks like a long data frame that combines both the assay and metadata. This format is helpful in doing more 
+Basically, the output looks like a long data frame that combines both the assay and metadata. This format is helpful in doing more work with the `tidyverse`:
 
 ```{r}
 library(tidySummarizedExperiment)
 GSE96870
 ```
 
+### Filtering Data
+
+We can use `dplyr` to filter the data using the `tidySummarizedExperiment` package:
+
+```{r}
+GSE96870 |>
+  filter(sex == "Female")
+```
+
 ### Getting Counts across the experiment
 
+We can produce summaries of the counts of each sample library:
 
 ```{r}
 GSE96870 |>
     group_by(.sample) |>
     summarise(total_counts=sum(counts))
+```
+
+### Try it out
+
+Try summarizing the `total_counts` by `sex` or by `infection`:
+
+```{r}
+GSE96870 
 ```
 
 ### Plotting 
@@ -206,16 +236,16 @@ GSE96870 |>
 ## Take Home Messages
 
 - We package multiple parts of the data (assay data and metadata) into a `SummarizedExperiment` object
-  - Columns correspond to samples, Row corresponds to gene locus or transcripts
+  - **Columns** correspond to *samples*, **Rows** correspond to *gene locus* or *transcripts*
   - *Column names* of the assay data must match a column in the `colData`
   - *Experimental Design* variables are part of the `colData`
   - Rownames of the assay data must match the rowNames in the column data
 - The `SummarizedExperiment` object lets us subset by phenotype variables
 - `tidySummarizedExperiment` lets us interact with the `SummarizedExperiment` object as if it were a long data frame with both metadata and assay data together.
   - We can plot and subset the `SummarizedExperiment` object using our regular `tidyverse` tools (`ggplot2`, `dplyr`, etc.) once we load the `tidySummarizedExperiment` package.  
-  
+
+:::{.callout-note}  
 ## What about all of the other kinds of objects?
 
 Most of the other Bioconductor Data Structures derive from some variant of the `SummarizedExperiment`. They might add some functionality that is core to the package they belong to, such as `DEseq2`. This includes `seurat` objects for Single Cell sequencing.
-
-
+:::

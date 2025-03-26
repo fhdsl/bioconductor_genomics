@@ -5,7 +5,7 @@ project:
     - "!episodes/"
 
 book:
-  title: Intro to SQL
+  title: Bioconductor for Genomics
   favicon: img/favicon.ico
   bread-crumbs: true
 
@@ -24,6 +24,8 @@ book:
     logo: "img/logo.png"
     logo-href: "https://hutchdatascience.org/"
     foreground: "#1B365D"
+    style: docked
+    background: light
   
   page-footer:
     left: |

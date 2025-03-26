@@ -19,9 +19,10 @@ Please note that this course requires the Intro to R course as a prerequisite, o
 
 |Week|Topic|Video|Office Hours|
 |----|-----|-----|------------|
-|Week 1|Experimental Design / Bioconductor Data Structures / What you need to know about S4 classes| | |
-|Week 2|SummarizedExperiment / Assay Data / Metadata / Subsetting / QC| | |
-|Week 3| DESeq / Differential Expression | | |
+|Week 0| [Concepts of RNA sequencing](00_concepts.html) | | |
+|Week 1| [Bioconductor Data Structures / What you need to know about S4 classes / `SummarizedExperiment`](01_introduction.html)| | |
+|Week 2| Experimental Design / Assay Data / Metadata / Subsetting / QC| | |
+|Week 3| DESeq2 / Differential Expression | | |
 |Week 4| Gene sets and annotation| | |
 |Week 5| Installing Bioconductor Packages / Loading Data into Bioconductor Data Structures| | |
 |Week 6| Wrap up / Running Bioconductor at FH / Using fHR| | |
