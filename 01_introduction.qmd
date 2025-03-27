@@ -87,6 +87,14 @@ Each argument to the `SummarizedExperiment` constructor defines restrictions on 
 
 The `checkDimnames` argument is critical. In order to do any work with an experiment you need to map samples to `colNames` (the experimental matrix). For example, to calculate differential expression between samples, you need to specify the different groups to compare and which samples map to which groups. Thus, the column names in the AssayData must be identical to the row names in `colData`.
 
+:::{.callout}
+## If it isn't in `colData`, it doesn't exist
+
+Keep in mind that your `colData` must be as complete as possible. Why? The short answer is that if there isn't a row for your sample in colData, then it basically doesn't exist for Bioconductor methods.
+
+So make sure your `colData` contains sample names for all your samples.
+:::
+
 ## `SummarizedExperiment`
 
 The following diagram shows how the different *data slots* in the `SummarizedExperiment` relate to each other.
@@ -173,7 +181,7 @@ This tight interaction of metadata and assay data is critical when we start doin
 
 ## `tidySummarizedExperiment`
 
-The `SummarizedExperiment` object does not act like the `data.frame`/`tibble` we expect, especially in filtering and subsetting.
+The `SummarizedExperiment` object does not act like the normal `data.frame`/`tibble` we expect, especially in filtering and subsetting.
 
 The `tidySummarizedExperiment` package will be helpful for us to understand and visualize the `SummarizedExperiment` package. Once we do that, our `SummarizedExperiment` object will act more like a `data.frame`. 
 

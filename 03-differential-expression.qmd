@@ -1,0 +1,60 @@
+---
+title: "Differential Expression"
+---
+
+Last week we talked about Experimental Design. This week we're going to apply that knowledge to finding *differential expressed* genes or - finding those genes or transcripts that are expressed differently between groups in our experimental design.
+
+That is, in general, are there genes for the samples in group A that have different counts than the samples in group B?
+
+We'll Explore the `edgeR` package as one method to find differentially expressed genes. There is also the `DESeq2` package. 
+
+:::{.callout-note}
+## Am I doing this right?
+
+If you are new to differential expression, it is worth talking with the Bioinformatics Core about your experimental design and how to set up your model matrix and contrasts.
+
+You did consult with them about the experimental design of your experiment before you sent the samples to be processed?
+:::
+
+## Count Data is Discrete Data
+
+What does it mean when we say a set of samples is differentially expressed when we are using count data?
+
+## What groups are we going to compare?
+
+
+## Making a `DEGlist` Object
+
+We can make a `DEGlist` object from our summarized experiment
+
+## Commands Used in `edgeR` package
+
+
+
+## Data Filtering in `edgeR`
+
+
+
+## Data Normalization in `edgeR`
+
+
+
+## Two group comparison
+
+
+
+## Multiple Groups
+
+In general, we want to use a Generalized Linear Model to discover differences between groups.
+
+```{mermaid}
+graph TD
+  A["ANOVA\n(across all groups)"] --> B["Contrasts\n(between groups)"]
+```
+
+One thing to keep in mind is that unless we know which group comparisons we want to focus on, we first have to do the ANOVA (analysis of variance) test to see if there are *any* differences among all groups.
+
+Only then can we move on to individual comparisons and discover differentially expressed genes for each group comparison. 
+
+## Multiple Groups, Multiple Factors
+

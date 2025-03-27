@@ -1,5 +1,6 @@
 ---
 title: "RNAseq Concepts"
+format: html
 ---
 
 This section covers some basics of the RNA-seq process, including how we go from making an RNA-seq library to making a count matrix.
@@ -98,9 +99,13 @@ graph TD
 # Finding the reference sequences
 
 In order to quantify abundances of known genes or transcripts from RNA-seq data, we need a reference database informing us of the sequence of these features, to which we can then compare our reads. 
+
 This information can be obtained from different online repositories. 
+
 It is highly recommended to choose one of these for a particular project, and not mix information from different sources. 
+
 Depending on the quantification tool you have chosen, you will need different types of reference information. 
+
 If you are aligning your reads to the genome and investigating the overlap with known annotated features, you will need the full genome sequence (provided in a fasta file) and a file that tells you the genomic location of each annotated feature (typically provided in a gtf file). 
 If you are mapping your reads to the transcriptome, you will instead need a file with the sequence of each transcript (again, a fasta file). 
 

@@ -1,8 +1,5 @@
 project:
   output-dir: docs
-  render:
-    - "*.qmd"
-    - "!episodes/"
 
 book:
   title: Bioconductor for Genomics
@@ -24,8 +21,6 @@ book:
     logo: "img/logo.png"
     logo-href: "https://hutchdatascience.org/"
     foreground: "#1B365D"
-    style: docked
-    background: light
   
   page-footer:
     left: |
@@ -53,7 +48,6 @@ format:
     linkcolor: "#00C1D5"
     mainfont: "Karla"
     
-    sidebar: true
     toc: true
   
     code-link: true
