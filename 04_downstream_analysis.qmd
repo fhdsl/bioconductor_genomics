@@ -1,0 +1,9 @@
+---
+title: "Annotation and Downstream Analysis"
+---
+
+Now that we have our sets of differentially expressed genes, we can now do the following:
+
+- Annotate the gene set to discover functional groupings
+- Cluster and analyze the clusters in a heatmap
+- Annotate our gene sets on pathways or networks

@@ -1,6 +1,8 @@
 ---
 title: "Introduction: Bioconductor S4 Objects / `SummarizedExperiment`"
-format: html
+format: 
+  html:
+    df-print: paged
 ---
 
 ## Learning Objectives
@@ -164,7 +166,7 @@ In our experimental design, we have males and females, timepoints, and different
 :::{.callout-note}
 ## Keep your `SummarizedExperiment` whole
 
-It might be tempting to extract the assay data and the metadata and work with them separately. But as we'll see in the following section, these two slots work together.
+It might be tempting to extract the assay data and the metadata and work with them separately. But as we'll see in the following section, these two slots work together and enable all sorts of analysis.
 :::
 
 ## Subsetting `SummarizedExperiment`
@@ -185,7 +187,7 @@ The `SummarizedExperiment` object does not act like the normal `data.frame`/`tib
 
 The `tidySummarizedExperiment` package will be helpful for us to understand and visualize the `SummarizedExperiment` package. Once we do that, our `SummarizedExperiment` object will act more like a `data.frame`. 
 
-Basically, the output looks like a long data frame that combines both the assay and metadata. This format is helpful in doing more work with the `tidyverse`:
+Basically, `tidySummarizedExperiment` treats the data as a long data frame that combines both the assay and metadata. This format is helpful in doing more work with the `tidyverse`:
 
 ```{r}
 library(tidySummarizedExperiment)
