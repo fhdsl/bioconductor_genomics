@@ -20,6 +20,13 @@ You did consult with them about the experimental design of your experiment befor
 
 What does it mean when we say a set of samples is differentially expressed when we are using count data?
 
+
+:::{.callout-note}
+## What about Single Cell Data?
+
+Single cell data actually uses a similar approach to discover differentially expressed genes: the *pseudo-bulk* approach. That is, counts for like cells are treated like a single bulk RNA sample. Then the pseudo-bulk samples can be tested for differential expression much like we're going to do.
+:::
+
 ## What groups are we going to compare?
 
 
