@@ -3,5 +3,90 @@ title: "02_week2"
 format: html
 ---
 
+## Experimental Design of RNAseq Experiments
+
+
+A quote from (Bacher and Kendziorski 2016) explains this clearly: “Generally speaking, a well-designed experiment is one that is sufficiently powered and one in which technical artifacts and biological features that may systematically affect measurements are balanced, randomized or controlled in some other way in order to minimize opportunities for multiple explanations for the effect(s) under study.”
+
+
+## Background: Law of large numbers
+
+Define: population, sample, population mean, sample mean, sample variance, effect size.
+
+When the sample size is large, then the sample mean approaches the population mean and the sample variance decreases. This is called the law of large numbers.
+
+The more samples, the better, one might say. But your samples may also relate to variables that may have an impact on the outcome you want to measure.
+
+- Experimental conditions that relate to your scientific question of interest, such as: case vs. control, time series, etc.
+
+- The model system used
+
+- Any relevant metadata, such as age, sex, subtype
+
+- Batch effects: the date of the experiment conducted, the person who performed the experiment, the reagents used
+
+- The sequencing technology
+
+- The amount of sequencing the sample received (more on this later in Normalization)
+
+- What else?
+
+This means you need to think carefully what the sample mean and variance is telling you: is it the mean and variability of your experimental condition, or is it the mean and variability of a different variable? (It doesn't have to be exclusive one or the other, as you will see shortly.)
+
+Would you rather: Sequence five replicates on the same cell line, or sequence one replicate each on five different cell lines?
+
+What would the sample variance of each experiment tell you?
+
+Define: biological, technical replicates
+
+Would you rather: Sequence five different samples at 10x coverage, or one sample at 50x coverage?
+
+What would the sample variance of each experiment tell you?
+
+
+
+## Confounding
+
+A confounded RNA-Seq experiment is one where you cannot distinguish the separate effects of two different sources of variation in the data.
+
+Example: We know that sex has large effects on gene expression, and if all of our control mice were female and all of the treatment mice were male, then our treatment effect would be confounded by sex. We could not differentiate the effect of treatment from the effect of sex.
+
+Example: We know that batch effect has large effects on gene expression, and if all of our control samples were processed by an experienced researcher on old reagents, and our treatment samples were processed by an trainee researcher on new reagents, our treatment effect would be confounded by (multiple!) batch effects.
+
+
+Solutions: 
+
+- Ensure that the samples in all experimental conditions have the same values for the confounding variable. 
+
+- If not possible, make sure that all experimental conditions have a similar amount of variability of the confounding variable.
+
+  - Save this information; we can eliminate these variability in the modeling process. 
+
+ May also want to consider:
+ 
+ - Unobserved confounders
+ 
+ - Propensity score matching 
+
+
+## Common design strategies
+
+### Completely randomized
+
+### Randomized block design
+
+
+
 ## Making our `DESeq2` Object
 
+```{r}
+#| warning: false
+#| message: false
+library(SummarizedExperiment)
+
+GSE96870 <- readRDS("data/GSE96870_se.rds")
+GSE96870
+```
+
+
+## Subsetting, QC
