@@ -5,9 +5,7 @@ format: html
 
 ## Experimental Design of RNAseq Experiments
 
-
-A quote from (Bacher and Kendziorski 2016) explains this clearly: “Generally speaking, a well-designed experiment is one that is sufficiently powered and one in which technical artifacts and biological features that may systematically affect measurements are balanced, randomized or controlled in some other way in order to minimize opportunities for multiple explanations for the effect(s) under study.”
-
+A quote from (Bacher and Kendziorski 2016) explains this clearly: "Generally speaking, a well-designed experiment is one that is sufficiently powered and one in which technical artifacts and biological features that may systematically affect measurements are balanced, randomized or controlled in some other way in order to minimize opportunities for multiple explanations for the effect(s) under study."
 
 ## Background: Law of large numbers
 
@@ -17,19 +15,17 @@ When the sample size is large, then the sample mean approaches the population me
 
 The more samples, the better, one might say. But your samples may also relate to variables that may have an impact on the outcome you want to measure.
 
-- Experimental conditions that relate to your scientific question of interest, such as: case vs. control, time series, etc.
+-   Experimental conditions that relate to your scientific question of interest, such as case vs. control. In differential gene expression analysis, your experimental design should vary at only a single factor of interest.
 
-- The model system used
+-   Any relevant metadata, such as age, sex, subtype
 
-- Any relevant metadata, such as age, sex, subtype
+-   Batch effects: the date of the experiment conducted, the person who performed the experiment, the reagents used
 
-- Batch effects: the date of the experiment conducted, the person who performed the experiment, the reagents used
+-   The sequencing technology
 
-- The sequencing technology
+-   The amount of sequencing the sample received (more on this later in Normalization)
 
-- The amount of sequencing the sample received (more on this later in Normalization)
-
-- What else?
+-   What else?
 
 This means you need to think carefully what the sample mean and variance is telling you: is it the mean and variability of your experimental condition, or is it the mean and variability of a different variable? (It doesn't have to be exclusive one or the other, as you will see shortly.)
 
@@ -43,8 +39,6 @@ Would you rather: Sequence five different samples at 10x coverage, or one sample
 
 What would the sample variance of each experiment tell you?
 
-
-
 ## Confounding
 
 A confounded RNA-Seq experiment is one where you cannot distinguish the separate effects of two different sources of variation in the data.
@@ -53,29 +47,19 @@ Example: We know that sex has large effects on gene expression, and if all of ou
 
 Example: We know that batch effect has large effects on gene expression, and if all of our control samples were processed by an experienced researcher on old reagents, and our treatment samples were processed by an trainee researcher on new reagents, our treatment effect would be confounded by (multiple!) batch effects.
 
+Solutions:
 
-Solutions: 
+-   Ensure that the samples in all experimental conditions have the same values for the confounding variable.
 
-- Ensure that the samples in all experimental conditions have the same values for the confounding variable. 
+-   If not possible, make sure that all experimental conditions have a similar amount of variability of the confounding variable. (Randomized blocking)
 
-- If not possible, make sure that all experimental conditions have a similar amount of variability of the confounding variable.
+    -   Save this information; we can eliminate these variability in the modeling process.
 
-  - Save this information; we can eliminate these variability in the modeling process. 
+May also want to consider:
 
- May also want to consider:
- 
- - Unobserved confounders
- 
- - Propensity score matching 
+-   Unobserved confounders
 
-
-## Common design strategies
-
-### Completely randomized
-
-### Randomized block design
-
-
+-   Propensity score matching
 
 ## Making our `DESeq2` Object
 
@@ -88,5 +72,8 @@ GSE96870 <- readRDS("data/GSE96870_se.rds")
 GSE96870
 ```
 
-
 ## Subsetting, QC
+
+## Did you double dip?
+
+are the demarcation of groups I\'m comparing is independent of my molecular measurements?
