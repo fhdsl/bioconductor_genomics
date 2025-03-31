@@ -5,7 +5,7 @@ format: html
 
 ## Experimental Design of RNAseq Experiments
 
-A quote from (Bacher and Kendziorski 2016) explains this clearly: "Generally speaking, a well-designed experiment is one that is sufficiently powered and one in which technical artifacts and biological features that may systematically affect measurements are balanced, randomized or controlled in some other way in order to minimize opportunities for multiple explanations for the effect(s) under study."
+A quote from ([Bacher and Kendziorski 2016](https://web.stanford.edu/class/bios221/book/16-chap.html#ref-Bacher:GB:2016)) explains this clearly: "Generally speaking, a well-designed experiment is one that is sufficiently powered and one in which technical artifacts and biological features that may systematically affect measurements are balanced, randomized or controlled in some other way in order to minimize opportunities for multiple explanations for the effect(s) under study."
 
 ## Background: Law of large numbers
 
@@ -15,11 +15,11 @@ When the sample size is large, then the sample mean approaches the population me
 
 The more samples, the better, one might say. But your samples may also relate to variables that may have an impact on the outcome you want to measure.
 
--   Experimental conditions that relate to your scientific question of interest, such as case vs. control. In differential gene expression analysis, your experimental design should vary at only a single factor of interest.
+-   Experimental conditions that relate to your scientific question of interest, such as case vs. control. In the most basic form of differential gene expression analysis, your experimental design should vary at only a single factor of interest.
 
 -   Any relevant metadata, such as age, sex, subtype
 
--   Batch effects: the date of the experiment conducted, the person who performed the experiment, the reagents used
+-   Batch effects: the date of the experiment conducted, the person who performed the experiment, the reagents used, etc.
 
 -   The sequencing technology
 
@@ -61,7 +61,28 @@ May also want to consider:
 
 -   Propensity score matching
 
-## Making our `DESeq2` Object
+## How do I know how many samples to use?
+
+Define "power", effect size, fold change.
+
+Reference to some packages for power calculations
+
+## Design matrix
+
+If you are comparing between groups, the simple way is to encode your experimental design the "group" column in colData of your SummarizedExperiment object.
+
+However, if you have more complex designs, such as covariates to control in a blocking design, you will need to create a design matrix:
+
+```{r}
+group <- factor(GSE96870$group)
+sex <- factor(GSE96870$sex)
+
+design <- model.matrix(~group+sex)
+```
+
+Warning: Did you double dip? Are the demarcation of groups I\'m comparing is independent of my molecular measurements? (https://stat.uw.edu/seminars/double-dipping-problems-and-solutions-application-single-cell-rna-sequencing-data, https://anna-neufeld.github.io/datathin/)
+
+## Filtering out low counts
 
 ```{r}
 #| warning: false
@@ -69,11 +90,87 @@ May also want to consider:
 library(SummarizedExperiment)
 
 GSE96870 <- readRDS("data/GSE96870_se.rds")
-GSE96870
 ```
 
-## Subsetting, QC
+The `filterByExp` function keeps rows that have worthwhile counts in a minumum number
+of samples (two samples in this case because the smallest group size is two). The function
+accesses the group factor contained in y in order to compute the minimum group size, but
+the filtering is performed independently of which sample belongs to which group so that no
+bias is introduced.
 
-## Did you double dip?
+The filtering should be based on the grouping factors or treatment factors that will be involved
+in the differential expression teststested for, rather than on blocking variables that are not
+of scientific interest in themselves.
 
-are the demarcation of groups I\'m comparing is independent of my molecular measurements?
+```{r}
+library(edgeR)
+GSE96870$group = GSE96870$Group
+
+keep = filterByExpr(GSE96870)
+
+GSE96870_kept = GSE96870[keep ,]
+GSE96870_notkept = GSE96870[!keep ,]
+
+GSE96870_kept_summary = GSE96870_kept %>% group_by(.feature) %>% summarise(median_count = median(counts),
+                                                  mean_count = mean(counts))
+
+summary(GSE96870_kept_summary$median_count)
+
+GSE96870_notkept_summary = GSE96870_notkept %>% group_by(.feature) %>% summarise(median_count = median(counts),
+                                                  mean_count = mean(counts))
+
+summary(GSE96870_notkept_summary$median_count)
+
+```
+
+## Dimension Reduction as EDA
+
+```{r}
+plotMDS(GSE96870_kept)
+```
+
+## 
+
+## Normalization 
+
+"edgeR is concerned with differential expression analysis rather than with the quantification of
+expression levels. It is concerned with relative changes in expression levels between conditions,
+but not directly with estimating absolute expression levels. This greatly simplifies the technical
+influences that need to be taken into account, because any technical factor that is unrelated
+to the experimental conditions should cancel out of any differential expression analysis. For
+example, read counts can generally be expected to be proportional to length as well as to
+expression for any transcript, but edgeR does not generally need to adjust for gene length
+because gene length has the same relative influence on the read counts for each RNA sample.
+For this reason, normalization issues arise only to the extent that technical factors have
+sample-specific effects"
+
+Sample-specific effects addressed
+
+-   Sequencing depth
+
+-   Effective library sizes (also known as RNA composition)
+
+    -    RNA-seq provides a measure of the relative abundance of each gene in each RNA sample, but does not provide any measure of the total RNA output on a per-cell basis - it is a relative measurement. That is, the proportion of reads attributed to a given gene in a library depends on the expression properties of the whole sample rather than just the expression level of that gene.
+
+    -   Then, if a small proportion of highly expressedgenes consume a substantial proportion of the total library size for a particular sample, this will cause the remaining genes to be under-sampled for that sample, confounding DE analysis. The `normLibSizes` function normalizes the library sizes in such a way to minimize the log-fold changes between the samples for most genes.
+
+Other effects that don't vary between sample-sample-length include:
+
+-   Gene length
+
+-   GC content\*
+
+Other ways of normalization out there can be [found here](https://hbctraining.github.io/Intro-to-DGE/lessons/02_DGE_count_normalization.html).
+
+```{r}
+result = normLibSizes(GSE96870_kept)
+
+#result2 <- estimateDisp(result)
+#plotBCV(result2)
+#et <- exactTest(result2, pair=c("Female_Day0", "Male_Day0"))
+#topTags(et)
+```
+
+Notice that output here is a "DGEList" object, instead of "SummarizedExperiment".
+
+## 
