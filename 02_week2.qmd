@@ -65,7 +65,32 @@ May also want to consider:
 
 Define "power", effect size, fold change.
 
-Reference to some packages for power calculations
+Reference to some packages for power calculations, such as [PROPER](https://bioconductor.org/packages/release/bioc/html/PROPER.html). Takes consideration of:
+
+-   Number of genes measured
+
+-   Number of genes significant
+
+-   Effect size of significant genes
+
+-   Controlled p-value cutoff
+
+-   Default datasets to simulate
+
+-   Number of samples
+
+```{r}
+library(PROPER)
+sim.opts.Cheung = RNAseq.SimOptions.2grp(ngenes = 20000, p.DE=0.05, lOD="cheung", lBaselineExpr="cheung")
+simres = runSims(Nreps = c(3, 5, 7, 10), sim.opts=sim.opts.Cheung, DEmethod="edgeR", nsims=5)
+powers = comparePower(simres, alpha.type="fdr", alpha.nominal=0.1, stratify.by="expr", delta=0.5)
+summaryPower(powers)
+plotPower(powers)
+```
+
+This suggests that you get more power out of more samples, rather than sequencing.
+
+The most rigorous power benchmarks are to use controlled labatory experiments, with many samples and sequencing, and then downsample.
 
 ## Design matrix
 
