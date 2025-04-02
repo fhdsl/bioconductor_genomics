@@ -3,5 +3,239 @@ title: "02_week2"
 format: html
 ---
 
-## Making our `DESeq2` Object
+## Learning Objectives
 
+-   **Explain** the the relationship between population mean vs. sample mean, and sample varaince as the sample size increase
+-   **Explain** the basics of experimental design, confounding, batch effects, and when to consult the sequencing core
+-   **Distinguish** between *technical* and *biological* replicates and what kinds of results to expect from each
+-   **Construct** a design matrix that reflects the study's experimental design
+-   **Analyze** the process of filtering out genes with low read counts
+
+## Experimental Design of RNAseq Experiments
+
+Today, we will look how experimental design plays a large role in the way we analyze RNA-seq data. Experimental design seeks to make sense data variation via careful design of conditions.
+
+A quote from ([Bacher and Kendziorski 2016](https://web.stanford.edu/class/bios221/book/16-chap.html#ref-Bacher:GB:2016)) explains this clearly: "Generally speaking, a well-designed experiment is one that is sufficiently powered and one in which technical artifacts and biological features that may systematically affect measurements are balanced, randomized or controlled in some other way in order to minimize opportunities for multiple explanations for the effect(s) under study."
+
+If you are not familiar with some of these technical terms in the quote, we will go over them shortly.
+
+## Background: Law of large numbers
+
+### Single, randomized group
+
+We will first start with looking at the most simple experimental design: a single, randomized group. Once we are comfortable with this, then we will return to a two group comparision in classic differential gene expression.
+
+When we run experiments, we are usually analyzing a subset of the population that we are trying to describe, called a sample. Let's define them clearly:
+
+**Population:** The entire collection of individual units that a researcher is interested to study.
+
+**Sample:** A smaller collection of individual units that the researcher has selected to study.
+
+When we carry out our experiment, we perform some form of measurement on our samples, such as RNA-seq which leads to gene-level quantification. Then, it is common to look at the mean and varianceof our measurements to summarize our samples. This **sample mean** and **sample variance** are our best guess at the **population mean** and **population variance**.
+
+There is a crucial relationship between samples, populations, and sample size: As the sample size gets larger, then the sample mean approaches the population mean and the sample variance approaches the population variance. This is called the Law of Large Numbers.
+
+Example: looking at gene lengths
+
+### Two-group comparisons
+
+In classical differntial gene expression, you are often conducting a two-group comparison between case and control. Our case samples arise from the case population, and our control samples arise from the control population. When we look at the measurements, we look at the *difference* of sample mean betewen case and controls for each gene, which is on a log-transformed scale called **log-fold change**. As the sample size gets larger, our sample log-fold change for each gene gets closer to the population log-fold change for each gene. Similarly, the sample variance for each gene from case and control groups gets closer to their respective population variance.
+
+By these properties, it is obvious that the more samples, the better, one might say. But **your choice of samples may also relate to variables that may have an impact on the outcome you want to measure**.
+
+-   Experimental conditions that relate to your scientific question of interest, such as case vs. control.
+
+-   Any relevant metadata, such as age, sex, subtype
+
+-   Batch effects: the date of the experiment conducted, the person who performed the experiment, the reagents used, etc.
+
+-   The sequencing technology
+
+-   The amount of sequencing the sample received (more on this later in Normalization)
+
+-   What else?
+
+This means you need to think carefully what the sample log-fold change and variances are telling you: does the sample log-fold change relate more to your experimental condition, or something else, such as batch effects?
+
+To illustrate the importance of these questions, let's consider a few questions (these are single, randomized group situations):
+
+Would you rather: Sequence five replicates on the same cell line, or sequence one replicate each on five different cell lines?
+
+What would the sample mean and sample variance of each experiment tell you?
+
+In light of this example, let's define two types of replicates:
+
+-   **Technical replicates:** use the same biological sample to repeat the technical or experimental steps in order to accurately measure technical variation.
+
+-   **Biological replicates** use different biological samples of the same condition to measure the biological variation between samples.
+
+Would you rather: Sequence five different samples at 10x coverage, or one sample at 50x coverage?
+
+What would the sample mean and sample variance of each experiment tell you?
+
+## Confounding
+
+We've seen above the importance of what to vary in your experimental design - are you trying to understand the biological variation of your samples, the technical variation of your instrument? Are you trying to understand the variability of a population, or trying to understand the variability of a single person?
+
+Once you have decided carefully what your experimental design is, you still need to pay attention to other variables that may impact the outcome you want to measure. A varaible can **confound** your experiment when you can't tell whether this variable or your experimental design is affecting the outcome.
+
+Example: We know that sex has large effects on gene expression, and if all of our control mice were female and all of the treatment mice were male, then our treatment effect would be confounded by the variable sex. We could not differentiate the effect of treatment from the effect of sex.
+
+Example: We know that batch effect has large effects on gene expression, and if all of our control samples were processed by an experienced researcher on old reagents, and our treatment samples were processed by an trainee researcher on new reagents, our treatment effect would be confounded by (multiple!) batch effects.
+
+Solutions:
+
+-   Ensure that the samples in all experimental conditions have the same values for the confounding variable - ie. all of the same sex, all of the same batch.
+
+-   If not possible, make sure that all experimental conditions have a similar amount of variability of the confounding variable - ie. the both case and control groups have a balance of males and females, and various batches.
+
+    -   Save this information; we can eliminate these variability in the modeling process.
+
+May also want to consider:
+
+-   Unobserved confounders
+
+-   Propensity score matching
+
+-   Are the demarcation of groups I\'m comparing is independent of my molecular measurements? (double dipping): https://stat.uw.edu/seminars/double-dipping-problems-and-solutions-application-single-cell-rna-sequencing-data, https://anna-neufeld.github.io/datathin/
+
+## How do I know how many samples to use?
+
+Define "power":
+
+Reference to some packages for power calculations, such as [PROPER](https://bioconductor.org/packages/release/bioc/html/PROPER.html). Takes consideration of:
+
+-   Number of samples
+
+-   Number of genes measured
+
+-   Number of genes significant
+
+-   Effect size of significant genes
+
+-   p-value cutoff in multiple testing
+
+-   Default datasets to simulate
+
+-   Definition of power in multiple testing
+
+    -   Probability we detect at least X% of genes that are truly different (at least some FC)
+
+```{r}
+library(PROPER)
+sim.opts.Cheung = RNAseq.SimOptions.2grp(ngenes = 20000, p.DE=0.05, lOD="cheung", lBaselineExpr="cheung")
+simres = runSims(Nreps = c(3, 5, 7, 10), sim.opts=sim.opts.Cheung, DEmethod="edgeR", nsims=5)
+powers = comparePower(simres, alpha.type="fdr", alpha.nominal=0.1, stratify.by="expr", delta=0.5)
+summaryPower(powers)
+plotPower(powers)
+```
+
+This suggests that you get more power out of more samples, rather than sequencing.
+
+The most rigorous power benchmarks are to use controlled labatory experiments, with many samples and sequencing, and then downsample.
+
+## Design matrix
+
+If you are comparing between groups, the simple way is to encode your experimental design the "group" column in colData of your SummarizedExperiment object.
+
+However, if you have more complex designs, such as covariates to control in a blocking design, you will need to create a design matrix:
+
+```{r}
+group <- factor(GSE96870$group)
+sex <- factor(GSE96870$sex)
+
+design <- model.matrix(~group+sex)
+```
+
+## Filtering out low counts
+
+```{r}
+#| warning: false
+#| message: false
+library(SummarizedExperiment)
+
+GSE96870 <- readRDS("data/GSE96870_se.rds")
+```
+
+The `filterByExp` function keeps rows that have worthwhile counts in a minumum number
+of samples (two samples in this case because the smallest group size is two). The function
+accesses the group factor contained in y in order to compute the minimum group size, but
+the filtering is performed independently of which sample belongs to which group so that no
+bias is introduced.
+
+The filtering should be based on the grouping factors or treatment factors that will be involved
+in the differential expression teststested for, rather than on blocking variables that are not
+of scientific interest in themselves.
+
+```{r}
+library(edgeR)
+GSE96870$group = GSE96870$Group
+
+keep = filterByExpr(GSE96870)
+
+GSE96870_kept = GSE96870[keep ,]
+GSE96870_notkept = GSE96870[!keep ,]
+
+GSE96870_kept_summary = GSE96870_kept %>% group_by(.feature) %>% summarise(median_count = median(counts),
+                                                  mean_count = mean(counts))
+
+summary(GSE96870_kept_summary$median_count)
+
+GSE96870_notkept_summary = GSE96870_notkept %>% group_by(.feature) %>% summarise(median_count = median(counts),
+                                                  mean_count = mean(counts))
+
+summary(GSE96870_notkept_summary$median_count)
+
+```
+
+## Dimension Reduction as EDA
+
+```{r}
+plotMDS(GSE96870_kept)
+```
+
+## 
+
+## Normalization - probably for week 3?
+
+"edgeR is concerned with differential expression analysis rather than with the quantification of
+expression levels. It is concerned with relative changes in expression levels between conditions,
+but not directly with estimating absolute expression levels. This greatly simplifies the technical
+influences that need to be taken into account, because any technical factor that is unrelated
+to the experimental conditions should cancel out of any differential expression analysis. For
+example, read counts can generally be expected to be proportional to length as well as to
+expression for any transcript, but edgeR does not generally need to adjust for gene length
+because gene length has the same relative influence on the read counts for each RNA sample.
+For this reason, normalization issues arise only to the extent that technical factors have
+sample-specific effects"
+
+Sample-specific effects addressed
+
+-   Sequencing depth
+
+-   Effective library sizes (also known as RNA composition)
+
+    -    RNA-seq provides a measure of the relative abundance of each gene in each RNA sample, but does not provide any measure of the total RNA output on a per-cell basis - it is a relative measurement. That is, the proportion of reads attributed to a given gene in a library depends on the expression properties of the whole sample rather than just the expression level of that gene.
+
+    -   Then, if a small proportion of highly expressedgenes consume a substantial proportion of the total library size for a particular sample, this will cause the remaining genes to be under-sampled for that sample, confounding DE analysis. The `normLibSizes` function normalizes the library sizes in such a way to minimize the log-fold changes between the samples for most genes.
+
+Other effects that don't vary between sample-sample-length include:
+
+-   Gene length
+
+-   GC content\*
+
+Other ways of normalization out there can be [found here](https://hbctraining.github.io/Intro-to-DGE/lessons/02_DGE_count_normalization.html).
+
+```{r}
+result = normLibSizes(GSE96870_kept)
+
+#result2 <- estimateDisp(result)
+#plotBCV(result2)
+#et <- exactTest(result2, pair=c("Female_Day0", "Male_Day0"))
+#topTags(et)
+```
+
+Notice that output here is a "DGEList" object, instead of "SummarizedExperiment".
+
+## 
