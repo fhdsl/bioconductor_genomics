@@ -1,8 +1,8 @@
 ---
-title: "Differential Expression"
+title: "Differential Expression using edgeR"
 ---
 
-Last week we talked about Experimental Design. This week we're going to apply that knowledge to finding *differential expressed* genes or - finding those genes or transcripts that are expressed differently between groups in our experimental design.
+Last week we talked about Experimental Design. This week we're going to apply that knowledge to finding *differential expressed* genes or transcripts - finding those genes or transcripts that are expressed differently between groups in our experimental design.
 
 That is, in general, are there genes for the samples in group A that have different counts than the samples in group B?
 
@@ -27,24 +27,47 @@ What does it mean when we say a set of samples is differentially expressed when 
 Single cell data actually uses a similar approach to discover differentially expressed genes: the *pseudo-bulk* approach. That is, counts for like cells are treated like a single bulk RNA sample. Then the pseudo-bulk samples can be tested for differential expression much like we're going to do.
 :::
 
+## The General Differential Expression Workflow
+
+```{mermaid}
+A[Reading in Data] --> B
+B[Annotation] --> C
+C[Filtering and Normalization] --> D
+D[Data Exploration] --> E
+E[Design Matrix] --> F
+F[Dispersion Estimation] --> G
+G[Differential Expression] --> H
+H[Annotation and Gene Set Analysis]
+G --> I[Clustering and Visualization]
+G --> J[Pathway and Network Analysis]
+```
+
 ## What groups are we going to compare?
 
 
 ## Making a `DEGlist` Object
 
-We can make a `DEGlist` object from our summarized experiment
+We can make a `DEGlist` object from our `SummarizedExperiment` object using []:
+
+```{r}
+
+
+```
 
 ## Commands Used in `edgeR` package
 
-
+|Procedure|Command|
+|---------|-------|
+|Filtering|
 
 ## Data Filtering in `edgeR`
 
+- We need to filter out those genes with low expression (low count number) before we run analysis. Alternatively, we can select genes to test by using Coefficient of Variation to find the most variable genes.
 
 
 ## Data Normalization in `edgeR`
 
-
+One of the things we need to account for is library size of our samples. Experimentally, there is variability in the number of reads across samples. 
 
 ## Two group comparison
 
@@ -65,3 +88,10 @@ Only then can we move on to individual comparisons and discover differentially e
 
 ## Multiple Groups, Multiple Factors
 
+
+## Take Home Points
+
+- We need to filter out those genes with low expression (low count number) before we run analysis. Alternatively, we can select genes to test by using Coefficient of Variation to find the most variable genes.
+- Count Data must be normalized by the library size to compare across samples.
+- We model data using distributions, and use those models to find expression differences.
+- `edgeR` and `DESeq2` are complementary approaches. Results from one method may be different than the other.
