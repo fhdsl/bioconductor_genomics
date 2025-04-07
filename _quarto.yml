@@ -15,7 +15,8 @@ book:
     - index.qmd
     - 00_concepts.qmd
     - 01_introduction.qmd
-    - 02_week2.qmd
+#    - 02_week2.qmd
+    - 03-differential-expression.qmd
 
   sidebar: 
     logo: "img/logo.png"

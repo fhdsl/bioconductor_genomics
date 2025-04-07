@@ -92,7 +92,7 @@ The `checkDimnames` argument is critical. In order to do any work with an experi
 :::{.callout}
 ## If it isn't in `colData`, it doesn't exist
 
-Keep in mind that your `colData` must be as complete as possible. Why? The short answer is that if there isn't a row for your sample in colData, then it basically doesn't exist for Bioconductor methods.
+Keep in mind that your `colData` must be as complete as possible. Why? The short answer is that if there isn't a row for your sample in `colData`, then it basically doesn't exist for Bioconductor methods.
 
 So make sure your `colData` contains sample names for all your samples.
 :::
@@ -233,19 +233,32 @@ GSE96870 |>
     theme_bw()
 ```
 
-The boxplots are helpful for detecting batch effects:
+Our data (individual gene counts) is highly skewed. If we log-transform the data, then the skew is lessened.  The boxplots of log counts are helpful for detecting batch effects.
 
 ```{r tidy-boxplot}
 GSE96870 |>
-    ggplot(aes(x=counts + 1, group=.sample, fill=infection)) +
+    ggplot(aes(y=log2(counts + 1), group=.sample, fill=infection)) +
     geom_boxplot() +
-    scale_x_log10() +
+    theme_bw()
+```
+
+Take a look at the above box plot. Are there differences in distribution between samples?
+
+In order to compare expression levels between samples, we will need to adjust, or *normalize* by library size. We'll investigate this further when we get to differential expression.  
+
+Try mapping another variable to `fill`. 
+
+```{r tidy-boxplot2}
+#| eval: false
+GSE96870 |>
+    ggplot(aes(y=log2(counts + 1), group=.sample, fill=------)) +
+    geom_boxplot() +
     theme_bw()
 ```
 
 ## Take Home Messages
 
-- We package multiple parts of the data (assay data and metadata) into a `SummarizedExperiment` object
+- We package multiple parts of the data (assay data and metadata) into a `SummarizedExperiment` object:
   - **Columns** correspond to *samples*, **Rows** correspond to *gene locus* or *transcripts*
   - *Column names* of the assay data must match a column in the `colData`
   - *Experimental Design* variables are part of the `colData`

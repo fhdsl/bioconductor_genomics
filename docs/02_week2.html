@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>02_week2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="02_week2_files/libs/clipboard/clipboard.min.js"></script>
+<script src="02_week2_files/libs/quarto-html/quarto.js"></script>
+<script src="02_week2_files/libs/quarto-html/popper.min.js"></script>
+<script src="02_week2_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="02_week2_files/libs/quarto-html/anchor.min.js"></script>
+<link href="02_week2_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="02_week2_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="02_week2_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="02_week2_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="02_week2_files/libs/bootstrap/bootstrap-0b9e35696ea153a55a49e2492062f191.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
+  <li><a href="#experimental-design-of-rnaseq-experiments" id="toc-experimental-design-of-rnaseq-experiments" class="nav-link" data-scroll-target="#experimental-design-of-rnaseq-experiments">Experimental Design of RNAseq Experiments</a></li>
+  <li>
+<a href="#background-law-of-large-numbers" id="toc-background-law-of-large-numbers" class="nav-link" data-scroll-target="#background-law-of-large-numbers">Background: Law of large numbers</a>
+  <ul class="collapse">
+<li><a href="#single-randomized-group" id="toc-single-randomized-group" class="nav-link" data-scroll-target="#single-randomized-group">Single, randomized group</a></li>
+  <li><a href="#two-group-comparisons" id="toc-two-group-comparisons" class="nav-link" data-scroll-target="#two-group-comparisons">Two-group comparisons</a></li>
+  </ul>
+</li>
+  <li><a href="#confounding" id="toc-confounding" class="nav-link" data-scroll-target="#confounding">Confounding</a></li>
+  <li><a href="#how-do-i-know-how-many-samples-to-use" id="toc-how-do-i-know-how-many-samples-to-use" class="nav-link" data-scroll-target="#how-do-i-know-how-many-samples-to-use">How do I know how many samples to use?</a></li>
+  <li><a href="#design-matrix" id="toc-design-matrix" class="nav-link" data-scroll-target="#design-matrix">Design matrix</a></li>
+  <li><a href="#filtering-out-low-counts" id="toc-filtering-out-low-counts" class="nav-link" data-scroll-target="#filtering-out-low-counts">Filtering out low counts</a></li>
+  <li><a href="#dimension-reduction-as-eda" id="toc-dimension-reduction-as-eda" class="nav-link" data-scroll-target="#dimension-reduction-as-eda">Dimension Reduction as EDA</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  <li><a href="#normalization---probably-for-week-3" id="toc-normalization---probably-for-week-3" class="nav-link" data-scroll-target="#normalization---probably-for-week-3">Normalization - probably for week 3?</a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"></a></li>
+  </ul></nav>
+</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">02_week2</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><section id="learning-objectives" class="level2"><h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
+<ul>
+<li>
+<strong>Explain</strong> the the relationship between population mean vs.&nbsp;sample mean, and sample varaince as the sample size increase</li>
+<li>
+<strong>Explain</strong> the basics of experimental design, confounding, batch effects, and when to consult the sequencing core</li>
+<li>
+<strong>Distinguish</strong> between <em>technical</em> and <em>biological</em> replicates and what kinds of results to expect from each</li>
+<li>
+<strong>Construct</strong> a design matrix that reflects the study’s experimental design</li>
+<li>
+<strong>Analyze</strong> the process of filtering out genes with low read counts</li>
+</ul></section><section id="experimental-design-of-rnaseq-experiments" class="level2"><h2 class="anchored" data-anchor-id="experimental-design-of-rnaseq-experiments">Experimental Design of RNAseq Experiments</h2>
+<p>Today, we will look how experimental design plays a large role in the way we analyze RNA-seq data. Experimental design seeks to make sense data variation via careful design of conditions.</p>
+<p>A quote from (<a href="https://web.stanford.edu/class/bios221/book/16-chap.html#ref-Bacher:GB:2016">Bacher and Kendziorski 2016</a>) explains this clearly: “Generally speaking, a well-designed experiment is one that is sufficiently powered and one in which technical artifacts and biological features that may systematically affect measurements are balanced, randomized or controlled in some other way in order to minimize opportunities for multiple explanations for the effect(s) under study.”</p>
+<p>If you are not familiar with some of these technical terms in the quote, we will go over them shortly.</p>
+</section><section id="background-law-of-large-numbers" class="level2"><h2 class="anchored" data-anchor-id="background-law-of-large-numbers">Background: Law of large numbers</h2>
+<section id="single-randomized-group" class="level3"><h3 class="anchored" data-anchor-id="single-randomized-group">Single, randomized group</h3>
+<p>We will first start with looking at the most simple experimental design: a single, randomized group. Once we are comfortable with this, then we will return to a two group comparision in classic differential gene expression.</p>
+<p>When we run experiments, we are usually analyzing a subset of the population that we are trying to describe, called a sample. Let’s define them clearly:</p>
+<p><strong>Population:</strong> The entire collection of individual units that a researcher is interested to study.</p>
+<p><strong>Sample:</strong> A smaller collection of individual units that the researcher has selected to study.</p>
+<p>When we carry out our experiment, we perform some form of measurement on our samples, such as RNA-seq which leads to gene-level quantification. Then, it is common to look at the mean and varianceof our measurements to summarize our samples. This <strong>sample mean</strong> and <strong>sample variance</strong> are our best guess at the <strong>population mean</strong> and <strong>population variance</strong>.</p>
+<p>There is a crucial relationship between samples, populations, and sample size: As the sample size gets larger, then the sample mean approaches the population mean and the sample variance approaches the population variance. This is called the Law of Large Numbers.</p>
+<p>Example: looking at gene lengths</p>
+</section><section id="two-group-comparisons" class="level3"><h3 class="anchored" data-anchor-id="two-group-comparisons">Two-group comparisons</h3>
+<p>In classical differntial gene expression, you are often conducting a two-group comparison between case and control. Our case samples arise from the case population, and our control samples arise from the control population. When we look at the measurements, we look at the <em>difference</em> of sample mean betewen case and controls for each gene, which is on a log-transformed scale called <strong>log-fold change</strong>. As the sample size gets larger, our sample log-fold change for each gene gets closer to the population log-fold change for each gene. Similarly, the sample variance for each gene from case and control groups gets closer to their respective population variance.</p>
+<p>By these properties, it is obvious that the more samples, the better, one might say. But <strong>your choice of samples may also relate to variables that may have an impact on the outcome you want to measure</strong>.</p>
+<ul>
+<li><p>Experimental conditions that relate to your scientific question of interest, such as case vs.&nbsp;control.</p></li>
+<li><p>Any relevant metadata, such as age, sex, subtype</p></li>
+<li><p>Batch effects: the date of the experiment conducted, the person who performed the experiment, the reagents used, etc.</p></li>
+<li><p>The sequencing technology</p></li>
+<li><p>The amount of sequencing the sample received (more on this later in Normalization)</p></li>
+<li><p>What else?</p></li>
+</ul>
+<p>This means you need to think carefully what the sample log-fold change and variances are telling you: does the sample log-fold change relate more to your experimental condition, or something else, such as batch effects?</p>
+<p>To illustrate the importance of these questions, let’s consider a few questions (these are single, randomized group situations):</p>
+<p>Would you rather: Sequence five replicates on the same cell line, or sequence one replicate each on five different cell lines?</p>
+<p>What would the sample mean and sample variance of each experiment tell you?</p>
+<p>In light of this example, let’s define two types of replicates:</p>
+<ul>
+<li><p><strong>Technical replicates:</strong> use the same biological sample to repeat the technical or experimental steps in order to accurately measure technical variation.</p></li>
+<li><p><strong>Biological replicates</strong> use different biological samples of the same condition to measure the biological variation between samples.</p></li>
+</ul>
+<p>Would you rather: Sequence five different samples at 10x coverage, or one sample at 50x coverage?</p>
+<p>What would the sample mean and sample variance of each experiment tell you?</p>
+</section></section><section id="confounding" class="level2"><h2 class="anchored" data-anchor-id="confounding">Confounding</h2>
+<p>We’ve seen above the importance of what to vary in your experimental design - are you trying to understand the biological variation of your samples, the technical variation of your instrument? Are you trying to understand the variability of a population, or trying to understand the variability of a single person?</p>
+<p>Once you have decided carefully what your experimental design is, you still need to pay attention to other variables that may impact the outcome you want to measure. A varaible can <strong>confound</strong> your experiment when you can’t tell whether this variable or your experimental design is affecting the outcome.</p>
+<p>Example: We know that sex has large effects on gene expression, and if all of our control mice were female and all of the treatment mice were male, then our treatment effect would be confounded by the variable sex. We could not differentiate the effect of treatment from the effect of sex.</p>
+<p>Example: We know that batch effect has large effects on gene expression, and if all of our control samples were processed by an experienced researcher on old reagents, and our treatment samples were processed by an trainee researcher on new reagents, our treatment effect would be confounded by (multiple!) batch effects.</p>
+<p>Solutions:</p>
+<ul>
+<li><p>Ensure that the samples in all experimental conditions have the same values for the confounding variable - ie. all of the same sex, all of the same batch.</p></li>
+<li>
+<p>If not possible, make sure that all experimental conditions have a similar amount of variability of the confounding variable - ie. the both case and control groups have a balance of males and females, and various batches.</p>
+<ul>
+<li>Save this information; we can eliminate these variability in the modeling process.</li>
+</ul>
+</li>
+</ul>
+<p>May also want to consider:</p>
+<ul>
+<li><p>Unobserved confounders</p></li>
+<li><p>Propensity score matching</p></li>
+<li><p>Are the demarcation of groups I'm comparing is independent of my molecular measurements? (double dipping): https://stat.uw.edu/seminars/double-dipping-problems-and-solutions-application-single-cell-rna-sequencing-data, https://anna-neufeld.github.io/datathin/</p></li>
+</ul></section><section id="how-do-i-know-how-many-samples-to-use" class="level2"><h2 class="anchored" data-anchor-id="how-do-i-know-how-many-samples-to-use">How do I know how many samples to use?</h2>
+<p>Define “power”:</p>
+<p>Reference to some packages for power calculations, such as <a href="https://bioconductor.org/packages/release/bioc/html/PROPER.html">PROPER</a>. Takes consideration of:</p>
+<ul>
+<li><p>Number of samples</p></li>
+<li><p>Number of genes measured</p></li>
+<li><p>Number of genes significant</p></li>
+<li><p>Effect size of significant genes</p></li>
+<li><p>p-value cutoff in multiple testing</p></li>
+<li><p>Default datasets to simulate</p></li>
+<li>
+<p>Definition of power in multiple testing</p>
+<ul>
+<li>Probability we detect at least X% of genes that are truly different (at least some FC)</li>
+</ul>
+</li>
+</ul>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">PROPER</span><span class="op">)</span></span>
+<span><span class="va">sim.opts.Cheung</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/PROPER/man/RNAseq.SimOptions.2grp.html">RNAseq.SimOptions.2grp</a></span><span class="op">(</span>ngenes <span class="op">=</span> <span class="fl">20000</span>, p.DE<span class="op">=</span><span class="fl">0.05</span>, lOD<span class="op">=</span><span class="st">"cheung"</span>, lBaselineExpr<span class="op">=</span><span class="st">"cheung"</span><span class="op">)</span></span>
+<span><span class="va">simres</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/PROPER/man/runSims.html">runSims</a></span><span class="op">(</span>Nreps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">7</span>, <span class="fl">10</span><span class="op">)</span>, sim.opts<span class="op">=</span><span class="va">sim.opts.Cheung</span>, DEmethod<span class="op">=</span><span class="st">"edgeR"</span>, nsims<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simulation number 1 </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: edgeR</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'edgeR' was built under R version 4.4.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: limma</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'limma' was built under R version 4.4.2</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simulation number 2 
+Simulation number 3 
+Simulation number 4 
+Simulation number 5 </code></pre>
+</div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">powers</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/PROPER/man/comparePower.html">comparePower</a></span><span class="op">(</span><span class="va">simres</span>, alpha.type<span class="op">=</span><span class="st">"fdr"</span>, alpha.nominal<span class="op">=</span><span class="fl">0.1</span>, stratify.by<span class="op">=</span><span class="st">"expr"</span>, delta<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/PROPER/man/summaryPower.html">summaryPower</a></span><span class="op">(</span><span class="va">powers</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     SS1 SS2 Nominal FDR Actual FDR Marginal power Avg # of TD Avg # of FD  FDC
+[1,]   3   3         0.1       0.39           0.27          42          27 0.63
+[2,]   5   5         0.1       0.23           0.41          65          20 0.31
+[3,]   7   7         0.1       0.16           0.50          82          16 0.20
+[4,]  10  10         0.1       0.12           0.58          96          13 0.14</code></pre>
+</div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/PROPER/man/plots.html">plotPower</a></span><span class="op">(</span><span class="va">powers</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This suggests that you get more power out of more samples, rather than sequencing.</p>
+<p>The most rigorous power benchmarks are to use controlled labatory experiments, with many samples and sequencing, and then downsample.</p>
+</section><section id="design-matrix" class="level2"><h2 class="anchored" data-anchor-id="design-matrix">Design matrix</h2>
+<p>If you are comparing between groups, the simple way is to encode your experimental design the “group” column in colData of your SummarizedExperiment object.</p>
+<p>However, if you have more complex designs, such as covariates to control in a blocking design, you will need to create a design matrix:</p>
+<div class="cell">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/SummarizedExperiment">SummarizedExperiment</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">GSE96870</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="st">"data/GSE96870_se.rds"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">GSE96870</span><span class="op">$</span><span class="va">group</span><span class="op">)</span></span>
+<span><span class="va">sex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">GSE96870</span><span class="op">$</span><span class="va">sex</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix</a></span><span class="op">(</span><span class="op">~</span><span class="va">group</span><span class="op">+</span><span class="va">sex</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="filtering-out-low-counts" class="level2"><h2 class="anchored" data-anchor-id="filtering-out-low-counts">Filtering out low counts</h2>
+<p>The <code>filterByExp</code> function keeps rows that have worthwhile counts in a minumum number of samples (two samples in this case because the smallest group size is two). The function accesses the group factor contained in y in order to compute the minimum group size, but the filtering is performed independently of which sample belongs to which group so that no bias is introduced.</p>
+<p>The filtering should be based on the grouping factors or treatment factors that will be involved in the differential expression teststested for, rather than on blocking variables that are not of scientific interest in themselves.</p>
+<div class="cell">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioinf.wehi.edu.au/edgeR/">edgeR</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.4     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ lubridate::%within%() masks IRanges::%within%()
+✖ dplyr::collapse()     masks IRanges::collapse()
+✖ dplyr::combine()      masks Biobase::combine(), BiocGenerics::combine()
+✖ dplyr::count()        masks matrixStats::count()
+✖ dplyr::desc()         masks IRanges::desc()
+✖ tidyr::expand()       masks S4Vectors::expand()
+✖ dplyr::filter()       masks stats::filter()
+✖ dplyr::first()        masks S4Vectors::first()
+✖ dplyr::lag()          masks stats::lag()
+✖ ggplot2::Position()   masks BiocGenerics::Position(), base::Position()
+✖ purrr::reduce()       masks GenomicRanges::reduce(), IRanges::reduce()
+✖ dplyr::rename()       masks S4Vectors::rename()
+✖ lubridate::second()   masks S4Vectors::second()
+✖ lubridate::second&lt;-() masks S4Vectors::second&lt;-()
+✖ dplyr::slice()        masks IRanges::slice()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stemangiola/tidySummarizedExperiment">tidySummarizedExperiment</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ttservice
+
+Attaching package: 'ttservice'
+
+The following objects are masked from 'package:dplyr':
+
+    bind_cols, bind_rows</code></pre>
+</div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870</span><span class="op">$</span><span class="va">group</span> <span class="op">=</span> <span class="va">GSE96870</span><span class="op">$</span><span class="va">Group</span></span>
+<span></span>
+<span><span class="va">keep</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/edgeR/man/filterByExpr.html">filterByExpr</a></span><span class="op">(</span><span class="va">GSE96870</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">GSE96870_kept</span> <span class="op">=</span> <span class="va">GSE96870</span><span class="op">[</span><span class="va">keep</span> ,<span class="op">]</span></span>
+<span><span class="va">GSE96870_notkept</span> <span class="op">=</span> <span class="va">GSE96870</span><span class="op">[</span><span class="op">!</span><span class="va">keep</span> ,<span class="op">]</span></span>
+<span></span>
+<span><span class="va">GSE96870_kept_summary</span> <span class="op">=</span> <span class="va">GSE96870_kept</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">.feature</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>median_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span>,</span>
+<span>                                                  mean_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</code></pre>
+</div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">GSE96870_kept_summary</span><span class="op">$</span><span class="va">median_count</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+     0.0     50.0    534.5   1921.9   1994.5 146407.0 </code></pre>
+</div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870_notkept_summary</span> <span class="op">=</span> <span class="va">GSE96870_notkept</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">.feature</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>median_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span>,</span>
+<span>                                                  mean_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</code></pre>
+</div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">GSE96870_notkept_summary</span><span class="op">$</span><span class="va">median_count</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.0000  0.0000  0.5751  0.5000  8.0000 </code></pre>
+</div>
+</div>
+</section><section id="dimension-reduction-as-eda" class="level2"><h2 class="anchored" data-anchor-id="dimension-reduction-as-eda">Dimension Reduction as EDA</h2>
+<div class="cell">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/plotMDS.html">plotMDS</a></span><span class="op">(</span><span class="va">GSE96870_kept</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="section" class="level2"><h2 class="anchored" data-anchor-id="section"></h2>
+</section><section id="normalization---probably-for-week-3" class="level2"><h2 class="anchored" data-anchor-id="normalization---probably-for-week-3">Normalization - probably for week 3?</h2>
+<p>“edgeR is concerned with differential expression analysis rather than with the quantification of expression levels. It is concerned with relative changes in expression levels between conditions, but not directly with estimating absolute expression levels. This greatly simplifies the technical influences that need to be taken into account, because any technical factor that is unrelated to the experimental conditions should cancel out of any differential expression analysis. For example, read counts can generally be expected to be proportional to length as well as to expression for any transcript, but edgeR does not generally need to adjust for gene length because gene length has the same relative influence on the read counts for each RNA sample. For this reason, normalization issues arise only to the extent that technical factors have sample-specific effects”</p>
+<p>Sample-specific effects addressed</p>
+<ul>
+<li><p>Sequencing depth</p></li>
+<li>
+<p>Effective library sizes (also known as RNA composition)</p>
+<ul>
+<li><p>RNA-seq provides a measure of the relative abundance of each gene in each RNA sample, but does not provide any measure of the total RNA output on a per-cell basis - it is a relative measurement. That is, the proportion of reads attributed to a given gene in a library depends on the expression properties of the whole sample rather than just the expression level of that gene.</p></li>
+<li><p>Then, if a small proportion of highly expressedgenes consume a substantial proportion of the total library size for a particular sample, this will cause the remaining genes to be under-sampled for that sample, confounding DE analysis. The <code>normLibSizes</code> function normalizes the library sizes in such a way to minimize the log-fold changes between the samples for most genes.</p></li>
+</ul>
+</li>
+</ul>
+<p>Other effects that don’t vary between sample-sample-length include:</p>
+<ul>
+<li><p>Gene length</p></li>
+<li><p>GC content*</p></li>
+</ul>
+<p>Other ways of normalization out there can be <a href="https://hbctraining.github.io/Intro-to-DGE/lessons/02_DGE_count_normalization.html">found here</a>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">result</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/edgeR/man/calcNormFactors.html">normLibSizes</a></span><span class="op">(</span><span class="va">GSE96870_kept</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#result2 &lt;- estimateDisp(result)</span></span>
+<span><span class="co">#plotBCV(result2)</span></span>
+<span><span class="co">#et &lt;- exactTest(result2, pair=c("Female_Day0", "Male_Day0"))</span></span>
+<span><span class="co">#topTags(et)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Notice that output here is a “DGEList” object, instead of “SummarizedExperiment”.</p>
+</section><section id="section-1" class="level2"><h2 class="anchored" data-anchor-id="section-1"></h2>
+</section></main><!-- /main column --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

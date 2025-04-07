@@ -1,5 +1,5 @@
 ---
-title: "Differential Expression using edgeR"
+title: "Differential Expression using DESeq2/edgeR"
 ---
 
 Last week we talked about Experimental Design. This week we're going to apply that knowledge to finding *differential expressed* genes or transcripts - finding those genes or transcripts that are expressed differently between groups in our experimental design.
@@ -13,13 +13,63 @@ We'll Explore the `edgeR` package as one method to find differentially expressed
 
 If you are new to differential expression, it is worth talking with the Bioinformatics Core about your experimental design and how to set up your model matrix and contrasts.
 
-You did consult with them about the experimental design of your experiment before you sent the samples to be processed?
+You did consult with them about the experimental design of your experiment before you sent the samples to be processed, I hope.
 :::
 
 ## Count Data is Discrete Data
 
 What does it mean when we say a set of samples is differentially expressed when we are using count data?
 
+```{r}
+#| warning: false
+#| message: false
+library(SummarizedExperiment)
+library(tidySummarizedExperiment)
+library(tidyverse)
+
+GSE96870 <- readRDS("data/GSE96870_se.rds")
+```
+
+The following plot is the plot of the expression counts for the `Asl` gene across all samples in our dataset grouped by `time`. There appears to be a difference in expression across the samples by timepoint, but there is a lot of variation that we can see in the data.
+
+```{r}
+expression_plot <- 
+  GSE96870 |>
+    filter(.feature == "Asl") |>
+    ggplot(aes(x = Label, y = counts, color = time)) +
+    geom_point() +
+    theme(axis.text.x = element_text(angle = 90))
+expression_plot
+```
+
+The issue is that the library sizes of each sample is different. If we compare the counts of each library, we'll see they vary.
+
+```{r}
+library(patchwork)
+
+expression_plot <- 
+  GSE96870 |>
+    filter(.feature == "Asl") |>
+    ggplot(aes(x = Label, y = counts, color = time)) +
+    geom_point() +
+    theme(axis.text.x = element_blank()) + 
+    ggtitle("Asl Expression count")
+
+count_plot <- 
+  GSE96870 |>
+    group_by(Label) |>
+    summarise(total_counts=sum(counts)) |>
+    mutate(time = colData(GSE96870)[["time"]]) |>
+    ggplot() +
+    aes(x=Label, y=total_counts, fill=time) +
+    geom_bar(stat="identity") +
+    theme(axis.text.x = element_text(angle = 90)) +
+    ggtitle("Library Size for each Sample")
+
+expression_plot / count_plot
+```
+
+You will notice that the counts for `Asl` across the samples vary by Library size (if you can't see it, look at the patterns of ups and downs). For us to truly compare the expression differences between our timepoints in our samples, we need to remove the effect of *library size* before we make the comparison.
 
 :::{.callout-note}
 ## What about Single Cell Data?
@@ -30,14 +80,17 @@ Single cell data actually uses a similar approach to discover differentially exp
 ## The General Differential Expression Workflow
 
 ```{mermaid}
+graph TD
 A[Reading in Data] --> B
-B[Annotation] --> C
-C[Filtering and Normalization] --> D
-D[Data Exploration] --> E
+B[Metadata] --> C
+C[Data Exploration] --> D
+subgraph DESeq2
+D[Filtering and Normalization] --> E
 E[Design Matrix] --> F
 F[Dispersion Estimation] --> G
-G[Differential Expression] --> H
-H[Annotation and Gene Set Analysis]
+G[Differential Expression]
+end
+G --> H[Annotation and Gene Set Analysis]
 G --> I[Clustering and Visualization]
 G --> J[Pathway and Network Analysis]
 ```
