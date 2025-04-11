@@ -134,6 +134,15 @@ G --> H[Annotation and Gene Set Analysis]
 G --> I[Clustering and Visualization]
 G --> J[Pathway and Network Analysis]
 ```
+## Models as Filters
+
+When we are calculating differential expression, we are using our model fitting as a filter for good and bad candidates. Our statistical test will generate a *p-value*, and we somehow use this p-value as a filtering criteria.
+
+So far, so good. What some things that might make the modeling difficult?
+
+1. Variation in library size
+2. Low expression counts
+
 
 ## What groups are we going to compare?
 
@@ -165,18 +174,118 @@ resultsNames(GSE_results)
 shrinkage <- lfcShrink(model_fit, coef="time_Day8_vs_Day0", lfcThreshold = 0.5)
 
 #before <- plotMA(GSE_results,MLE=TRUE)
-after <- plotMA(GSE_results)
+before <- plotMA(GSE_results, main= "Before Shrinkage")
+after <- plotMA(shrinkage, main="After Shrinkage")
+before + after
+```
 
-after
+Get the original expression data
+
+```{r}
+colnames(GSE96870)
+```
+
+
+```{r}
+gsecounts <- assay(GSE96870[GSE96870$time %in% c("Day0", "Day8"),])
+
 ```
 
 ```{r}
-GSE_results
+
+test <- as.data.frame(GSE_results)
+test$gene <- rownames(test)
+
+test_small <- test[sample(nrow(test), size=2000),]
+
+test_small |>
+  ggplot() +
+  aes(y=-log2(padj), x=log2FoldChange) +
+  geom_point() +
+  geom_hline(yintercept = -log2(0.05)) +
+  geom_vline(xintercept = -1) +
+  geom_vline(xintercept = 1)
+
+positive_candidates <- test_small |>
+  filter(padj < 0.05) |>
+  filter(log2FoldChange > 1) |>
+  slice_sample(n=10)
+```
+```{r}
+library(ggbeeswarm)
+make_expression_plot <- function(gene){
+  pval <- test_small |>
+    filter(gene == gene) |>
+    pull(padj)
+  
+  FC <- test_small |>
+    filter(gene == gene) |>
+    pull(log2FoldChange)
+  
+out_plot <-  GSE96870_normalized |>
+    filter(.feature == gene) |>
+    filter(time %in% c("Day0", "Day8")) |>
+    ggplot() +
+  aes(y=counts, x=time) +
+   geom_boxplot(aes(fill=time)) +
+  geom_beeswarm(cex=5) +
+#   facet_wrap(~.feature, scales="free")+
+  ggtitle(gene, subtitle = paste0( "p=", signif(pval,digits = 2),  ", FC=", signif(FC, digits=2))) + theme_minimal() +
+  theme(legend.position = "none") 
+
+  #out_plot
+    ggsave(filename = paste0("data/plots/", gene, ".jpg"),device = jpeg(),units = "px", height=600, width=600)
+    dev.off()
+}
+
+make_expression_plot("Glod5")
 ```
 
 ```{r}
+library(purrr)
+
+walk(test_small$gene[1:50], make_expression_plot)
+```
+
+```{r}
+positive_data <- GSE96870_normalized |>
+  mutate(count_norm = counts / sizeFactor) |>
+  filter(time %in% c("Day0", "Day8")) |>
+  filter(.feature %in% positive_candidates$gene) 
+
+positive_plots <- positive_data |>
+  filter(.feature != "Col5a3") |>
+  ggplot() +
+  aes(y=count_norm, x=time) +
+   geom_boxplot(aes(fill=time)) +
+  geom_point() +
+   facet_wrap(~.feature, scales="free")+
+  ggtitle("Good Candidates") + theme_minimal()
+ 
+positive_plots
+```
 
 
+```{r}
+negative_candidates <- test_small |>
+  filter(padj > 0.1) |>
+  filter(log2FoldChange > 1) |>
+  slice_sample(n = 10)
+
+negative_data <- GSE96870_normalized |>
+  mutate(count_norm = counts / sizeFactor) |>
+  filter(time %in% c("Day0", "Day8")) |>
+  filter(.feature %in% negative_candidates$gene) 
+
+negative_plots <- negative_data |>
+  ggplot() +
+  aes(y=count_norm, x=time) +
+   geom_boxplot(aes(fill=time)) +
+  geom_point() +
+  facet_wrap(~.feature, scales="free")+
+  ggtitle("Bad Candidates") + theme_minimal()
+ 
+(positive_plots + theme(legend.position = "none", axis.text.x = element_text())) + (negative_plots + theme(legend.position = "none"))
 ```
 
 ## Commands Used in `edgeR` package
