@@ -6,7 +6,7 @@ Last week we talked about Experimental Design. This week we're going to apply th
 
 That is, in general, are there genes for the samples in group A that have different counts than the samples in group B?
 
-We'll Explore the `edgeR` package as one method to find differentially expressed genes. There is also the `DESeq2` package. 
+We'll Explore the `DESeq2` package as one method to find differentially expressed genes. There is also the `edgeR` package. 
 
 :::{.callout-note}
 ## Am I doing this right?
@@ -26,6 +26,7 @@ What does it mean when we say a set of samples is differentially expressed when 
 library(SummarizedExperiment)
 library(tidySummarizedExperiment)
 library(tidyverse)
+library(DESeq2)
 
 GSE96870 <- readRDS("data/GSE96870_se.rds")
 ```
@@ -38,7 +39,7 @@ expression_plot <-
     filter(.feature == "Asl") |>
     ggplot(aes(x = Label, y = counts, color = time)) +
     geom_point() +
-    theme(axis.text.x = element_text(angle = 90))
+    theme(axis.text.x = element_text(angle = 90)) + theme_minimal()
 expression_plot
 ```
 
@@ -51,9 +52,9 @@ expression_plot <-
   GSE96870 |>
     filter(.feature == "Asl") |>
     ggplot(aes(x = Label, y = counts, color = time)) +
-    geom_point() +
+    geom_point() + theme_minimal() +
     theme(axis.text.x = element_blank()) + 
-    ggtitle("Asl Expression count")
+    ggtitle("Asl Expression count") 
 
 count_plot <- 
   GSE96870 |>
@@ -62,14 +63,49 @@ count_plot <-
     mutate(time = colData(GSE96870)[["time"]]) |>
     ggplot() +
     aes(x=Label, y=total_counts, fill=time) +
-    geom_bar(stat="identity") +
+    geom_bar(stat="identity") + theme_minimal() +
     theme(axis.text.x = element_text(angle = 90)) +
-    ggtitle("Library Size for each Sample")
+    ggtitle("Library Size for each Sample") 
 
-expression_plot / count_plot
+expression_plot/ count_plot 
 ```
 
 You will notice that the counts for `Asl` across the samples vary by Library size (if you can't see it, look at the patterns of ups and downs). For us to truly compare the expression differences between our timepoints in our samples, we need to remove the effect of *library size* before we make the comparison.
+
+```{r}
+#| warning: false
+GSE96870_filtered <- GSE96870[rowSums(assay(GSE96870, "counts")) > 5,]
+
+GSE96870_deseq <- DESeq2::DESeqDataSet(GSE96870_filtered, design = ~ sex + time)
+
+GSE96870_normalized <-  DESeq2::estimateSizeFactors(GSE96870_deseq)
+
+scaling_coeffs <- sizeFactors(GSE96870_normalized)
+
+scaling_coeffs
+```
+These are the scaling factors. If we look at `GSE96870_normalized`, we will see that an extra column called `sizeFactor` has been added:
+
+```{r}
+GSE96870_normalized |>
+  select(.feature, .sample, counts, sizeFactor)
+```
+
+If we divide `counts` by `sizeFactor`, then we get our `scaled` counts.
+
+```{r}
+expression_normalized <- GSE96870_normalized |>
+    filter(.feature == "Asl") |>
+    mutate(scaled = counts / sizeFactor) |>
+    ggplot(aes(x = Label, y = scaled, color = time)) +
+    geom_point() + theme_minimal() + 
+    theme(axis.text.x = element_blank()) + 
+    ggtitle("Asl Expression count \nnormalized by library size")
+
+(expression_plot + theme(legend.position = "none")) + expression_normalized
+```
+
+As you can see, some, but not all of the intra-timepoint variation was removed, especially within the `Day0` timepoint. We will attempt to account for this variability in our model.
 
 :::{.callout-note}
 ## What about Single Cell Data?
@@ -79,12 +115,16 @@ Single cell data actually uses a similar approach to discover differentially exp
 
 ## The General Differential Expression Workflow
 
+So, now we know part of what we're working toward: assessing whether there is a timepoint effect while accounting for variability in our data.
+
+In the general workflow, we are in the box below. 
+
 ```{mermaid}
 graph TD
 A[Reading in Data] --> B
 B[Metadata] --> C
 C[Data Exploration] --> D
-subgraph DESeq2
+subgraph "DESeq2 / EdgeR"
 D[Filtering and Normalization] --> E
 E[Design Matrix] --> F
 F[Dispersion Estimation] --> G
@@ -97,10 +137,42 @@ G --> J[Pathway and Network Analysis]
 
 ## What groups are we going to compare?
 
+In our analysis, we are going to compare the two timepoints in our study: `Day0` and `Day8`. 
 
-## Making a `DEGlist` Object
+```{r}
+GSE96970_est <- DESeq2::estimateDispersions(GSE96870_normalized)
+plotDispEsts(GSE96970_est)
+```
 
-We can make a `DEGlist` object from our `SummarizedExperiment` object using []:
+```{r}
+model_fit <- DESeq2::nbinomWaldTest(GSE96970_est)
+model_fit
+```
+
+## Contrasts
+
+```{r}
+#mcols(model_fit)
+mcols(mcols(model_fit))
+```
+
+
+```{r}
+GSE_results <- DESeq2::results(model_fit, contrast = c("time", "Day8", "Day0"), lfcThreshold = 0.5,alpha = 0.05)
+summary(GSE_results)
+
+resultsNames(GSE_results)
+shrinkage <- lfcShrink(model_fit, coef="time_Day8_vs_Day0", lfcThreshold = 0.5)
+
+#before <- plotMA(GSE_results,MLE=TRUE)
+after <- plotMA(GSE_results)
+
+after
+```
+
+```{r}
+GSE_results
+```
 
 ```{r}
 

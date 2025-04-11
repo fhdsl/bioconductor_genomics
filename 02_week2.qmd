@@ -141,6 +141,15 @@ If you are comparing between groups, the simple way is to encode your experiment
 However, if you have more complex designs, such as covariates to control in a blocking design, you will need to create a design matrix:
 
 ```{r}
+#| warning: false
+#| message: false
+library(SummarizedExperiment)
+
+GSE96870 <- readRDS("data/GSE96870_se.rds")
+```
+
+```{r}
+#| eval: false
 group <- factor(GSE96870$group)
 sex <- factor(GSE96870$sex)
 
@@ -148,14 +157,6 @@ design <- model.matrix(~group+sex)
 ```
 
 ## Filtering out low counts
-
-```{r}
-#| warning: false
-#| message: false
-library(SummarizedExperiment)
-
-GSE96870 <- readRDS("data/GSE96870_se.rds")
-```
 
 The `filterByExp` function keeps rows that have worthwhile counts in a minumum number
 of samples (two samples in this case because the smallest group size is two). The function
@@ -169,6 +170,8 @@ of scientific interest in themselves.
 
 ```{r}
 library(edgeR)
+library(tidyverse)
+library(tidySummarizedExperiment)
 GSE96870$group = GSE96870$Group
 
 keep = filterByExpr(GSE96870)
