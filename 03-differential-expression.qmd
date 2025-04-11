@@ -196,7 +196,8 @@ gsecounts <- assay(GSE96870[GSE96870$time %in% c("Day0", "Day8"),])
 test <- as.data.frame(GSE_results)
 test$gene <- rownames(test)
 
-test_small <- test[sample(nrow(test), size=2000),]
+#test_small <- test[sample(nrow(test), size=2000),]
+test_small <- read_csv("data/plots/sampled_results.csv")
 
 test_small |>
   ggplot() +
@@ -221,6 +222,8 @@ make_expression_plot <- function(gene){
   FC <- test_small |>
     filter(gene == gene) |>
     pull(log2FoldChange)
+  
+  FC <- 2^FC
   
 out_plot <-  GSE96870_normalized |>
     filter(.feature == gene) |>
@@ -263,6 +266,13 @@ positive_plots <- positive_data |>
   ggtitle("Good Candidates") + theme_minimal()
  
 positive_plots
+```
+
+```{r}
+library(plotly)
+
+
+
 ```
 
 
