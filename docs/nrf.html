@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>NRF-data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="nrf_files/libs/clipboard/clipboard.min.js"></script>
+<script src="nrf_files/libs/quarto-html/quarto.js"></script>
+<script src="nrf_files/libs/quarto-html/popper.min.js"></script>
+<script src="nrf_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="nrf_files/libs/quarto-html/anchor.min.js"></script>
+<link href="nrf_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="nrf_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="nrf_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="nrf_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="nrf_files/libs/bootstrap/bootstrap-0b9e35696ea153a55a49e2492062f191.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+  
+</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">NRF-data</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/SummarizedExperiment">SummarizedExperiment</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: MatrixGenerics</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'MatrixGenerics' was built under R version 4.4.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: matrixStats</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'MatrixGenerics'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:matrixStats':
+
+    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    colWeightedMeans, colWeightedMedians, colWeightedSds,
+    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    rowWeightedSds, rowWeightedVars</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: GenomicRanges</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: stats4</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: BiocGenerics</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'BiocGenerics'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    IQR, mad, sd, var, xtabs</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    anyDuplicated, aperm, append, as.data.frame, basename, cbind,
+    colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
+    get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,
+    match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
+    Position, rank, rbind, Reduce, rownames, sapply, saveRDS, setdiff,
+    table, tapply, union, unique, unsplit, which.max, which.min</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: S4Vectors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'S4Vectors'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:utils':
+
+    findMatches</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    expand.grid, I, unname</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: IRanges</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'IRanges' was built under R version 4.4.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: GenomeInfoDb</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'GenomeInfoDb' was built under R version 4.4.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Biobase</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'Biobase'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:MatrixGenerics':
+
+    rowMedians</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:matrixStats':
+
+    anyMissing, rowMedians</code></pre>
+</div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stemangiola/tidySummarizedExperiment">tidySummarizedExperiment</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ttservice</code></pre>
+</div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ forcats   1.0.0     ✔ readr     2.1.5
+✔ lubridate 1.9.4     ✔ stringr   1.5.1
+✔ purrr     1.0.4     ✔ tibble    3.2.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ lubridate::%within%() masks IRanges::%within%()
+✖ dplyr::bind_cols()    masks ttservice::bind_cols()
+✖ dplyr::bind_rows()    masks ttservice::bind_rows()
+✖ dplyr::collapse()     masks IRanges::collapse()
+✖ dplyr::combine()      masks Biobase::combine(), BiocGenerics::combine()
+✖ dplyr::count()        masks matrixStats::count()
+✖ dplyr::desc()         masks IRanges::desc()
+✖ tidyr::expand()       masks S4Vectors::expand()
+✖ dplyr::filter()       masks stats::filter()
+✖ dplyr::first()        masks S4Vectors::first()
+✖ dplyr::lag()          masks stats::lag()
+✖ ggplot2::Position()   masks BiocGenerics::Position(), base::Position()
+✖ purrr::reduce()       masks GenomicRanges::reduce(), IRanges::reduce()
+✖ dplyr::rename()       masks S4Vectors::rename()
+✖ lubridate::second()   masks S4Vectors::second()
+✖ lubridate::second&lt;-() masks S4Vectors::second&lt;-()
+✖ dplyr::slice()        masks IRanges::slice()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="st">"data/GSE222256.rds"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">gse_222256</span> <span class="op">&lt;-</span> <span class="va">gse</span><span class="op">$</span><span class="va">GSE222256_series_matrix.txt.gz</span></span>
+<span><span class="va">gse_se</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/makeSummarizedExperimentFromExpressionSet.html">makeSummarizedExperimentFromExpressionSet</a></span><span class="op">(</span><span class="va">gse_222256</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="st">"data/GSE222256_raw_counts.tsv"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 55339 Columns: 31
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr  (1): geneid
+dbl (30): C151S_Vehicle1, C151S_CDDO-Me5, N0_Vehicle1, N0_CDDO-Me1, N0_Vehic...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#assay(gse_se) &lt;- counts</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sfirke/janitor">janitor</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'janitor'
+
+The following objects are masked from 'package:stats':
+
+    chisq.test, fisher.test</code></pre>
+</div>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">features</span> <span class="op">&lt;-</span> <span class="va">counts</span><span class="op">$</span><span class="va">geneid</span></span>
+<span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="va">counts</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">coldat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span><span class="op">(</span><span class="va">gse_se</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">janitor</span><span class="fu">::</span><span class="fu"><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>genotype_ch1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">genotype_ch1</span><span class="op">)</span>,</span>
+<span>         characteristics_ch1_2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">characteristics_ch1_2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">coldat</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    title geo_accession                status submission_date
+GSM6919077 C151S_Vehicle1    GSM6919077 Public on Mar 07 2023     Jan 05 2023
+GSM6919078 C151S_Vehicle2    GSM6919078 Public on Mar 07 2023     Jan 05 2023
+GSM6919079 C151S_Vehicle3    GSM6919079 Public on Mar 07 2023     Jan 05 2023
+GSM6919080 C151S_CDDO-Me1    GSM6919080 Public on Mar 07 2023     Jan 05 2023
+GSM6919081 C151S_CDDO-Me2    GSM6919081 Public on Mar 07 2023     Jan 05 2023
+GSM6919082 C151S_Vehicle4    GSM6919082 Public on Mar 07 2023     Jan 05 2023
+GSM6919083 C151S_Vehicle5    GSM6919083 Public on Mar 07 2023     Jan 05 2023
+GSM6919084  C151S_CDDO-M3    GSM6919084 Public on Mar 07 2023     Jan 05 2023
+GSM6919085 C151S_CDDO-Me4    GSM6919085 Public on Mar 07 2023     Jan 05 2023
+GSM6919086 C151S_CDDO-Me5    GSM6919086 Public on Mar 07 2023     Jan 05 2023
+GSM6919087    N0_Vehicle1    GSM6919087 Public on Mar 07 2023     Jan 05 2023
+GSM6919088    N0_CDDO-Me1    GSM6919088 Public on Mar 07 2023     Jan 05 2023
+GSM6919089    N0_Vehicle2    GSM6919089 Public on Mar 07 2023     Jan 05 2023
+GSM6919090    N0_CDDO-Me2    GSM6919090 Public on Mar 07 2023     Jan 05 2023
+GSM6919091    N0_Vehicle3    GSM6919091 Public on Mar 07 2023     Jan 05 2023
+GSM6919092    N0_CDDO-Me3    GSM6919092 Public on Mar 07 2023     Jan 05 2023
+GSM6919093    N0_CDDO-Me4    GSM6919093 Public on Mar 07 2023     Jan 05 2023
+GSM6919094    N0_Vehicle4    GSM6919094 Public on Mar 07 2023     Jan 05 2023
+GSM6919095    N0_CDDO-Me5    GSM6919095 Public on Mar 07 2023     Jan 05 2023
+GSM6919096    N0_Vehicle5    GSM6919096 Public on Mar 07 2023     Jan 05 2023
+GSM6919097    WT_CDDO-Me1    GSM6919097 Public on Mar 07 2023     Jan 05 2023
+GSM6919098    WT_CDDO-Me2    GSM6919098 Public on Mar 07 2023     Jan 05 2023
+GSM6919099    WT_CDDO-Me3    GSM6919099 Public on Mar 07 2023     Jan 05 2023
+GSM6919100    WT_Vehicle1    GSM6919100 Public on Mar 07 2023     Jan 05 2023
+GSM6919101    WT_CDDO-Me4    GSM6919101 Public on Mar 07 2023     Jan 05 2023
+GSM6919102    WT_Vehicle2    GSM6919102 Public on Mar 07 2023     Jan 05 2023
+GSM6919103    WT_Vehicle3    GSM6919103 Public on Mar 07 2023     Jan 05 2023
+GSM6919104    WT_Vehicle4    GSM6919104 Public on Mar 07 2023     Jan 05 2023
+GSM6919105    WT_CDDO-Me5    GSM6919105 Public on Mar 07 2023     Jan 05 2023
+GSM6919106    WT_Vehicle5    GSM6919106 Public on Mar 07 2023     Jan 05 2023
+           last_update_date type channel_count source_name_ch1 organism_ch1
+GSM6919077      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919078      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919079      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919080      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919081      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919082      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919083      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919084      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919085      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919086      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919087      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919088      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919089      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919090      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919091      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919092      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919093      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919094      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919095      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919096      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919097      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919098      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919099      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919100      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919101      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919102      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919103      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919104      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919105      Mar 07 2023  SRA             1           Liver Mus musculus
+GSM6919106      Mar 07 2023  SRA             1           Liver Mus musculus
+           characteristics_ch1  characteristics_ch1_1 characteristics_ch1_2
+GSM6919077       tissue: Liver        genotype: C151S    treatment: Vehicle
+GSM6919078       tissue: Liver        genotype: C151S    treatment: Vehicle
+GSM6919079       tissue: Liver        genotype: C151S    treatment: Vehicle
+GSM6919080       tissue: Liver        genotype: C151S    treatment: CDDO-Me
+GSM6919081       tissue: Liver        genotype: C151S    treatment: CDDO-Me
+GSM6919082       tissue: Liver        genotype: C151S    treatment: Vehicle
+GSM6919083       tissue: Liver        genotype: C151S    treatment: Vehicle
+GSM6919084       tissue: Liver        genotype: C151S    treatment: CDDO-Me
+GSM6919085       tissue: Liver        genotype: C151S    treatment: CDDO-Me
+GSM6919086       tissue: Liver        genotype: C151S    treatment: CDDO-Me
+GSM6919087       tissue: Liver genotype: Nrf2 kockout    treatment: Vehicle
+GSM6919088       tissue: Liver genotype: Nrf2 kockout    treatment: CDDO-Me
+GSM6919089       tissue: Liver genotype: Nrf2 kockout    treatment: Vehicle
+GSM6919090       tissue: Liver genotype: Nrf2 kockout    treatment: CDDO-Me
+GSM6919091       tissue: Liver genotype: Nrf2 kockout    treatment: Vehicle
+GSM6919092       tissue: Liver genotype: Nrf2 kockout    treatment: CDDO-Me
+GSM6919093       tissue: Liver genotype: Nrf2 kockout    treatment: CDDO-Me
+GSM6919094       tissue: Liver genotype: Nrf2 kockout    treatment: Vehicle
+GSM6919095       tissue: Liver genotype: Nrf2 kockout    treatment: CDDO-Me
+GSM6919096       tissue: Liver genotype: Nrf2 kockout    treatment: Vehicle
+GSM6919097       tissue: Liver    genotype: wild-type    treatment: CDDO-Me
+GSM6919098       tissue: Liver    genotype: wild-type    treatment: CDDO-Me
+GSM6919099       tissue: Liver    genotype: wild-type    treatment: CDDO-Me
+GSM6919100       tissue: Liver    genotype: wild-type    treatment: Vehicle
+GSM6919101       tissue: Liver    genotype: wild-type    treatment: CDDO-Me
+GSM6919102       tissue: Liver    genotype: wild-type    treatment: Vehicle
+GSM6919103       tissue: Liver    genotype: wild-type    treatment: Vehicle
+GSM6919104       tissue: Liver    genotype: wild-type    treatment: Vehicle
+GSM6919105       tissue: Liver    genotype: wild-type    treatment: CDDO-Me
+GSM6919106       tissue: Liver    genotype: wild-type    treatment: Vehicle
+           molecule_ch1
+GSM6919077    total RNA
+GSM6919078    total RNA
+GSM6919079    total RNA
+GSM6919080    total RNA
+GSM6919081    total RNA
+GSM6919082    total RNA
+GSM6919083    total RNA
+GSM6919084    total RNA
+GSM6919085    total RNA
+GSM6919086    total RNA
+GSM6919087    total RNA
+GSM6919088    total RNA
+GSM6919089    total RNA
+GSM6919090    total RNA
+GSM6919091    total RNA
+GSM6919092    total RNA
+GSM6919093    total RNA
+GSM6919094    total RNA
+GSM6919095    total RNA
+GSM6919096    total RNA
+GSM6919097    total RNA
+GSM6919098    total RNA
+GSM6919099    total RNA
+GSM6919100    total RNA
+GSM6919101    total RNA
+GSM6919102    total RNA
+GSM6919103    total RNA
+GSM6919104    total RNA
+GSM6919105    total RNA
+GSM6919106    total RNA
+                                                                                                                                                      extract_protocol_ch1
+GSM6919077 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919078 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919079 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919080 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919081 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919082 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919083 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919084 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919085 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919086 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919087 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919088 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919089 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919090 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919091 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919092 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919093 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919094 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919095 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919096 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919097 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919098 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919099 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919100 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919101 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919102 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919103 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919104 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919105 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+GSM6919106 RNA was prepared using Trizol (Thermo Fisher Scientific) and RNeasy Mini Kit (Qiagen). 1 ug of total RNA was used for the construction of sequencing libraries.
+           taxid_ch1
+GSM6919077     10090
+GSM6919078     10090
+GSM6919079     10090
+GSM6919080     10090
+GSM6919081     10090
+GSM6919082     10090
+GSM6919083     10090
+GSM6919084     10090
+GSM6919085     10090
+GSM6919086     10090
+GSM6919087     10090
+GSM6919088     10090
+GSM6919089     10090
+GSM6919090     10090
+GSM6919091     10090
+GSM6919092     10090
+GSM6919093     10090
+GSM6919094     10090
+GSM6919095     10090
+GSM6919096     10090
+GSM6919097     10090
+GSM6919098     10090
+GSM6919099     10090
+GSM6919100     10090
+GSM6919101     10090
+GSM6919102     10090
+GSM6919103     10090
+GSM6919104     10090
+GSM6919105     10090
+GSM6919106     10090
+                                                                 data_processing
+GSM6919077 The quality control of the raw fastq files were performed using fastp
+GSM6919078 The quality control of the raw fastq files were performed using fastp
+GSM6919079 The quality control of the raw fastq files were performed using fastp
+GSM6919080 The quality control of the raw fastq files were performed using fastp
+GSM6919081 The quality control of the raw fastq files were performed using fastp
+GSM6919082 The quality control of the raw fastq files were performed using fastp
+GSM6919083 The quality control of the raw fastq files were performed using fastp
+GSM6919084 The quality control of the raw fastq files were performed using fastp
+GSM6919085 The quality control of the raw fastq files were performed using fastp
+GSM6919086 The quality control of the raw fastq files were performed using fastp
+GSM6919087 The quality control of the raw fastq files were performed using fastp
+GSM6919088 The quality control of the raw fastq files were performed using fastp
+GSM6919089 The quality control of the raw fastq files were performed using fastp
+GSM6919090 The quality control of the raw fastq files were performed using fastp
+GSM6919091 The quality control of the raw fastq files were performed using fastp
+GSM6919092 The quality control of the raw fastq files were performed using fastp
+GSM6919093 The quality control of the raw fastq files were performed using fastp
+GSM6919094 The quality control of the raw fastq files were performed using fastp
+GSM6919095 The quality control of the raw fastq files were performed using fastp
+GSM6919096 The quality control of the raw fastq files were performed using fastp
+GSM6919097 The quality control of the raw fastq files were performed using fastp
+GSM6919098 The quality control of the raw fastq files were performed using fastp
+GSM6919099 The quality control of the raw fastq files were performed using fastp
+GSM6919100 The quality control of the raw fastq files were performed using fastp
+GSM6919101 The quality control of the raw fastq files were performed using fastp
+GSM6919102 The quality control of the raw fastq files were performed using fastp
+GSM6919103 The quality control of the raw fastq files were performed using fastp
+GSM6919104 The quality control of the raw fastq files were performed using fastp
+GSM6919105 The quality control of the raw fastq files were performed using fastp
+GSM6919106 The quality control of the raw fastq files were performed using fastp
+                                                              data_processing_1
+GSM6919077 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919078 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919079 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919080 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919081 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919082 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919083 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919084 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919085 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919086 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919087 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919088 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919089 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919090 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919091 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919092 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919093 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919094 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919095 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919096 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919097 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919098 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919099 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919100 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919101 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919102 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919103 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919104 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919105 The reads were then mapped to the reference using STAR version 2.7.7
+GSM6919106 The reads were then mapped to the reference using STAR version 2.7.7
+                                                                             data_processing_2
+GSM6919077 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919078 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919079 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919080 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919081 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919082 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919083 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919084 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919085 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919086 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919087 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919088 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919089 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919090 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919091 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919092 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919093 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919094 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919095 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919096 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919097 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919098 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919099 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919100 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919101 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919102 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919103 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919104 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919105 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+GSM6919106 Quality checks on the binary alignment map were donw using tool RSeQC version 3.0.0
+                                                                                  data_processing_3
+GSM6919077 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919078 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919079 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919080 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919081 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919082 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919083 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919084 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919085 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919086 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919087 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919088 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919089 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919090 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919091 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919092 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919093 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919094 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919095 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919096 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919097 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919098 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919099 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919100 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919101 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919102 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919103 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919104 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919105 Differential expression analysis was performed between groups using edgeR version 3.36.0
+GSM6919106 Differential expression analysis was performed between groups using edgeR version 3.36.0
+           data_processing_4
+GSM6919077    Assembly: mm10
+GSM6919078    Assembly: mm10
+GSM6919079    Assembly: mm10
+GSM6919080    Assembly: mm10
+GSM6919081    Assembly: mm10
+GSM6919082    Assembly: mm10
+GSM6919083    Assembly: mm10
+GSM6919084    Assembly: mm10
+GSM6919085    Assembly: mm10
+GSM6919086    Assembly: mm10
+GSM6919087    Assembly: mm10
+GSM6919088    Assembly: mm10
+GSM6919089    Assembly: mm10
+GSM6919090    Assembly: mm10
+GSM6919091    Assembly: mm10
+GSM6919092    Assembly: mm10
+GSM6919093    Assembly: mm10
+GSM6919094    Assembly: mm10
+GSM6919095    Assembly: mm10
+GSM6919096    Assembly: mm10
+GSM6919097    Assembly: mm10
+GSM6919098    Assembly: mm10
+GSM6919099    Assembly: mm10
+GSM6919100    Assembly: mm10
+GSM6919101    Assembly: mm10
+GSM6919102    Assembly: mm10
+GSM6919103    Assembly: mm10
+GSM6919104    Assembly: mm10
+GSM6919105    Assembly: mm10
+GSM6919106    Assembly: mm10
+                                                                                    data_processing_5
+GSM6919077 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919078 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919079 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919080 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919081 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919082 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919083 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919084 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919085 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919086 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919087 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919088 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919089 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919090 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919091 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919092 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919093 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919094 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919095 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919096 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919097 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919098 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919099 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919100 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919101 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919102 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919103 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919104 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919105 Supplementary files format and content: tab-delimited raw counts text file for each sample
+GSM6919106 Supplementary files format and content: tab-delimited raw counts text file for each sample
+           platform_id    contact_name contact_laboratory
+GSM6919077    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919078    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919079    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919080    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919081    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919082    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919083    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919084    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919085    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919086    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919087    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919088    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919089    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919090    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919091    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919092    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919093    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919094    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919095    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919096    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919097    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919098    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919099    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919100    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919101    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919102    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919103    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919104    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919105    GPL19057 Yoko,,Yagishita        Kensler Lab
+GSM6919106    GPL19057 Yoko,,Yagishita        Kensler Lab
+               contact_department             contact_institute
+GSM6919077 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919078 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919079 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919080 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919081 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919082 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919083 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919084 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919085 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919086 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919087 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919088 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919089 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919090 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919091 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919092 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919093 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919094 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919095 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919096 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919097 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919098 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919099 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919100 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919101 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919102 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919103 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919104 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919105 Public Health Sciences Fred Hutchinson Cancer Center
+GSM6919106 Public Health Sciences Fred Hutchinson Cancer Center
+               contact_address contact_city contact_state
+GSM6919077 1100 Fairview Ave N      Seattle            WA
+GSM6919078 1100 Fairview Ave N      Seattle            WA
+GSM6919079 1100 Fairview Ave N      Seattle            WA
+GSM6919080 1100 Fairview Ave N      Seattle            WA
+GSM6919081 1100 Fairview Ave N      Seattle            WA
+GSM6919082 1100 Fairview Ave N      Seattle            WA
+GSM6919083 1100 Fairview Ave N      Seattle            WA
+GSM6919084 1100 Fairview Ave N      Seattle            WA
+GSM6919085 1100 Fairview Ave N      Seattle            WA
+GSM6919086 1100 Fairview Ave N      Seattle            WA
+GSM6919087 1100 Fairview Ave N      Seattle            WA
+GSM6919088 1100 Fairview Ave N      Seattle            WA
+GSM6919089 1100 Fairview Ave N      Seattle            WA
+GSM6919090 1100 Fairview Ave N      Seattle            WA
+GSM6919091 1100 Fairview Ave N      Seattle            WA
+GSM6919092 1100 Fairview Ave N      Seattle            WA
+GSM6919093 1100 Fairview Ave N      Seattle            WA
+GSM6919094 1100 Fairview Ave N      Seattle            WA
+GSM6919095 1100 Fairview Ave N      Seattle            WA
+GSM6919096 1100 Fairview Ave N      Seattle            WA
+GSM6919097 1100 Fairview Ave N      Seattle            WA
+GSM6919098 1100 Fairview Ave N      Seattle            WA
+GSM6919099 1100 Fairview Ave N      Seattle            WA
+GSM6919100 1100 Fairview Ave N      Seattle            WA
+GSM6919101 1100 Fairview Ave N      Seattle            WA
+GSM6919102 1100 Fairview Ave N      Seattle            WA
+GSM6919103 1100 Fairview Ave N      Seattle            WA
+GSM6919104 1100 Fairview Ave N      Seattle            WA
+GSM6919105 1100 Fairview Ave N      Seattle            WA
+GSM6919106 1100 Fairview Ave N      Seattle            WA
+           contact_zip_postal_code contact_country data_row_count
+GSM6919077                   98109             USA              0
+GSM6919078                   98109             USA              0
+GSM6919079                   98109             USA              0
+GSM6919080                   98109             USA              0
+GSM6919081                   98109             USA              0
+GSM6919082                   98109             USA              0
+GSM6919083                   98109             USA              0
+GSM6919084                   98109             USA              0
+GSM6919085                   98109             USA              0
+GSM6919086                   98109             USA              0
+GSM6919087                   98109             USA              0
+GSM6919088                   98109             USA              0
+GSM6919089                   98109             USA              0
+GSM6919090                   98109             USA              0
+GSM6919091                   98109             USA              0
+GSM6919092                   98109             USA              0
+GSM6919093                   98109             USA              0
+GSM6919094                   98109             USA              0
+GSM6919095                   98109             USA              0
+GSM6919096                   98109             USA              0
+GSM6919097                   98109             USA              0
+GSM6919098                   98109             USA              0
+GSM6919099                   98109             USA              0
+GSM6919100                   98109             USA              0
+GSM6919101                   98109             USA              0
+GSM6919102                   98109             USA              0
+GSM6919103                   98109             USA              0
+GSM6919104                   98109             USA              0
+GSM6919105                   98109             USA              0
+GSM6919106                   98109             USA              0
+               instrument_model library_selection library_source
+GSM6919077 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919078 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919079 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919080 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919081 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919082 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919083 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919084 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919085 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919086 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919087 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919088 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919089 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919090 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919091 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919092 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919093 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919094 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919095 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919096 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919097 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919098 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919099 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919100 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919101 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919102 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919103 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919104 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919105 Illumina NextSeq 500              cDNA transcriptomic
+GSM6919106 Illumina NextSeq 500              cDNA transcriptomic
+           library_strategy
+GSM6919077          RNA-Seq
+GSM6919078          RNA-Seq
+GSM6919079          RNA-Seq
+GSM6919080          RNA-Seq
+GSM6919081          RNA-Seq
+GSM6919082          RNA-Seq
+GSM6919083          RNA-Seq
+GSM6919084          RNA-Seq
+GSM6919085          RNA-Seq
+GSM6919086          RNA-Seq
+GSM6919087          RNA-Seq
+GSM6919088          RNA-Seq
+GSM6919089          RNA-Seq
+GSM6919090          RNA-Seq
+GSM6919091          RNA-Seq
+GSM6919092          RNA-Seq
+GSM6919093          RNA-Seq
+GSM6919094          RNA-Seq
+GSM6919095          RNA-Seq
+GSM6919096          RNA-Seq
+GSM6919097          RNA-Seq
+GSM6919098          RNA-Seq
+GSM6919099          RNA-Seq
+GSM6919100          RNA-Seq
+GSM6919101          RNA-Seq
+GSM6919102          RNA-Seq
+GSM6919103          RNA-Seq
+GSM6919104          RNA-Seq
+GSM6919105          RNA-Seq
+GSM6919106          RNA-Seq
+                                                                 relation
+GSM6919077 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32604007
+GSM6919078 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32604006
+GSM6919079 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32604005
+GSM6919080 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32604004
+GSM6919081 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32604003
+GSM6919082 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32604002
+GSM6919083 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32604001
+GSM6919084 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32604000
+GSM6919085 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603999
+GSM6919086 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603998
+GSM6919087 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603997
+GSM6919088 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603996
+GSM6919089 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603995
+GSM6919090 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603994
+GSM6919091 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603993
+GSM6919092 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603992
+GSM6919093 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603991
+GSM6919094 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603990
+GSM6919095 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603989
+GSM6919096 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603988
+GSM6919097 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603987
+GSM6919098 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603986
+GSM6919099 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603985
+GSM6919100 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603984
+GSM6919101 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603983
+GSM6919102 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603982
+GSM6919103 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603981
+GSM6919104 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603980
+GSM6919105 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603979
+GSM6919106 BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN32603978
+                                                       relation_1
+GSM6919077 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946956
+GSM6919078 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946957
+GSM6919079 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946958
+GSM6919080 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946959
+GSM6919081 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946960
+GSM6919082 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946961
+GSM6919083 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946962
+GSM6919084 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946963
+GSM6919085 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946964
+GSM6919086 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946965
+GSM6919087 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946966
+GSM6919088 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946967
+GSM6919089 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946968
+GSM6919090 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946969
+GSM6919091 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946970
+GSM6919092 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946971
+GSM6919093 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946972
+GSM6919094 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946973
+GSM6919095 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946974
+GSM6919096 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946975
+GSM6919097 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946976
+GSM6919098 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946977
+GSM6919099 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946978
+GSM6919100 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946979
+GSM6919101 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946980
+GSM6919102 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946981
+GSM6919103 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946982
+GSM6919104 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946983
+GSM6919105 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946984
+GSM6919106 SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX18946985
+           supplementary_file_1 genotype_ch1 tissue_ch1 treatment_ch1
+GSM6919077                 NONE        C151S      Liver       Vehicle
+GSM6919078                 NONE        C151S      Liver       Vehicle
+GSM6919079                 NONE        C151S      Liver       Vehicle
+GSM6919080                 NONE        C151S      Liver       CDDO-Me
+GSM6919081                 NONE        C151S      Liver       CDDO-Me
+GSM6919082                 NONE        C151S      Liver       Vehicle
+GSM6919083                 NONE        C151S      Liver       Vehicle
+GSM6919084                 NONE        C151S      Liver       CDDO-Me
+GSM6919085                 NONE        C151S      Liver       CDDO-Me
+GSM6919086                 NONE        C151S      Liver       CDDO-Me
+GSM6919087                 NONE Nrf2 kockout      Liver       Vehicle
+GSM6919088                 NONE Nrf2 kockout      Liver       CDDO-Me
+GSM6919089                 NONE Nrf2 kockout      Liver       Vehicle
+GSM6919090                 NONE Nrf2 kockout      Liver       CDDO-Me
+GSM6919091                 NONE Nrf2 kockout      Liver       Vehicle
+GSM6919092                 NONE Nrf2 kockout      Liver       CDDO-Me
+GSM6919093                 NONE Nrf2 kockout      Liver       CDDO-Me
+GSM6919094                 NONE Nrf2 kockout      Liver       Vehicle
+GSM6919095                 NONE Nrf2 kockout      Liver       CDDO-Me
+GSM6919096                 NONE Nrf2 kockout      Liver       Vehicle
+GSM6919097                 NONE    wild-type      Liver       CDDO-Me
+GSM6919098                 NONE    wild-type      Liver       CDDO-Me
+GSM6919099                 NONE    wild-type      Liver       CDDO-Me
+GSM6919100                 NONE    wild-type      Liver       Vehicle
+GSM6919101                 NONE    wild-type      Liver       CDDO-Me
+GSM6919102                 NONE    wild-type      Liver       Vehicle
+GSM6919103                 NONE    wild-type      Liver       Vehicle
+GSM6919104                 NONE    wild-type      Liver       Vehicle
+GSM6919105                 NONE    wild-type      Liver       CDDO-Me
+GSM6919106                 NONE    wild-type      Liver       Vehicle</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">counts2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">counts2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">features</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">coldat</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "GSM6919077" "GSM6919078" "GSM6919079" "GSM6919080" "GSM6919081"
+ [6] "GSM6919082" "GSM6919083" "GSM6919084" "GSM6919085" "GSM6919086"
+[11] "GSM6919087" "GSM6919088" "GSM6919089" "GSM6919090" "GSM6919091"
+[16] "GSM6919092" "GSM6919093" "GSM6919094" "GSM6919095" "GSM6919096"
+[21] "GSM6919097" "GSM6919098" "GSM6919099" "GSM6919100" "GSM6919101"
+[26] "GSM6919102" "GSM6919103" "GSM6919104" "GSM6919105" "GSM6919106"</code></pre>
+</div>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">counts2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "C151S_Vehicle1" "C151S_CDDO-Me5" "N0_Vehicle1"    "N0_CDDO-Me1"   
+ [5] "N0_Vehicle2"    "N0_CDDO-Me2"    "N0_Vehicle3"    "N0_CDDO-Me3"   
+ [9] "N0_CDDO-Me4"    "N0_Vehicle4"    "N0_CDDO-Me5"    "C151S_Vehicle2"
+[13] "N0_Vehicle5"    "WT_CDDO-Me1"    "WT_CDDO-Me2"    "WT_CDDO-Me3"   
+[17] "WT_Vehicle1"    "WT_CDDO-Me4"    "WT_Vehicle2"    "WT_Vehicle3"   
+[21] "WT_Vehicle4"    "WT_CDDO-Me5"    "C151S_Vehicle3" "WT_Vehicle5"   
+[25] "C151S_CDDO-Me1" "C151S_CDDO-Me2" "C151S_Vehicle4" "C151S_Vehicle5"
+[29] "C151S_CDDO-Me3" "C151S_CDDO-Me4"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">counts2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">coldat</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">SummarizedExperiment</a></span><span class="op">(</span></span>
+<span>    assays <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">counts2</span><span class="op">)</span>,</span>
+<span>    colData <span class="op">=</span> <span class="va">coldat</span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/thelovelab/DESeq2">DESeq2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">desdata</span> <span class="op">&lt;-</span> <span class="fu">DESeq2</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/DESeqDataSet.html">DESeqDataSet</a></span><span class="op">(</span><span class="va">se</span>, design <span class="op">=</span> <span class="op">~</span> <span class="va">treatment_ch1</span> <span class="op">+</span> <span class="va">genotype_ch1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>converting counts to integer mode</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in DESeq2::DESeqDataSet(se, design = ~treatment_ch1 + genotype_ch1):
+some variables in design formula are characters, converting to factors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>  Note: levels of factors in the design contain characters other than
+  letters, numbers, '_' and '.'. It is recommended (but not required) to use
+  only letters, numbers, and delimiters '_' or '.', as these are safe characters
+  for column names in R. [This is a message, not a warning or an error]</code></pre>
+</div>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">desdata</span> <span class="op">&lt;-</span> <span class="fu">estimateSizeFactors</span><span class="op">(</span><span class="va">desdata</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>  Note: levels of factors in the design contain characters other than
+  letters, numbers, '_' and '.'. It is recommended (but not required) to use
+  only letters, numbers, and delimiters '_' or '.', as these are safe characters
+  for column names in R. [This is a message, not a warning or an error]</code></pre>
+</div>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">desdata</span> <span class="op">&lt;-</span> <span class="fu">estimateDispersions</span><span class="op">(</span><span class="va">desdata</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>gene-wise dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>mean-dispersion relationship</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>  Note: levels of factors in the design contain characters other than
+  letters, numbers, '_' and '.'. It is recommended (but not required) to use
+  only letters, numbers, and delimiters '_' or '.', as these are safe characters
+  for column names in R. [This is a message, not a warning or an error]</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>final dispersion estimates</code></pre>
+</div>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html">plotDispEsts</a></span><span class="op">(</span><span class="va">desdata</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">desdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/nbinomWaldTest.html">nbinomWaldTest</a></span><span class="op">(</span><span class="va">desdata</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">coldat</span><span class="op">$</span><span class="va">genotype.ch1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NULL</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">resGeno</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/results.html">results</a></span><span class="op">(</span><span class="va">desdata</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"genotype_ch1"</span>, <span class="st">"Nrf2 kockout"</span>, <span class="st">"C151S"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">resGeno</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">resGeno</span><span class="op">$</span><span class="va">pvalue</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>log2 fold change (MLE): genotype_ch1 Nrf2 kockout vs C151S 
+Wald test p-value: genotype ch1 Nrf2.kockout vs C151S 
+DataFrame with 6 rows and 6 columns
+                       baseMean log2FoldChange     lfcSE      stat      pvalue
+                      &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;
+ENSMUSG00000105315.1    138.264       4.378403  0.642073   6.81917 9.15676e-12
+ENSMUSG00000063704.13   311.065       3.174140  0.466029   6.81103 9.69024e-12
+ENSMUSG00000041075.8    390.237       0.997383  0.149857   6.65555 2.82235e-11
+ENSMUSG00000032418.15  4075.028       2.033192  0.306557   6.63235 3.30378e-11
+ENSMUSG00000000440.12   274.709       1.411949  0.229111   6.16273 7.15008e-10
+ENSMUSG00000022215.6    273.979       3.046804  0.495869   6.14437 8.02813e-10
+                             padj
+                        &lt;numeric&gt;
+ENSMUSG00000105315.1  8.42518e-08
+ENSMUSG00000063704.13 8.42518e-08
+ENSMUSG00000041075.8  1.43624e-07
+ENSMUSG00000032418.15 1.43624e-07
+ENSMUSG00000000440.12 2.32669e-06
+ENSMUSG00000022215.6  2.32669e-06</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">resTreat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/results.html">results</a></span><span class="op">(</span><span class="va">desdata</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"genotype_ch1"</span>, <span class="st">"Nrf2 kockout"</span>, <span class="st">"C151S"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+</main><!-- /main column --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -102,7 +102,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header><p>Last week we talked about Experimental Design. This week we’re going to apply that knowledge to finding <em>differential expressed</em> genes or transcripts - finding those genes or transcripts that are expressed differently between groups in our experimental design.</p>
 <p>That is, in general, are there genes for the samples in group A that have different counts than the samples in group B?</p>
-<p>We’ll Explore the <code>edgeR</code> package as one method to find differentially expressed genes. There is also the <code>DESeq2</code> package.</p>
+<p>We’ll Explore the <code>DESeq2</code> package as one method to find differentially expressed genes. There is also the <code>edgeR</code> package.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -124,59 +124,16 @@ Am I doing this right?
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stemangiola/tidySummarizedExperiment">tidySummarizedExperiment</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">GSE96870</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="st">"data/GSE96870_se.rds"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span><span class="op">(</span><span class="va">GSE96870</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>DataFrame with 22 rows and 12 columns
-                     title geo_accession     organism         age         sex
-               &lt;character&gt;   &lt;character&gt;  &lt;character&gt; &lt;character&gt; &lt;character&gt;
-GSM2545337 CNS_RNA-seq_11C    GSM2545337 Mus musculus     8 weeks      Female
-GSM2545338 CNS_RNA-seq_12C    GSM2545338 Mus musculus     8 weeks      Female
-GSM2545348 CNS_RNA-seq_27C    GSM2545348 Mus musculus     8 weeks      Female
-GSM2545353  CNS_RNA-seq_3C    GSM2545353 Mus musculus     8 weeks      Female
-GSM2545343 CNS_RNA-seq_20C    GSM2545343 Mus musculus     8 weeks        Male
-...                    ...           ...          ...         ...         ...
-GSM2545351  CNS_RNA-seq_2C    GSM2545351 Mus musculus     8 weeks      Female
-GSM2545380  CNS_RNA-seq_9C    GSM2545380 Mus musculus     8 weeks      Female
-GSM2545341 CNS_RNA-seq_17C    GSM2545341 Mus musculus     8 weeks        Male
-GSM2545346 CNS_RNA-seq_25C    GSM2545346 Mus musculus     8 weeks        Male
-GSM2545347 CNS_RNA-seq_26C    GSM2545347 Mus musculus     8 weeks        Male
-             infection      strain        time      tissue     mouse
-           &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;integer&gt;
-GSM2545337 NonInfected     C57BL/6        Day0  Cerebellum         9
-GSM2545338 NonInfected     C57BL/6        Day0  Cerebellum        10
-GSM2545348 NonInfected     C57BL/6        Day0  Cerebellum         8
-GSM2545353 NonInfected     C57BL/6        Day0  Cerebellum         4
-GSM2545343 NonInfected     C57BL/6        Day0  Cerebellum        11
-...                ...         ...         ...         ...       ...
-GSM2545351  InfluenzaA     C57BL/6        Day8  Cerebellum        16
-GSM2545380  InfluenzaA     C57BL/6        Day8  Cerebellum        19
-GSM2545341  InfluenzaA     C57BL/6        Day8  Cerebellum         6
-GSM2545346  InfluenzaA     C57BL/6        Day8  Cerebellum        23
-GSM2545347  InfluenzaA     C57BL/6        Day8  Cerebellum        24
-                    Label       Group
-                 &lt;factor&gt;    &lt;factor&gt;
-GSM2545337 Female_Day0_9  Female_Day0
-GSM2545338 Female_Day0_10 Female_Day0
-GSM2545348 Female_Day0_8  Female_Day0
-GSM2545353 Female_Day0_4  Female_Day0
-GSM2545343 Male_Day0_11   Male_Day0  
-...                   ...         ...
-GSM2545351 Female_Day8_16 Female_Day8
-GSM2545380 Female_Day8_19 Female_Day8
-GSM2545341 Male_Day8_6    Male_Day8  
-GSM2545346 Male_Day8_23   Male_Day8  
-GSM2545347 Male_Day8_24   Male_Day8  </code></pre>
-</div>
+<span><span class="va">GSE96870</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="st">"data/GSE96870_se.rds"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The following plot is the plot of the expression counts for the <code>Asl</code> gene across all samples in our dataset grouped by <code>time</code>. There appears to be a difference in expression across the samples by timepoint, but there is a lot of variation that we can see in the data.</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">expression_plot</span> <span class="op">&lt;-</span> </span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">expression_plot</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">GSE96870</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.feature</span> <span class="op">==</span> <span class="st">"Asl"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Label</span>, y <span class="op">=</span> <span class="va">counts</span>, color <span class="op">=</span> <span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">expression_plot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
@@ -187,15 +144,15 @@ GSM2545347 Male_Day8_24   Male_Day8  </code></pre>
 </div>
 <p>The issue is that the library sizes of each sample is different. If we compare the counts of each library, we’ll see they vary.</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">expression_plot</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">GSE96870</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.feature</span> <span class="op">==</span> <span class="st">"Asl"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Label</span>, y <span class="op">=</span> <span class="va">counts</span>, color <span class="op">=</span> <span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Expression count"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Asl Expression count"</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="va">count_plot</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">GSE96870</span> <span class="op">|&gt;</span></span>
@@ -204,13 +161,13 @@ GSM2545347 Male_Day8_24   Male_Day8  </code></pre>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span><span class="op">(</span><span class="va">GSE96870</span><span class="op">)</span><span class="op">[[</span><span class="st">"time"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Label</span>, y<span class="op">=</span><span class="va">total_counts</span>, fill<span class="op">=</span><span class="va">time</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>stat<span class="op">=</span><span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>stat<span class="op">=</span><span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Library Size for each Sample"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Library Size for each Sample"</span><span class="op">)</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</code></pre>
 </div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">expression_plot</span> <span class="op">/</span> <span class="va">count_plot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">expression_plot</span><span class="op">/</span> <span class="va">count_plot</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
@@ -218,7 +175,69 @@ GSM2545347 Male_Day8_24   Male_Day8  </code></pre>
 </div>
 </div>
 </div>
-<p>You will notice that the counts for <code>Asl</code> across the samples vary by Library size (if you can’t see it, look at the patterns of ups and downs). For us to truly compare the expression differences between our timepoints, we need to remove the effect of <em>library size</em> before we make the comparison.</p>
+<p>You will notice that the counts for <code>Asl</code> across the samples vary by Library size (if you can’t see it, look at the patterns of ups and downs). For us to truly compare the expression differences between our timepoints in our samples, we need to remove the effect of <em>library size</em> before we make the comparison.</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870_filtered</span> <span class="op">&lt;-</span> <span class="va">GSE96870</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/MatrixGenerics/man/rowSums.html">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">GSE96870</span>, <span class="st">"counts"</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">5</span>,<span class="op">]</span></span>
+<span></span>
+<span><span class="va">GSE96870_deseq</span> <span class="op">&lt;-</span> <span class="fu">DESeq2</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/DESeqDataSet.html">DESeqDataSet</a></span><span class="op">(</span><span class="va">GSE96870_filtered</span>, design <span class="op">=</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">time</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">GSE96870_normalized</span> <span class="op">&lt;-</span>  <span class="fu">DESeq2</span><span class="fu">::</span><span class="fu">estimateSizeFactors</span><span class="op">(</span><span class="va">GSE96870_deseq</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">scaling_coeffs</span> <span class="op">&lt;-</span> <span class="fu">sizeFactors</span><span class="op">(</span><span class="va">GSE96870_normalized</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">scaling_coeffs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>GSM2545337 GSM2545338 GSM2545348 GSM2545353 GSM2545343 GSM2545349 GSM2545354 
+ 0.9094342  0.8566129  1.0423155  1.1065400  1.1185077  1.0160492  0.9792305 
+GSM2545339 GSM2545344 GSM2545352 GSM2545362 GSM2545340 GSM2545345 GSM2545350 
+ 0.9149625  0.9310654  1.2170848  1.0833621  0.9291129  0.9350809  1.1544881 
+GSM2545363 GSM2545336 GSM2545342 GSM2545351 GSM2545380 GSM2545341 GSM2545346 
+ 1.0002899  1.1343694  0.8755758  1.0434522  1.1336830  0.8849693  0.9341256 
+GSM2545347 
+ 1.0079374 </code></pre>
+</div>
+</div>
+<p>These are the scaling factors. If we look at <code>GSE96870_normalized</code>, we will see that an extra column called <code>sizeFactor</code> has been added:</p>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870_normalized</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">.feature</span>, <span class="va">.sample</span>, <span class="va">counts</span>, <span class="va">sizeFactor</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A SummarizedExperiment-tibble abstraction: 603,460 × 9
+# Features=27430 | Samples=22 | Assays=counts
+   .feature     .sample    counts sizeFactor seqnames  start    end width strand
+   &lt;chr&gt;        &lt;chr&gt;       &lt;int&gt;      &lt;dbl&gt; &lt;fct&gt;     &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;fct&gt; 
+ 1 Xkr4         GSM2545337   2410      0.909 1        3.67e6 3.67e6  1191 -     
+ 2 LOC105243853 GSM2545337      0      0.909 1        3.36e6 3.37e6  9183 +     
+ 3 LOC105242387 GSM2545337    121      0.909 1        3.66e6 3.67e6 11610 -     
+ 4 LOC105242467 GSM2545337      5      0.909 1        4.23e6 4.23e6   293 -     
+ 5 Rp1          GSM2545337      2      0.909 1        4.41e6 4.41e6    72 -     
+ 6 Sox17        GSM2545337    239      0.909 1        4.50e6 4.50e6  1064 -     
+ 7 Gm7357       GSM2545337      0      0.909 1        4.52e6 4.52e6   775 +     
+ 8 LOC105243855 GSM2545337      3      0.909 1        4.59e6 4.59e6   801 -     
+ 9 Gm6123       GSM2545337      7      0.909 1        4.77e6 4.77e6  1289 +     
+10 Mrpl15       GSM2545337   1019      0.909 1        4.79e6 4.79e6   154 -     
+# ℹ 40 more rows</code></pre>
+</div>
+</div>
+<p>If we divide <code>counts</code> by <code>sizeFactor</code>, then we get our <code>scaled</code> counts.</p>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">expression_normalized</span> <span class="op">&lt;-</span> <span class="va">GSE96870_normalized</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.feature</span> <span class="op">==</span> <span class="st">"Asl"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>scaled <span class="op">=</span> <span class="va">counts</span> <span class="op">/</span> <span class="va">sizeFactor</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Label</span>, y <span class="op">=</span> <span class="va">scaled</span>, color <span class="op">=</span> <span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Asl Expression count \nnormalized by library size"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="op">(</span><span class="va">expression_plot</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="va">expression_normalized</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As you can see, some, but not all of the intra-timepoint variation was removed, especially within the <code>Day0</code> timepoint. We will attempt to account for this variability in our model.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -233,6 +252,8 @@ What about Single Cell Data?
 </div>
 </div>
 </section><section id="the-general-differential-expression-workflow" class="level2"><h2 class="anchored" data-anchor-id="the-general-differential-expression-workflow">The General Differential Expression Workflow</h2>
+<p>So, now we know part of what we’re working toward: assessing whether there is a timepoint effect while accounting for variability in our data.</p>
+<p>In the general workflow, we are in the box below.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
@@ -242,7 +263,7 @@ What about Single Cell Data?
 A[Reading in Data] --&gt; B
 B[Metadata] --&gt; C
 C[Data Exploration] --&gt; D
-subgraph DESeq2
+subgraph "DESeq2 / EdgeR"
 D[Filtering and Normalization] --&gt; E
 E[Design Matrix] --&gt; F
 F[Dispersion Estimation] --&gt; G
