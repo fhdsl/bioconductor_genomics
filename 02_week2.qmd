@@ -34,7 +34,7 @@ When we carry out our experiment, we perform some form of measurement on our sam
 
 There is a crucial relationship between samples, populations, and sample size: As the sample size gets larger, then the sample mean approaches the population mean and the sample variance approaches the population variance. This is called the **Law of Large Numbers**.
 
-Let's take at the following experiment as a demo: The goal of this study was to determine the effect of an upper-respiratory infection on changes in RNA transcription occurring in the cerebellum and spinal cord. post infection by inoculated saline at **day 0 (Control)** or with Influenza A at **day 8 (Case)**.
+Let's take at the following experiment as a demo: The goal of this [study](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE96870) was to determine the effect of an upper-respiratory infection on changes in RNA transcription occurring in the cerebellum on mouse models. Control mice were inoculated with saline at Day 0 and measured on the same day. Case mice were inoculated with Influenza A and measured at day 8 post-infection.
 
 Let's take a look at RNA-seq measurement of the gene `Asl` for the control samples.
 
