@@ -82,13 +82,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#model-fitting" id="toc-model-fitting" class="nav-link" data-scroll-target="#model-fitting">Model Fitting</a></li>
   <li><a href="#shrinkage" id="toc-shrinkage" class="nav-link" data-scroll-target="#shrinkage">Shrinkage</a></li>
   <li><a href="#adjustment-for-multiple-comparisons" id="toc-adjustment-for-multiple-comparisons" class="nav-link" data-scroll-target="#adjustment-for-multiple-comparisons">Adjustment for multiple comparisons</a></li>
+  <li><a href="#going-back-to-volcano-plots" id="toc-going-back-to-volcano-plots" class="nav-link" data-scroll-target="#going-back-to-volcano-plots">Going back to Volcano Plots</a></li>
   <li><a href="#contrasts" id="toc-contrasts" class="nav-link" data-scroll-target="#contrasts">Contrasts</a></li>
-  <li><a href="#commands-used-in-edger-package" id="toc-commands-used-in-edger-package" class="nav-link" data-scroll-target="#commands-used-in-edger-package">Commands Used in <code>edgeR</code> package</a></li>
-  <li><a href="#data-filtering-in-edger" id="toc-data-filtering-in-edger" class="nav-link" data-scroll-target="#data-filtering-in-edger">Data Filtering in <code>edgeR</code></a></li>
-  <li><a href="#data-normalization-in-edger" id="toc-data-normalization-in-edger" class="nav-link" data-scroll-target="#data-normalization-in-edger">Data Normalization in <code>edgeR</code></a></li>
-  <li><a href="#two-group-comparison" id="toc-two-group-comparison" class="nav-link" data-scroll-target="#two-group-comparison">Two group comparison</a></li>
-  <li><a href="#multiple-groups" id="toc-multiple-groups" class="nav-link" data-scroll-target="#multiple-groups">Multiple Groups</a></li>
-  <li><a href="#multiple-groups-multiple-factors" id="toc-multiple-groups-multiple-factors" class="nav-link" data-scroll-target="#multiple-groups-multiple-factors">Multiple Groups, Multiple Factors</a></li>
   <li><a href="#take-home-points" id="toc-take-home-points" class="nav-link" data-scroll-target="#take-home-points">Take Home Points</a></li>
   </ul></nav>
 </div>
@@ -256,7 +251,16 @@ G --&gt; J[Pathway and Network Analysis]
 </div>
 <p>Let’s calculate the mean expression by <code>time</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE_means</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE_means</span> <span class="op">&lt;-</span> <span class="va">GSE96870_normalized</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">time</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Day0"</span>, <span class="st">"Day8"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.feature</span> <span class="op">==</span> <span class="st">"Asl"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>scaled <span class="op">=</span> <span class="va">counts</span> <span class="op">/</span> <span class="va">sizeFactor</span>, time<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>mean_expression <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">scaled</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</code></pre>
+</div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE_means</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 2
   time  mean_expression
@@ -289,10 +293,10 @@ G --&gt; J[Pathway and Network Analysis]
 <li>Our data begins at 0 and goes up</li>
 <li>It is skewed (most of the genes have very low expression)</li>
 </ol>
-<p>The main thing we are fitting is the <em>dispersion of the data</em>, which is like the variance of the data, . The main thing to remember is that lower expression values are less reliable than those</p>
+<p>The main thing we are fitting is the <em>dispersion of the data</em>, which is like the variance of the data, . The main thing to remember is that lower expression values are less reliable than the higher expression values.</p>
 <p>We use <code>estimateDispersions()</code> in <code>DESeq2</code> to fit our model.</p>
 <div class="cell">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96970_est</span> <span class="op">&lt;-</span> <span class="fu">DESeq2</span><span class="fu">::</span><span class="fu">estimateDispersions</span><span class="op">(</span><span class="va">GSE96870_normalized</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96970_est</span> <span class="op">&lt;-</span> <span class="fu">DESeq2</span><span class="fu">::</span><span class="fu">estimateDispersions</span><span class="op">(</span><span class="va">GSE96870_normalized</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>gene-wise dispersion estimates</code></pre>
 </div>
@@ -302,7 +306,7 @@ G --&gt; J[Pathway and Network Analysis]
 <div class="cell-output cell-output-stderr">
 <pre><code>final dispersion estimates</code></pre>
 </div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html">plotDispEsts</a></span><span class="op">(</span><span class="va">GSE96970_est</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html">plotDispEsts</a></span><span class="op">(</span><span class="va">GSE96970_est</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
@@ -318,11 +322,11 @@ G --&gt; J[Pathway and Network Analysis]
 <p>Genes with high dispersion experience the most amount of shrinkage. They actually pay a penalty in that their fold-change estimates <em>shrink</em>. The crucial thing to note is that low dispersion candidates experience very little shrinkage.</p>
 <p>After model fitting and shrinkage, the next step is to actually conduct the statistical test.</p>
 <div class="cell">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">model_fit</span> <span class="op">&lt;-</span> <span class="fu">DESeq2</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/nbinomWaldTest.html">nbinomWaldTest</a></span><span class="op">(</span><span class="va">GSE96970_est</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">model_fit</span> <span class="op">&lt;-</span> <span class="fu">DESeq2</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/nbinomWaldTest.html">nbinomWaldTest</a></span><span class="op">(</span><span class="va">GSE96970_est</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>After running the statistical test, we need to extract the comparison we’re interested in using the <code>results</code> function. We need to specify the comparison and groups we’re interested in to the <code>contrast</code> argument, and can specify a log Fold Change threshold</p>
 <div class="cell">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE_results</span> <span class="op">&lt;-</span> <span class="fu">DESeq2</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/results.html">results</a></span><span class="op">(</span><span class="va">model_fit</span>, </span>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE_results</span> <span class="op">&lt;-</span> <span class="fu">DESeq2</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/results.html">results</a></span><span class="op">(</span><span class="va">model_fit</span>, </span>
 <span>                               contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"Day8"</span>, <span class="st">"Day0"</span><span class="op">)</span>, </span>
 <span>                               lfcThreshold <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>                               alpha <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
@@ -339,11 +343,11 @@ low counts [2]     : 2128, 7.8%
 [1] see 'cooksCutoff' argument of ?results
 [2] see 'independentFiltering' argument of ?results</code></pre>
 </div>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/results.html">resultsNames</a></span><span class="op">(</span><span class="va">GSE_results</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/results.html">resultsNames</a></span><span class="op">(</span><span class="va">GSE_results</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>character(0)</code></pre>
 </div>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">shrinkage</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/lfcShrink.html">lfcShrink</a></span><span class="op">(</span><span class="va">model_fit</span>, coef<span class="op">=</span><span class="st">"time_Day8_vs_Day0"</span>, lfcThreshold <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">shrinkage</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/lfcShrink.html">lfcShrink</a></span><span class="op">(</span><span class="va">model_fit</span>, coef<span class="op">=</span><span class="st">"time_Day8_vs_Day0"</span>, lfcThreshold <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>using 'apeglm' for LFC shrinkage. If used in published research, please cite:
     Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for
@@ -353,28 +357,10 @@ low counts [2]     : 2128, 7.8%
 <div class="cell-output cell-output-stderr">
 <pre><code>computing FSOS 'false sign or small' s-values (T=0.5)</code></pre>
 </div>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#before &lt;- plotMA(GSE_results,MLE=TRUE)</span></span>
-<span><span class="va">before</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/plotMA.html">plotMA</a></span><span class="op">(</span><span class="va">GSE_results</span>, main<span class="op">=</span> <span class="st">"Before Shrinkage"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
 </div>
-</div>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">after</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/plotMA.html">plotMA</a></span><span class="op">(</span><span class="va">shrinkage</span>, main<span class="op">=</span><span class="st">"After Shrinkage"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>thresholding s-values on alpha=0.005 to color points</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-9-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>We can visualize the shrinkage directly by plotting before and after fold change vs pvalue:</p>
+<p>We can visualize the shrinkage directly by plotting before (black) and after (blue) fold change vs pvalue.</p>
 <div class="cell">
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">111</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">111</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">after</span> <span class="op">&lt;-</span> <span class="va">shrinkage</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -411,11 +397,35 @@ Removed 1 row containing missing values or values outside the scale range
 </div>
 </div>
 </div>
+<p>Another way to visualize shrinkage is with an <em>MA plot</em> - this plots the log2 fold change on the y-axis and mean of normalized counts on the y-axis.</p>
+<div class="cell">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/plotMA.html">plotMA</a></span><span class="op">(</span><span class="va">GSE_results</span>, main<span class="op">=</span> <span class="st">"Before Shrinkage"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Before shrinkage, we can see there are a lot of high fold change candidates at low normalized counts. Compare this to after shrinkage:</p>
+<div class="cell">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/plotMA.html">plotMA</a></span><span class="op">(</span><span class="va">shrinkage</span>, main<span class="op">=</span><span class="st">"After Shrinkage"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>thresholding s-values on alpha=0.005 to color points</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can see that the shrinkage procedure has shrunk a lot of these high-fold change candidates at lower counts - notice the low counts look “tighter”.</p>
 </section><section id="adjustment-for-multiple-comparisons" class="level2"><h2 class="anchored" data-anchor-id="adjustment-for-multiple-comparisons">Adjustment for multiple comparisons</h2>
 <p>The last thing we need to do is adjust for multiple comparisons. We are doing over 20,000 statistical tests, and with each test we make, the probability that we have a <em>false discovery</em> increase. So we need a way to correct for multiple comparisons.</p>
-<p>We adjust our p-value distribution using what’s called a FDR (False discovery rate) procedure. A lot of potential candidates have their p-values pushed toward 1.</p>
+<p>We adjust our p-value distribution using what’s called a FDR (False discovery rate) procedure. Here is the original p-value distribution, and the p-value distribution after adjustment.</p>
 <div class="cell">
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">before</span> <span class="op">&lt;-</span> <span class="va">GSE_results</span> <span class="op">|&gt;</span></span>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">before</span> <span class="op">&lt;-</span> <span class="va">GSE_results</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">pvalue</span><span class="op">)</span>, fill<span class="op">=</span><span class="st">"black"</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, bins<span class="op">=</span><span class="fl">40</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"original p-value"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -438,13 +448,16 @@ Removed 1 row containing missing values or values outside the scale range
 </div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>Note that a lot of p-values get pushed towards a value of 1 - a lot more than the untransformed p-values.</p>
+<p>The main thing to understand about this adjustment procedure is that it reduces the proportion of <em>False Discoveries</em> - which are candidates we think pass the p-value threshold but are not real discoveries. False discoveries are similar to False Positives, but with a different prioritization framework.</p>
+</section><section id="going-back-to-volcano-plots" class="level2"><h2 class="anchored" data-anchor-id="going-back-to-volcano-plots">Going back to Volcano Plots</h2>
 <div class="cell">
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">small_both</span> <span class="op">|&gt;</span></span>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">small_both</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y<span class="op">=</span><span class="va">padj</span>, x<span class="op">=</span><span class="va">before_fit</span><span class="op">)</span>, color<span class="op">=</span><span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y<span class="op">=</span><span class="va">padj</span>, x<span class="op">=</span><span class="va">after_fit</span><span class="op">)</span>, color<span class="op">=</span><span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -464,14 +477,14 @@ Removed 14 rows containing missing values or values outside the scale range
 </div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>This is beginning to look familiar, doesn’t it? If we transform <code>padj</code> by taking the log2, we arrive at our original volcano plot:</p>
 <div class="cell">
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">small_both</span> <span class="op">|&gt;</span></span>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">small_both</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y<span class="op">=</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="va">padj</span><span class="op">)</span>, x<span class="op">=</span><span class="va">before_fit</span><span class="op">)</span>, color<span class="op">=</span><span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y<span class="op">=</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="va">padj</span><span class="op">)</span>, x<span class="op">=</span><span class="va">after_fit</span><span class="op">)</span>, color<span class="op">=</span><span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -493,37 +506,46 @@ Removed 14 rows containing missing values or values outside the scale range
 </div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">before</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/plotMA.html">plotMA</a></span><span class="op">(</span><span class="va">GSE_results</span>, main<span class="op">=</span> <span class="st">"Before Shrinkage"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">after</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/plotMA.html">plotMA</a></span><span class="op">(</span><span class="va">shrinkage</span>, main<span class="op">=</span><span class="st">"After Shrinkage"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">small_both</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y<span class="op">=</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="va">pvalue</span><span class="op">)</span>, x<span class="op">=</span><span class="va">before_fit</span><span class="op">)</span>, color<span class="op">=</span><span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y<span class="op">=</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="va">pvalue</span><span class="op">)</span>, x<span class="op">=</span><span class="va">after_fit</span><span class="op">)</span>, color<span class="op">=</span><span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html">geom_segment</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y<span class="op">=</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="va">pvalue</span><span class="op">)</span>, x<span class="op">=</span><span class="va">before_fit</span>, xend<span class="op">=</span><span class="va">after_fit</span><span class="op">)</span>,arrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/grid/arrow.html">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">2</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="fl">0.05</span><span class="op">)</span>, lty<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html">annotate</a></span><span class="op">(</span>geom<span class="op">=</span><span class="st">"text"</span>, x<span class="op">=</span><span class="fl">0</span>, y<span class="op">=</span><span class="fl">0.1</span>, label<span class="op">=</span><span class="st">"alpha"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"log2 fold change"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>thresholding s-values on alpha=0.005 to color points</code></pre>
+<pre><code>Warning: Removed 1 row containing missing values or values outside the scale range
+(`geom_point()`).
+Removed 1 row containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 1 row containing missing values or values outside the scale range
+(`geom_segment()`).</code></pre>
 </div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-14-2.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </section><section id="contrasts" class="level2"><h2 class="anchored" data-anchor-id="contrasts">Contrasts</h2>
 <div class="cell">
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#mcols(model_fit)</span></span>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#mcols(model_fit)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html">mcols</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html">mcols</a></span><span class="op">(</span><span class="va">model_fit</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE_results</span> <span class="op">&lt;-</span> <span class="fu">DESeq2</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/results.html">results</a></span><span class="op">(</span><span class="va">model_fit</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"Day8"</span>, <span class="st">"Day0"</span><span class="op">)</span>, lfcThreshold <span class="op">=</span> <span class="fl">0.5</span>,alpha <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE_results</span> <span class="op">&lt;-</span> <span class="fu">DESeq2</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/results.html">results</a></span><span class="op">(</span><span class="va">model_fit</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"Day8"</span>, <span class="st">"Day0"</span><span class="op">)</span>, lfcThreshold <span class="op">=</span> <span class="fl">0.5</span>,alpha <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">GSE_results</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/results.html">resultsNames</a></span><span class="op">(</span><span class="va">GSE_results</span><span class="op">)</span></span>
@@ -533,49 +555,19 @@ Removed 14 rows containing missing values or values outside the scale range
 <span><span class="va">before</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/plotMA.html">plotMA</a></span><span class="op">(</span><span class="va">GSE_results</span>, main<span class="op">=</span> <span class="st">"Before Shrinkage"</span><span class="op">)</span></span>
 <span><span class="va">after</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/plotMA.html">plotMA</a></span><span class="op">(</span><span class="va">shrinkage</span>, main<span class="op">=</span><span class="st">"After Shrinkage"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="commands-used-in-edger-package" class="level2"><h2 class="anchored" data-anchor-id="commands-used-in-edger-package">Commands Used in <code>edgeR</code> package</h2>
-<table class="caption-top table">
-<thead><tr class="header">
-<th>Procedure</th>
-<th>Command</th>
-</tr></thead>
-<tbody><tr class="odd">
-<td>Filtering</td>
-<td></td>
-</tr></tbody>
-</table></section><section id="data-filtering-in-edger" class="level2"><h2 class="anchored" data-anchor-id="data-filtering-in-edger">Data Filtering in <code>edgeR</code>
-</h2>
-<ul>
-<li>We need to filter out those genes with low expression (low count number) before we run analysis. Alternatively, we can select genes to test by using Coefficient of Variation to find the most variable genes.</li>
-</ul></section><section id="data-normalization-in-edger" class="level2"><h2 class="anchored" data-anchor-id="data-normalization-in-edger">Data Normalization in <code>edgeR</code>
-</h2>
-<p>One of the things we need to account for is library size of our samples. Experimentally, there is variability in the number of reads across samples.</p>
-</section><section id="two-group-comparison" class="level2"><h2 class="anchored" data-anchor-id="two-group-comparison">Two group comparison</h2>
-</section><section id="multiple-groups" class="level2"><h2 class="anchored" data-anchor-id="multiple-groups">Multiple Groups</h2>
-<p>In general, we want to use a Generalized Linear Model to discover differences between groups.</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"></figure><p></p>
-<div>
-<pre class="mermaid mermaid-js">graph TD
-  A["ANOVA\n(across all groups)"] --&gt; B["Contrasts\n(between groups)"]
-</pre>
-</div>
-<p></p>
-</div>
-</div>
-</div>
-<p>One thing to keep in mind is that unless we know which group comparisons we want to focus on, we first have to do the ANOVA (analysis of variance) test to see if there are <em>any</em> differences among all groups.</p>
-<p>Only then can we move on to individual comparisons and discover differentially expressed genes for each group comparison.</p>
-</section><section id="multiple-groups-multiple-factors" class="level2"><h2 class="anchored" data-anchor-id="multiple-groups-multiple-factors">Multiple Groups, Multiple Factors</h2>
 </section><section id="take-home-points" class="level2"><h2 class="anchored" data-anchor-id="take-home-points">Take Home Points</h2>
 <ul>
+<li>Fold change represents the effect size - the mean expression value of 1 group divided by the mean expression value of the 2nd group.</li>
 <li>We need to filter out those genes with low expression (low count number) before we run analysis. Alternatively, we can select genes to test by using Coefficient of Variation to find the most variable genes.</li>
 <li>Count Data must be normalized by the library size to compare across samples.</li>
 <li>We model data using distributions, and use those models to find expression differences.</li>
-<li>
-<code>edgeR</code> and <code>DESeq2</code> are complementary approaches. Results from one method may be different than the other.</li>
+<li>There are two quantities we adjust during the modeling procedure:
+<ul>
+<li>Fold change using our dispersion estimation / shrinkage procedure, which penalizes lower count candidates by <em>shrinking their fold change</em>. Low dispersion candidates are not as penalized as much by the shrinkage procedure</li>
+<li>P-values using False Discovery Rate Adjustment, which adjusts for multiple comparisons</li>
+</ul>
+</li>
+<li>In the end, we have high fold-change, low p-value candidates for further analysis.</li>
 </ul></section></main><!-- /main column --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

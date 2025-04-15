@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.6.42">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>02_week2</title>
+<title>Experimental Design / QC</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -74,24 +74,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
   <li><a href="#experimental-design-of-rnaseq-experiments" id="toc-experimental-design-of-rnaseq-experiments" class="nav-link" data-scroll-target="#experimental-design-of-rnaseq-experiments">Experimental Design of RNAseq Experiments</a></li>
   <li>
-<a href="#background-law-of-large-numbers" id="toc-background-law-of-large-numbers" class="nav-link" data-scroll-target="#background-law-of-large-numbers">Background: Law of large numbers</a>
+<a href="#background-what-are-we-estimating" id="toc-background-what-are-we-estimating" class="nav-link" data-scroll-target="#background-what-are-we-estimating">Background: What are we estimating?</a>
   <ul class="collapse">
 <li><a href="#single-randomized-group" id="toc-single-randomized-group" class="nav-link" data-scroll-target="#single-randomized-group">Single, randomized group</a></li>
   <li><a href="#two-group-comparisons" id="toc-two-group-comparisons" class="nav-link" data-scroll-target="#two-group-comparisons">Two-group comparisons</a></li>
   </ul>
 </li>
-  <li><a href="#confounding" id="toc-confounding" class="nav-link" data-scroll-target="#confounding">Confounding</a></li>
-  <li><a href="#how-do-i-know-how-many-samples-to-use" id="toc-how-do-i-know-how-many-samples-to-use" class="nav-link" data-scroll-target="#how-do-i-know-how-many-samples-to-use">How do I know how many samples to use?</a></li>
-  <li><a href="#design-matrix" id="toc-design-matrix" class="nav-link" data-scroll-target="#design-matrix">Design matrix</a></li>
-  <li><a href="#filtering-out-low-counts" id="toc-filtering-out-low-counts" class="nav-link" data-scroll-target="#filtering-out-low-counts">Filtering out low counts</a></li>
-  <li><a href="#dimension-reduction-as-eda" id="toc-dimension-reduction-as-eda" class="nav-link" data-scroll-target="#dimension-reduction-as-eda">Dimension Reduction as EDA</a></li>
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
-  <li><a href="#normalization---probably-for-week-3" id="toc-normalization---probably-for-week-3" class="nav-link" data-scroll-target="#normalization---probably-for-week-3">Normalization - probably for week 3?</a></li>
-  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"></a></li>
+  <li><a href="#dealing-with-confounding" id="toc-dealing-with-confounding" class="nav-link" data-scroll-target="#dealing-with-confounding">Dealing with confounding</a></li>
+  <li>
+<a href="#specific-confounding-issues-in-rna-seq-experiments" id="toc-specific-confounding-issues-in-rna-seq-experiments" class="nav-link" data-scroll-target="#specific-confounding-issues-in-rna-seq-experiments">Specific confounding issues in RNA-seq experiments</a>
+  <ul class="collapse">
+<li><a href="#library-size" id="toc-library-size" class="nav-link" data-scroll-target="#library-size">Library Size</a></li>
+  <li><a href="#rna-composition" id="toc-rna-composition" class="nav-link" data-scroll-target="#rna-composition">RNA Composition</a></li>
+  </ul>
+</li>
+  <li><a href="#putting-this-together-in-practice" id="toc-putting-this-together-in-practice" class="nav-link" data-scroll-target="#putting-this-together-in-practice">Putting this together in practice</a></li>
+  <li><a href="#appendix-how-do-i-know-how-many-samples-to-use" id="toc-appendix-how-do-i-know-how-many-samples-to-use" class="nav-link" data-scroll-target="#appendix-how-do-i-know-how-many-samples-to-use">Appendix: How do I know how many samples to use?</a></li>
+  <li><a href="#appendix-dimension-reduction-to-explore-your-data" id="toc-appendix-dimension-reduction-to-explore-your-data" class="nav-link" data-scroll-target="#appendix-dimension-reduction-to-explore-your-data">Appendix: Dimension Reduction to explore your data</a></li>
+  <li><a href="#appendix-other-confounding-factors-to-consider" id="toc-appendix-other-confounding-factors-to-consider" class="nav-link" data-scroll-target="#appendix-other-confounding-factors-to-consider">Appendix: Other confounding factors to consider</a></li>
   </ul></nav>
 </div>
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title">02_week2</h1>
+<h1 class="title">Experimental Design / QC</h1>
 </div>
 
 
@@ -108,71 +112,368 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header><section id="learning-objectives" class="level2"><h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
 <ul>
 <li>
-<strong>Explain</strong> the the relationship between population mean vs.&nbsp;sample mean, and sample varaince as the sample size increase</li>
+<strong>Explain</strong> the the relationship between population mean vs.&nbsp;sample mean as the sample size increase</li>
+<li>
+<strong>Distinguish</strong> between <em>technical</em> and <em>biological</em> replicates and what kinds of results to expect from each</li>
 <li>
 <strong>Explain</strong> the basics of experimental design, confounding, batch effects, and when to consult the sequencing core</li>
 <li>
-<strong>Distinguish</strong> between <em>technical</em> and <em>biological</em> replicates and what kinds of results to expect from each</li>
+<strong>Explain</strong> the confounding issues of library size and RNA composition</li>
 <li>
 <strong>Construct</strong> a design matrix that reflects the study’s experimental design</li>
 <li>
 <strong>Analyze</strong> the process of filtering out genes with low read counts</li>
 </ul></section><section id="experimental-design-of-rnaseq-experiments" class="level2"><h2 class="anchored" data-anchor-id="experimental-design-of-rnaseq-experiments">Experimental Design of RNAseq Experiments</h2>
 <p>Today, we will look how experimental design plays a large role in the way we analyze RNA-seq data. Experimental design seeks to make sense data variation via careful design of conditions.</p>
-<p>A quote from (<a href="https://web.stanford.edu/class/bios221/book/16-chap.html#ref-Bacher:GB:2016">Bacher and Kendziorski 2016</a>) explains this clearly: “Generally speaking, a well-designed experiment is one that is sufficiently powered and one in which technical artifacts and biological features that may systematically affect measurements are balanced, randomized or controlled in some other way in order to minimize opportunities for multiple explanations for the effect(s) under study.”</p>
 <p>If you are not familiar with some of these technical terms in the quote, we will go over them shortly.</p>
-</section><section id="background-law-of-large-numbers" class="level2"><h2 class="anchored" data-anchor-id="background-law-of-large-numbers">Background: Law of large numbers</h2>
+</section><section id="background-what-are-we-estimating" class="level2"><h2 class="anchored" data-anchor-id="background-what-are-we-estimating">Background: What are we estimating?</h2>
 <section id="single-randomized-group" class="level3"><h3 class="anchored" data-anchor-id="single-randomized-group">Single, randomized group</h3>
 <p>We will first start with looking at the most simple experimental design: a single, randomized group. Once we are comfortable with this, then we will return to a two group comparision in classic differential gene expression.</p>
-<p>When we run experiments, we are usually analyzing a subset of the population that we are trying to describe, called a sample. Let’s define them clearly:</p>
+<p>When we run experiments, we are usually analyzing a subset of the population, called a sample. Let’s define them clearly:</p>
 <p><strong>Population:</strong> The entire collection of individual units that a researcher is interested to study.</p>
 <p><strong>Sample:</strong> A smaller collection of individual units that the researcher has selected to study.</p>
-<p>When we carry out our experiment, we perform some form of measurement on our samples, such as RNA-seq which leads to gene-level quantification. Then, it is common to look at the mean and varianceof our measurements to summarize our samples. This <strong>sample mean</strong> and <strong>sample variance</strong> are our best guess at the <strong>population mean</strong> and <strong>population variance</strong>.</p>
-<p>There is a crucial relationship between samples, populations, and sample size: As the sample size gets larger, then the sample mean approaches the population mean and the sample variance approaches the population variance. This is called the Law of Large Numbers.</p>
-<p>Example: looking at gene lengths</p>
-</section><section id="two-group-comparisons" class="level3"><h3 class="anchored" data-anchor-id="two-group-comparisons">Two-group comparisons</h3>
-<p>In classical differntial gene expression, you are often conducting a two-group comparison between case and control. Our case samples arise from the case population, and our control samples arise from the control population. When we look at the measurements, we look at the <em>difference</em> of sample mean betewen case and controls for each gene, which is on a log-transformed scale called <strong>log-fold change</strong>. As the sample size gets larger, our sample log-fold change for each gene gets closer to the population log-fold change for each gene. Similarly, the sample variance for each gene from case and control groups gets closer to their respective population variance.</p>
-<p>By these properties, it is obvious that the more samples, the better, one might say. But <strong>your choice of samples may also relate to variables that may have an impact on the outcome you want to measure</strong>.</p>
+<p>When we carry out our experiment, we perform some form of measurement on our samples, such as an experimental assay. Then, it is common to look at the mean and variance of our measurements to summarize our samples. This <strong>sample mean</strong> and <strong>sample variance</strong> are our best guess at the <strong>population mean</strong> and <strong>population variance</strong>.</p>
+<p>There is a crucial relationship between samples, populations, and sample size: As the sample size gets larger, then the sample mean approaches the population mean and the sample variance approaches the population variance. This is called the <strong>Law of Large Numbers</strong>.</p>
+<p>Let’s take at the following experiment as a demo: The goal of this <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE96870">study</a> was to determine the effect of an upper-respiratory infection on changes in RNA transcription occurring in the cerebellum on mouse models. Control mice were inoculated with saline at Day 0 and measured on the same day. Case mice were inoculated with Influenza A and measured at day 8 post-infection.</p>
+<p>Let’s take a look at RNA-seq measurement of the gene <code>Asl</code> for the control samples.</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/SummarizedExperiment">SummarizedExperiment</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stemangiola/tidySummarizedExperiment">tidySummarizedExperiment</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/thelovelab/DESeq2">DESeq2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">GSE96870</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="st">"data/GSE96870_se.rds"</span><span class="op">)</span></span>
+<span><span class="va">GSE96870_Case_Control</span> <span class="op">&lt;-</span> <span class="va">GSE96870</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">time</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Day0"</span>, <span class="st">"Day8"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">expression_plot</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">GSE96870_Case_Control</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.feature</span> <span class="op">==</span> <span class="st">"Asl"</span> <span class="op">&amp;</span> <span class="va">time</span> <span class="op">==</span> <span class="st">"Day0"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Label</span>, y <span class="op">=</span> <span class="va">counts</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">expression_plot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We have 7 samples here, and we would compute the mean to get the sample mean for the counts, approximating the population mean.</p>
+<p>By these properties, it is obvious that the more samples, the better, one might say. But your choice of samples also has an impact on the population you are approximating!</p>
+<p>Let’s consider the following thought experiment:</p>
+<p>Would you rather: Sequence 7 replicates on the same cell line, or sequence one replicate each on 7 different cell lines?</p>
+<p>What would the sample mean and sample variance of each experiment tell you?</p>
+<p>In light of this example, let’s define two types of replicates:</p>
 <ul>
-<li><p>Experimental conditions that relate to your scientific question of interest, such as case vs.&nbsp;control.</p></li>
+<li><p><strong>Technical replicates:</strong> use the same biological sample to repeat the technical or experimental steps in order to accurately measure experimental variation.</p></li>
+<li><p><strong>Biological replicates</strong> use different biological samples of the same condition to measure the biological variation between samples.</p></li>
+</ul></section><section id="two-group-comparisons" class="level3"><h3 class="anchored" data-anchor-id="two-group-comparisons">Two-group comparisons</h3>
+<p>In classical differntial gene expression, you are often conducting a two-group comparison between case and control. Our case samples arise from the case population, and our control samples arise from the control population. When we look at the measurements of a gene, we look at the <em>difference</em> of sample mean betewen case and controls, which is on a log-transformed scale called <strong>log-fold change</strong>. As the sample size gets larger, our gene’s sample log-fold change gets closer to the population log-fold change. Similarly, the sample variance for from case and control groups for this gene gets closer to their respective population variances.</p>
+<p>In the ideal experimental set-up, you want all of your samples to be randomly sampled and differ only by the case and control conditions. However, that rarely happens in real life. There are other variables lurking, also known as <strong>confounding variables,</strong> that may also have an impact on the outcome you want to measure.</p>
+<ul>
 <li><p>Any relevant metadata, such as age, sex, subtype</p></li>
 <li><p>Batch effects: the date of the experiment conducted, the person who performed the experiment, the reagents used, etc.</p></li>
 <li><p>The sequencing technology</p></li>
 <li><p>The amount of sequencing the sample received (more on this later in Normalization)</p></li>
 <li><p>What else?</p></li>
 </ul>
-<p>This means you need to think carefully what the sample log-fold change and variances are telling you: does the sample log-fold change relate more to your experimental condition, or something else, such as batch effects?</p>
-<p>To illustrate the importance of these questions, let’s consider a few questions (these are single, randomized group situations):</p>
-<p>Would you rather: Sequence five replicates on the same cell line, or sequence one replicate each on five different cell lines?</p>
-<p>What would the sample mean and sample variance of each experiment tell you?</p>
-<p>In light of this example, let’s define two types of replicates:</p>
-<ul>
-<li><p><strong>Technical replicates:</strong> use the same biological sample to repeat the technical or experimental steps in order to accurately measure technical variation.</p></li>
-<li><p><strong>Biological replicates</strong> use different biological samples of the same condition to measure the biological variation between samples.</p></li>
-</ul>
-<p>Would you rather: Sequence five different samples at 10x coverage, or one sample at 50x coverage?</p>
-<p>What would the sample mean and sample variance of each experiment tell you?</p>
-</section></section><section id="confounding" class="level2"><h2 class="anchored" data-anchor-id="confounding">Confounding</h2>
-<p>We’ve seen above the importance of what to vary in your experimental design - are you trying to understand the biological variation of your samples, the technical variation of your instrument? Are you trying to understand the variability of a population, or trying to understand the variability of a single person?</p>
-<p>Once you have decided carefully what your experimental design is, you still need to pay attention to other variables that may impact the outcome you want to measure. A varaible can <strong>confound</strong> your experiment when you can’t tell whether this variable or your experimental design is affecting the outcome.</p>
+<p>This means you need to think carefully what the sample log-fold change are telling you: does the sample log-fold change relate more to your experimental condition, or something else, such as batch effects? A variable can <strong>confound</strong> your experiment when you can’t tell whether this variable or your experimental design is affecting the outcome.</p>
 <p>Example: We know that sex has large effects on gene expression, and if all of our control mice were female and all of the treatment mice were male, then our treatment effect would be confounded by the variable sex. We could not differentiate the effect of treatment from the effect of sex.</p>
-<p>Example: We know that batch effect has large effects on gene expression, and if all of our control samples were processed by an experienced researcher on old reagents, and our treatment samples were processed by an trainee researcher on new reagents, our treatment effect would be confounded by (multiple!) batch effects.</p>
+<p>Example: We know that batch effect has large effects on gene expression, and if all of our control samples were processed by an experienced researcher on old reagents, and our treatment samples were processed by an trainee researcher on new reagents, our treatment effect would be confounded by batch effects.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><a href="https://web.stanford.edu/class/bios221/book/13-chap.html"><img src="https://web.stanford.edu/class/bios221/book/13-chap_files/figure-html/fig-confounding-1-1.png" class="img-fluid figure-img" width="350" alt="Source: Modern Statistics for Modern Biology, Chapter 13"></a></p>
+<figcaption>Source: Modern Statistics for Modern Biology, Chapter 13</figcaption></figure>
+</div>
+</section></section><section id="dealing-with-confounding" class="level2"><h2 class="anchored" data-anchor-id="dealing-with-confounding">Dealing with confounding</h2>
 <p>Solutions:</p>
 <ul>
 <li><p>Ensure that the samples in all experimental conditions have the same values for the confounding variable - ie. all of the same sex, all of the same batch.</p></li>
 <li>
 <p>If not possible, make sure that all experimental conditions have a similar amount of variability of the confounding variable - ie. the both case and control groups have a balance of males and females, and various batches.</p>
 <ul>
+<li><div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="https://web.stanford.edu/class/bios221/book/13-chap_files/figure-html/fig-blockbox-1.png" class="img-fluid figure-img" width="350"></p>
+<figcaption>Source: Modern Statistics for Modern Biology, Chapter 13</figcaption></figure>
+</div></li>
 <li>Save this information; we can eliminate these variability in the modeling process.</li>
 </ul>
 </li>
 </ul>
-<p>May also want to consider:</p>
-<ul>
-<li><p>Unobserved confounders</p></li>
-<li><p>Propensity score matching</p></li>
-<li><p>Are the demarcation of groups I'm comparing is independent of my molecular measurements? (double dipping): https://stat.uw.edu/seminars/double-dipping-problems-and-solutions-application-single-cell-rna-sequencing-data, https://anna-neufeld.github.io/datathin/</p></li>
-</ul></section><section id="how-do-i-know-how-many-samples-to-use" class="level2"><h2 class="anchored" data-anchor-id="how-do-i-know-how-many-samples-to-use">How do I know how many samples to use?</h2>
+<p>Let’s look at our experimental design. Have our potential confounders been accounted for?</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span><span class="op">(</span><span class="va">GSE96870_Case_Control</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                     title geo_accession     organism     age    sex
+GSM2545337 CNS_RNA-seq_11C    GSM2545337 Mus musculus 8 weeks Female
+GSM2545338 CNS_RNA-seq_12C    GSM2545338 Mus musculus 8 weeks Female
+GSM2545348 CNS_RNA-seq_27C    GSM2545348 Mus musculus 8 weeks Female
+GSM2545353  CNS_RNA-seq_3C    GSM2545353 Mus musculus 8 weeks Female
+GSM2545343 CNS_RNA-seq_20C    GSM2545343 Mus musculus 8 weeks   Male
+GSM2545349 CNS_RNA-seq_28C    GSM2545349 Mus musculus 8 weeks   Male
+GSM2545354  CNS_RNA-seq_4C    GSM2545354 Mus musculus 8 weeks   Male
+GSM2545336 CNS_RNA-seq_10C    GSM2545336 Mus musculus 8 weeks Female
+GSM2545342  CNS_RNA-seq_1C    GSM2545342 Mus musculus 8 weeks Female
+GSM2545351  CNS_RNA-seq_2C    GSM2545351 Mus musculus 8 weeks Female
+GSM2545380  CNS_RNA-seq_9C    GSM2545380 Mus musculus 8 weeks Female
+GSM2545341 CNS_RNA-seq_17C    GSM2545341 Mus musculus 8 weeks   Male
+GSM2545346 CNS_RNA-seq_25C    GSM2545346 Mus musculus 8 weeks   Male
+GSM2545347 CNS_RNA-seq_26C    GSM2545347 Mus musculus 8 weeks   Male
+             infection  strain time     tissue mouse          Label       Group
+GSM2545337 NonInfected C57BL/6 Day0 Cerebellum     9  Female_Day0_9 Female_Day0
+GSM2545338 NonInfected C57BL/6 Day0 Cerebellum    10 Female_Day0_10 Female_Day0
+GSM2545348 NonInfected C57BL/6 Day0 Cerebellum     8  Female_Day0_8 Female_Day0
+GSM2545353 NonInfected C57BL/6 Day0 Cerebellum     4  Female_Day0_4 Female_Day0
+GSM2545343 NonInfected C57BL/6 Day0 Cerebellum    11   Male_Day0_11   Male_Day0
+GSM2545349 NonInfected C57BL/6 Day0 Cerebellum     7    Male_Day0_7   Male_Day0
+GSM2545354 NonInfected C57BL/6 Day0 Cerebellum     2    Male_Day0_2   Male_Day0
+GSM2545336  InfluenzaA C57BL/6 Day8 Cerebellum    14 Female_Day8_14 Female_Day8
+GSM2545342  InfluenzaA C57BL/6 Day8 Cerebellum     5  Female_Day8_5 Female_Day8
+GSM2545351  InfluenzaA C57BL/6 Day8 Cerebellum    16 Female_Day8_16 Female_Day8
+GSM2545380  InfluenzaA C57BL/6 Day8 Cerebellum    19 Female_Day8_19 Female_Day8
+GSM2545341  InfluenzaA C57BL/6 Day8 Cerebellum     6    Male_Day8_6   Male_Day8
+GSM2545346  InfluenzaA C57BL/6 Day8 Cerebellum    23   Male_Day8_23   Male_Day8
+GSM2545347  InfluenzaA C57BL/6 Day8 Cerebellum    24   Male_Day8_24   Male_Day8</code></pre>
+</div>
+</div>
+</section><section id="specific-confounding-issues-in-rna-seq-experiments" class="level2"><h2 class="anchored" data-anchor-id="specific-confounding-issues-in-rna-seq-experiments">Specific confounding issues in RNA-seq experiments</h2>
+<p>Besides looking at our metadata, there are two confounding variables that happen in nearly every RNA-seq experiment that people have spent a great deal of time developing tools to reduce confounding.</p>
+<section id="library-size" class="level3"><h3 class="anchored" data-anchor-id="library-size">Library Size</h3>
+<p>Each sample will receive different number of reads for sequencing, and that may confound the our desired measurement of log-fold change. The total number of reads a sample received for sequencing is called the <strong>library size</strong>.</p>
+<p>The following plot is the plot of the expression counts for the <code>Asl</code> gene across all samples in our dataset grouped by <code>time</code>. There appears to be a difference in expression across the samples by timepoint, but is that due to the experimental condition (Day 0 is control, Day 8 is case), or due to the number of sequencing reads each sample received?</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">expression_plot</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">GSE96870_Case_Control</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.feature</span> <span class="op">==</span> <span class="st">"Asl"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Label</span>, y <span class="op">=</span> <span class="va">counts</span>, color <span class="op">=</span> <span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">expression_plot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The issue is that the library sizes of each sample is different. If we compare the counts of each library, we’ll see they vary.</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">expression_plot</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">GSE96870_Case_Control</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.feature</span> <span class="op">==</span> <span class="st">"Asl"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Label</span>, y <span class="op">=</span> <span class="va">counts</span>, color <span class="op">=</span> <span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Asl Expression count"</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">count_plot</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">GSE96870_Case_Control</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Label</span>, <span class="va">time</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>total_counts<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Label</span>, y<span class="op">=</span><span class="va">total_counts</span>, fill<span class="op">=</span><span class="va">time</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>stat<span class="op">=</span><span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Library Size for each Sample"</span><span class="op">)</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'Label'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">expression_plot</span><span class="op">/</span><span class="va">count_plot</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>You will notice that the counts for <code>Asl</code> across the samples vary by Library size (if you can’t see it, look at the patterns of ups and downs). For us to truly compare the expression differences between our timepoints in our samples, we need to remove the effect of <em>library size</em> before we make the comparison between case and control.</p>
+<p>The easiest way to remove this confounder is to divide gene count of each sample by its respective total library size. However, there’s a second confounder that needs to be simultaneously addressed…</p>
+</section><section id="rna-composition" class="level3"><h3 class="anchored" data-anchor-id="rna-composition">RNA Composition</h3>
+<p>The second source of confounding has to do with the relative measurement of RNA-seq. Consider a single sample you just perforemd RNA-seq on. The assay provides a measure of the relative abundance of each gene in each RNA sample, but does not provide any measure of the total RNA output - it is a relative measurement. That is, the proportion of reads attributed to a given gene in a library depends on the expression properties of the whole sample rather than just the expression level of that gene.</p>
+<p>Then, if a small proportion of highly expressed genes consume a substantial proportion of the total library size for a particular sample, this will cause the remaining genes to be under-sampled for that sample, confounding our analysis analysis.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="https://hbctraining.github.io/Intro-to-DGE/img/normalization_methods_composition.png" class="img-fluid figure-img" width="450"></p>
+<figcaption>Source: Harvard Bioinformatics Training. Imagine the sequencing depths are similar between Sample A and Sample B, and every gene except for gene differentially expressed presents similar expression level between samples. The counts in Sample B would be greatly skewed by the differentially expressed gene, which takes up most of the counts. Other genes for Sample B would therefore appear to be less expressed than those same genes in Sample A.</figcaption></figure>
+</div>
+<p>The way we deal with this type of confounding is to make the assumption that <em>most</em> genes do not exhibit differential expression. DESeq2 divides gene count of each sample by its “size factor”, which is related to the sample’s library size for non-differentially expressed genes. If you want to see how it is calculated, this is a <a href="https://hbctraining.github.io/Intro-to-DGE/lessons/02_DGE_count_normalization.html">great tutorial</a>.</p>
+</section></section><section id="putting-this-together-in-practice" class="level2"><h2 class="anchored" data-anchor-id="putting-this-together-in-practice">Putting this together in practice</h2>
+<p>First, let’s do a little bit of clean up. Take a look at the total number of reads each gene received, and remove genes that just don’t have many reads across samples to be analyzed. Here’s the first five genes.</p>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/MatrixGenerics/man/rowSums.html">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">GSE96870_Case_Control</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        Xkr4 LOC105243853 LOC105242387 LOC105242467          Rp1 
+       27023           12         2396           52           29 </code></pre>
+</div>
+</div>
+<p>Let’s look at its distribution:</p>
+<div class="cell">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/MatrixGenerics/man/rowSums.html">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">GSE96870_Case_Control</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      0       1      39   12144    5198 2042743 </code></pre>
+</div>
+</div>
+<p>We started with 42k genes:</p>
+<div class="cell">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">GSE96870_Case_Control</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 41786    14</code></pre>
+</div>
+</div>
+<p>Let’s remove any genes from the analysis if they received less than 5 reads total across samples.</p>
+<div class="cell">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870_filtered</span> <span class="op">&lt;-</span> <span class="va">GSE96870_Case_Control</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/MatrixGenerics/man/rowSums.html">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">GSE96870_Case_Control</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fl">5</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">GSE96870_filtered</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 26818    14</code></pre>
+</div>
+</div>
+<p>Which reduced us to 27k genes.</p>
+<p>Now, let’s create a <code>DESeq</code> object from our <code>SummarizedExperiment</code> object and our experimental design. We need to provide an experimental design formula. The <strong>design formula</strong> should have all of the factors in your metadata that account for major sources of variation in your data.</p>
+<p>Let’s look at our metadata to remind us all the variables in there:</p>
+<div class="cell">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span><span class="op">(</span><span class="va">GSE96870_filtered</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                     title geo_accession     organism     age    sex
+GSM2545337 CNS_RNA-seq_11C    GSM2545337 Mus musculus 8 weeks Female
+GSM2545338 CNS_RNA-seq_12C    GSM2545338 Mus musculus 8 weeks Female
+GSM2545348 CNS_RNA-seq_27C    GSM2545348 Mus musculus 8 weeks Female
+GSM2545353  CNS_RNA-seq_3C    GSM2545353 Mus musculus 8 weeks Female
+GSM2545343 CNS_RNA-seq_20C    GSM2545343 Mus musculus 8 weeks   Male
+GSM2545349 CNS_RNA-seq_28C    GSM2545349 Mus musculus 8 weeks   Male
+GSM2545354  CNS_RNA-seq_4C    GSM2545354 Mus musculus 8 weeks   Male
+GSM2545336 CNS_RNA-seq_10C    GSM2545336 Mus musculus 8 weeks Female
+GSM2545342  CNS_RNA-seq_1C    GSM2545342 Mus musculus 8 weeks Female
+GSM2545351  CNS_RNA-seq_2C    GSM2545351 Mus musculus 8 weeks Female
+GSM2545380  CNS_RNA-seq_9C    GSM2545380 Mus musculus 8 weeks Female
+GSM2545341 CNS_RNA-seq_17C    GSM2545341 Mus musculus 8 weeks   Male
+GSM2545346 CNS_RNA-seq_25C    GSM2545346 Mus musculus 8 weeks   Male
+GSM2545347 CNS_RNA-seq_26C    GSM2545347 Mus musculus 8 weeks   Male
+             infection  strain time     tissue mouse          Label       Group
+GSM2545337 NonInfected C57BL/6 Day0 Cerebellum     9  Female_Day0_9 Female_Day0
+GSM2545338 NonInfected C57BL/6 Day0 Cerebellum    10 Female_Day0_10 Female_Day0
+GSM2545348 NonInfected C57BL/6 Day0 Cerebellum     8  Female_Day0_8 Female_Day0
+GSM2545353 NonInfected C57BL/6 Day0 Cerebellum     4  Female_Day0_4 Female_Day0
+GSM2545343 NonInfected C57BL/6 Day0 Cerebellum    11   Male_Day0_11   Male_Day0
+GSM2545349 NonInfected C57BL/6 Day0 Cerebellum     7    Male_Day0_7   Male_Day0
+GSM2545354 NonInfected C57BL/6 Day0 Cerebellum     2    Male_Day0_2   Male_Day0
+GSM2545336  InfluenzaA C57BL/6 Day8 Cerebellum    14 Female_Day8_14 Female_Day8
+GSM2545342  InfluenzaA C57BL/6 Day8 Cerebellum     5  Female_Day8_5 Female_Day8
+GSM2545351  InfluenzaA C57BL/6 Day8 Cerebellum    16 Female_Day8_16 Female_Day8
+GSM2545380  InfluenzaA C57BL/6 Day8 Cerebellum    19 Female_Day8_19 Female_Day8
+GSM2545341  InfluenzaA C57BL/6 Day8 Cerebellum     6    Male_Day8_6   Male_Day8
+GSM2545346  InfluenzaA C57BL/6 Day8 Cerebellum    23   Male_Day8_23   Male_Day8
+GSM2545347  InfluenzaA C57BL/6 Day8 Cerebellum    24   Male_Day8_24   Male_Day8</code></pre>
+</div>
+</div>
+<p>The variables that may contribute to variation to our data are: <code>sex</code>, <code>time</code>. There are variables such as <code>infection</code>, <code>Label</code>, <code>Group</code> that are encoded in <code>Label</code> and <code>Group</code> so we don’t need to include that information. The <code>mouse</code> variable is the unique identifier for each sample so that isn’t needed either.</p>
+<p>Let’s create our <code>DESeq</code> object using <code>SummarizedExperiment</code> object and our design formula.</p>
+<div class="cell">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870_deseq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/DESeqDataSet.html">DESeqDataSet</a></span><span class="op">(</span><span class="va">GSE96870_filtered</span>, design <span class="op">=</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">time</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in DESeqDataSet(GSE96870_filtered, design = ~sex + time): some
+variables in design formula are characters, converting to factors</code></pre>
+</div>
+</div>
+<p>Let’s calculate our “size factor” to deal with the library size and RNA composition confounders via the <code>estimateSizeFactors</code> function. Afterwards, you can see the size factor on the rightmost column of our colData.</p>
+<div class="cell">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870_normalized</span> <span class="op">&lt;-</span> <span class="fu">estimateSizeFactors</span><span class="op">(</span><span class="va">GSE96870_deseq</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span><span class="op">(</span><span class="va">GSE96870_normalized</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                     title geo_accession     organism     age    sex
+GSM2545337 CNS_RNA-seq_11C    GSM2545337 Mus musculus 8 weeks Female
+GSM2545338 CNS_RNA-seq_12C    GSM2545338 Mus musculus 8 weeks Female
+GSM2545348 CNS_RNA-seq_27C    GSM2545348 Mus musculus 8 weeks Female
+GSM2545353  CNS_RNA-seq_3C    GSM2545353 Mus musculus 8 weeks Female
+GSM2545343 CNS_RNA-seq_20C    GSM2545343 Mus musculus 8 weeks   Male
+GSM2545349 CNS_RNA-seq_28C    GSM2545349 Mus musculus 8 weeks   Male
+GSM2545354  CNS_RNA-seq_4C    GSM2545354 Mus musculus 8 weeks   Male
+GSM2545336 CNS_RNA-seq_10C    GSM2545336 Mus musculus 8 weeks Female
+GSM2545342  CNS_RNA-seq_1C    GSM2545342 Mus musculus 8 weeks Female
+GSM2545351  CNS_RNA-seq_2C    GSM2545351 Mus musculus 8 weeks Female
+GSM2545380  CNS_RNA-seq_9C    GSM2545380 Mus musculus 8 weeks Female
+GSM2545341 CNS_RNA-seq_17C    GSM2545341 Mus musculus 8 weeks   Male
+GSM2545346 CNS_RNA-seq_25C    GSM2545346 Mus musculus 8 weeks   Male
+GSM2545347 CNS_RNA-seq_26C    GSM2545347 Mus musculus 8 weeks   Male
+             infection  strain time     tissue mouse          Label       Group
+GSM2545337 NonInfected C57BL/6 Day0 Cerebellum     9  Female_Day0_9 Female_Day0
+GSM2545338 NonInfected C57BL/6 Day0 Cerebellum    10 Female_Day0_10 Female_Day0
+GSM2545348 NonInfected C57BL/6 Day0 Cerebellum     8  Female_Day0_8 Female_Day0
+GSM2545353 NonInfected C57BL/6 Day0 Cerebellum     4  Female_Day0_4 Female_Day0
+GSM2545343 NonInfected C57BL/6 Day0 Cerebellum    11   Male_Day0_11   Male_Day0
+GSM2545349 NonInfected C57BL/6 Day0 Cerebellum     7    Male_Day0_7   Male_Day0
+GSM2545354 NonInfected C57BL/6 Day0 Cerebellum     2    Male_Day0_2   Male_Day0
+GSM2545336  InfluenzaA C57BL/6 Day8 Cerebellum    14 Female_Day8_14 Female_Day8
+GSM2545342  InfluenzaA C57BL/6 Day8 Cerebellum     5  Female_Day8_5 Female_Day8
+GSM2545351  InfluenzaA C57BL/6 Day8 Cerebellum    16 Female_Day8_16 Female_Day8
+GSM2545380  InfluenzaA C57BL/6 Day8 Cerebellum    19 Female_Day8_19 Female_Day8
+GSM2545341  InfluenzaA C57BL/6 Day8 Cerebellum     6    Male_Day8_6   Male_Day8
+GSM2545346  InfluenzaA C57BL/6 Day8 Cerebellum    23   Male_Day8_23   Male_Day8
+GSM2545347  InfluenzaA C57BL/6 Day8 Cerebellum    24   Male_Day8_24   Male_Day8
+           sizeFactor
+GSM2545337  0.9133349
+GSM2545338  0.8598908
+GSM2545348  1.0456296
+GSM2545353  1.1116468
+GSM2545343  1.1217156
+GSM2545349  1.0209117
+GSM2545354  0.9843337
+GSM2545336  1.1394808
+GSM2545342  0.8802526
+GSM2545351  1.0487852
+GSM2545380  1.1395748
+GSM2545341  0.8886238
+GSM2545346  0.9389596
+GSM2545347  1.0149250</code></pre>
+</div>
+</div>
+<p>If we divide <code>counts</code> by <code>sizeFactor</code>, then we get our <code>scaled</code> counts.</p>
+<div class="cell">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">expression_plot</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">GSE96870_Case_Control</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.feature</span> <span class="op">==</span> <span class="st">"Asl"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Label</span>, y <span class="op">=</span> <span class="va">counts</span>, color <span class="op">=</span> <span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>limits<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">400</span>, <span class="fl">1100</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Asl Expression count"</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">expression_normalized</span> <span class="op">&lt;-</span> <span class="va">GSE96870_normalized</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.feature</span> <span class="op">==</span> <span class="st">"Asl"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>scaled <span class="op">=</span> <span class="va">counts</span> <span class="op">/</span> <span class="va">sizeFactor</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Label</span>, y <span class="op">=</span> <span class="va">scaled</span>, color <span class="op">=</span> <span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>limits<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">400</span>, <span class="fl">1100</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Asl Expression count normalized"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="op">(</span><span class="va">expression_plot</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="va">expression_normalized</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 3 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As you can see, some, but not all of the intra-timepoint variation was removed, especially within the <code>Day0</code> timepoint.</p>
+<p>Whew, that’s all for experimental designs for now!</p>
+<p>Here’s a nice summary of what we covered to ensure good experimental designs: “Generally speaking, a well-designed experiment is one that [has enough samples] and one in which technical artifacts and biological features that may systematically affect measurements are balanced, randomized or controlled in some other way in order to minimize opportunities for multiple explanations for the effect(s) under study.” (<a href="https://web.stanford.edu/class/bios221/book/16-chap.html#ref-Bacher:GB:2016">Bacher and Kendziorski 2016</a>)</p>
+</section><section id="appendix-how-do-i-know-how-many-samples-to-use" class="level2"><h2 class="anchored" data-anchor-id="appendix-how-do-i-know-how-many-samples-to-use">Appendix: How do I know how many samples to use?</h2>
 <p>Define “power”:</p>
 <p>Reference to some packages for power calculations, such as <a href="https://bioconductor.org/packages/release/bioc/html/PROPER.html">PROPER</a>. Takes consideration of:</p>
 <ul>
@@ -190,173 +491,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
 </ul>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">PROPER</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">PROPER</span><span class="op">)</span></span>
 <span><span class="va">sim.opts.Cheung</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/PROPER/man/RNAseq.SimOptions.2grp.html">RNAseq.SimOptions.2grp</a></span><span class="op">(</span>ngenes <span class="op">=</span> <span class="fl">20000</span>, p.DE<span class="op">=</span><span class="fl">0.05</span>, lOD<span class="op">=</span><span class="st">"cheung"</span>, lBaselineExpr<span class="op">=</span><span class="st">"cheung"</span><span class="op">)</span></span>
-<span><span class="va">simres</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/PROPER/man/runSims.html">runSims</a></span><span class="op">(</span>Nreps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">7</span>, <span class="fl">10</span><span class="op">)</span>, sim.opts<span class="op">=</span><span class="va">sim.opts.Cheung</span>, DEmethod<span class="op">=</span><span class="st">"edgeR"</span>, nsims<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">simres</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/PROPER/man/runSims.html">runSims</a></span><span class="op">(</span>Nreps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">7</span>, <span class="fl">10</span><span class="op">)</span>, sim.opts<span class="op">=</span><span class="va">sim.opts.Cheung</span>, DEmethod<span class="op">=</span><span class="st">"DESeq2"</span>, nsims<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Simulation number 1 </code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: edgeR</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'edgeR' was built under R version 4.4.2</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: limma</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'limma' was built under R version 4.4.2</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Simulation number 2 
+<pre><code>Simulation number 1 
+Simulation number 2 
 Simulation number 3 
 Simulation number 4 
 Simulation number 5 </code></pre>
 </div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">powers</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/PROPER/man/comparePower.html">comparePower</a></span><span class="op">(</span><span class="va">simres</span>, alpha.type<span class="op">=</span><span class="st">"fdr"</span>, alpha.nominal<span class="op">=</span><span class="fl">0.1</span>, stratify.by<span class="op">=</span><span class="st">"expr"</span>, delta<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">powers</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/PROPER/man/comparePower.html">comparePower</a></span><span class="op">(</span><span class="va">simres</span>, alpha.type<span class="op">=</span><span class="st">"fdr"</span>, alpha.nominal<span class="op">=</span><span class="fl">0.1</span>, stratify.by<span class="op">=</span><span class="st">"expr"</span>, delta<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/PROPER/man/summaryPower.html">summaryPower</a></span><span class="op">(</span><span class="va">powers</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     SS1 SS2 Nominal FDR Actual FDR Marginal power Avg # of TD Avg # of FD  FDC
-[1,]   3   3         0.1       0.39           0.27          42          27 0.63
-[2,]   5   5         0.1       0.23           0.41          65          20 0.31
-[3,]   7   7         0.1       0.16           0.50          82          16 0.20
-[4,]  10  10         0.1       0.12           0.58          96          13 0.14</code></pre>
+[1,]   3   3         0.1       0.36           0.39          60          35 0.57
+[2,]   5   5         0.1       0.25           0.49          78          27 0.34
+[3,]   7   7         0.1       0.20           0.55          89          23 0.26
+[4,]  10  10         0.1       0.17           0.60          99          22 0.22</code></pre>
 </div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/PROPER/man/plots.html">plotPower</a></span><span class="op">(</span><span class="va">powers</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/PROPER/man/plots.html">plotPower</a></span><span class="op">(</span><span class="va">powers</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>This suggests that you get more power out of more samples, rather than sequencing.</p>
 <p>The most rigorous power benchmarks are to use controlled labatory experiments, with many samples and sequencing, and then downsample.</p>
-</section><section id="design-matrix" class="level2"><h2 class="anchored" data-anchor-id="design-matrix">Design matrix</h2>
-<p>If you are comparing between groups, the simple way is to encode your experimental design the “group” column in colData of your SummarizedExperiment object.</p>
-<p>However, if you have more complex designs, such as covariates to control in a blocking design, you will need to create a design matrix:</p>
-<div class="cell">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/SummarizedExperiment">SummarizedExperiment</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">GSE96870</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="st">"data/GSE96870_se.rds"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">GSE96870</span><span class="op">$</span><span class="va">group</span><span class="op">)</span></span>
-<span><span class="va">sex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">GSE96870</span><span class="op">$</span><span class="va">sex</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix</a></span><span class="op">(</span><span class="op">~</span><span class="va">group</span><span class="op">+</span><span class="va">sex</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section><section id="filtering-out-low-counts" class="level2"><h2 class="anchored" data-anchor-id="filtering-out-low-counts">Filtering out low counts</h2>
-<p>The <code>filterByExp</code> function keeps rows that have worthwhile counts in a minumum number of samples (two samples in this case because the smallest group size is two). The function accesses the group factor contained in y in order to compute the minimum group size, but the filtering is performed independently of which sample belongs to which group so that no bias is introduced.</p>
-<p>The filtering should be based on the grouping factors or treatment factors that will be involved in the differential expression teststested for, rather than on blocking variables that are not of scientific interest in themselves.</p>
-<div class="cell">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioinf.wehi.edu.au/edgeR/">edgeR</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.5
-✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-✔ purrr     1.0.4     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ lubridate::%within%() masks IRanges::%within%()
-✖ dplyr::collapse()     masks IRanges::collapse()
-✖ dplyr::combine()      masks Biobase::combine(), BiocGenerics::combine()
-✖ dplyr::count()        masks matrixStats::count()
-✖ dplyr::desc()         masks IRanges::desc()
-✖ tidyr::expand()       masks S4Vectors::expand()
-✖ dplyr::filter()       masks stats::filter()
-✖ dplyr::first()        masks S4Vectors::first()
-✖ dplyr::lag()          masks stats::lag()
-✖ ggplot2::Position()   masks BiocGenerics::Position(), base::Position()
-✖ purrr::reduce()       masks GenomicRanges::reduce(), IRanges::reduce()
-✖ dplyr::rename()       masks S4Vectors::rename()
-✖ lubridate::second()   masks S4Vectors::second()
-✖ lubridate::second&lt;-() masks S4Vectors::second&lt;-()
-✖ dplyr::slice()        masks IRanges::slice()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stemangiola/tidySummarizedExperiment">tidySummarizedExperiment</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: ttservice
-
-Attaching package: 'ttservice'
-
-The following objects are masked from 'package:dplyr':
-
-    bind_cols, bind_rows</code></pre>
-</div>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870</span><span class="op">$</span><span class="va">group</span> <span class="op">=</span> <span class="va">GSE96870</span><span class="op">$</span><span class="va">Group</span></span>
-<span></span>
-<span><span class="va">keep</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/edgeR/man/filterByExpr.html">filterByExpr</a></span><span class="op">(</span><span class="va">GSE96870</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">GSE96870_kept</span> <span class="op">=</span> <span class="va">GSE96870</span><span class="op">[</span><span class="va">keep</span> ,<span class="op">]</span></span>
-<span><span class="va">GSE96870_notkept</span> <span class="op">=</span> <span class="va">GSE96870</span><span class="op">[</span><span class="op">!</span><span class="va">keep</span> ,<span class="op">]</span></span>
-<span></span>
-<span><span class="va">GSE96870_kept_summary</span> <span class="op">=</span> <span class="va">GSE96870_kept</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">.feature</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>median_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span>,</span>
-<span>                                                  mean_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</code></pre>
-</div>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">GSE96870_kept_summary</span><span class="op">$</span><span class="va">median_count</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-     0.0     50.0    534.5   1921.9   1994.5 146407.0 </code></pre>
-</div>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870_notkept_summary</span> <span class="op">=</span> <span class="va">GSE96870_notkept</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">.feature</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>median_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span>,</span>
-<span>                                                  mean_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</code></pre>
-</div>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">GSE96870_notkept_summary</span><span class="op">$</span><span class="va">median_count</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
- 0.0000  0.0000  0.0000  0.5751  0.5000  8.0000 </code></pre>
-</div>
-</div>
-</section><section id="dimension-reduction-as-eda" class="level2"><h2 class="anchored" data-anchor-id="dimension-reduction-as-eda">Dimension Reduction as EDA</h2>
-<div class="cell">
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/plotMDS.html">plotMDS</a></span><span class="op">(</span><span class="va">GSE96870_kept</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="resources/images/figure/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section><section id="section" class="level2"><h2 class="anchored" data-anchor-id="section"></h2>
-</section><section id="normalization---probably-for-week-3" class="level2"><h2 class="anchored" data-anchor-id="normalization---probably-for-week-3">Normalization - probably for week 3?</h2>
-<p>“edgeR is concerned with differential expression analysis rather than with the quantification of expression levels. It is concerned with relative changes in expression levels between conditions, but not directly with estimating absolute expression levels. This greatly simplifies the technical influences that need to be taken into account, because any technical factor that is unrelated to the experimental conditions should cancel out of any differential expression analysis. For example, read counts can generally be expected to be proportional to length as well as to expression for any transcript, but edgeR does not generally need to adjust for gene length because gene length has the same relative influence on the read counts for each RNA sample. For this reason, normalization issues arise only to the extent that technical factors have sample-specific effects”</p>
-<p>Sample-specific effects addressed</p>
+</section><section id="appendix-dimension-reduction-to-explore-your-data" class="level2"><h2 class="anchored" data-anchor-id="appendix-dimension-reduction-to-explore-your-data">Appendix: Dimension Reduction to explore your data</h2>
+</section><section id="appendix-other-confounding-factors-to-consider" class="level2"><h2 class="anchored" data-anchor-id="appendix-other-confounding-factors-to-consider">Appendix: Other confounding factors to consider</h2>
 <ul>
-<li><p>Sequencing depth</p></li>
-<li>
-<p>Effective library sizes (also known as RNA composition)</p>
-<ul>
-<li><p>RNA-seq provides a measure of the relative abundance of each gene in each RNA sample, but does not provide any measure of the total RNA output on a per-cell basis - it is a relative measurement. That is, the proportion of reads attributed to a given gene in a library depends on the expression properties of the whole sample rather than just the expression level of that gene.</p></li>
-<li><p>Then, if a small proportion of highly expressedgenes consume a substantial proportion of the total library size for a particular sample, this will cause the remaining genes to be under-sampled for that sample, confounding DE analysis. The <code>normLibSizes</code> function normalizes the library sizes in such a way to minimize the log-fold changes between the samples for most genes.</p></li>
-</ul>
-</li>
-</ul>
-<p>Other effects that don’t vary between sample-sample-length include:</p>
-<ul>
-<li><p>Gene length</p></li>
-<li><p>GC content*</p></li>
-</ul>
-<p>Other ways of normalization out there can be <a href="https://hbctraining.github.io/Intro-to-DGE/lessons/02_DGE_count_normalization.html">found here</a>.</p>
-<div class="cell">
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">result</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/edgeR/man/calcNormFactors.html">normLibSizes</a></span><span class="op">(</span><span class="va">GSE96870_kept</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#result2 &lt;- estimateDisp(result)</span></span>
-<span><span class="co">#plotBCV(result2)</span></span>
-<span><span class="co">#et &lt;- exactTest(result2, pair=c("Female_Day0", "Male_Day0"))</span></span>
-<span><span class="co">#topTags(et)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Notice that output here is a “DGEList” object, instead of “SummarizedExperiment”.</p>
-</section><section id="section-1" class="level2"><h2 class="anchored" data-anchor-id="section-1"></h2>
-</section></main><!-- /main column --><script id="quarto-html-after-body" type="application/javascript">
+<li><p>Unobserved confounders</p></li>
+<li><p>Are the demarcation of groups I’m comparing is independent of my molecular measurements? (double dipping): https://stat.uw.edu/seminars/double-dipping-problems-and-solutions-application-single-cell-rna-sequencing-data, https://anna-neufeld.github.io/datathin/</p></li>
+</ul></section></main><!-- /main column --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
