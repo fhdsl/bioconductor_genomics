@@ -1,6 +1,8 @@
 ---
-title: "02_week2"
-format: html
+title: "Experimental Design / QC"
+format: 
+  html:
+    embed-resources: true
 ---
 
 ## Learning Objectives

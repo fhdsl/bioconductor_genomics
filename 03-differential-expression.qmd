@@ -1,5 +1,10 @@
 ---
 title: "Differential Expression using DESeq2/edgeR"
+filters: 
+  - shinylive
+format:
+  html:
+    embed-resources: true
 ---
 
 Last week we talked about Experimental Design. This week we're going to apply that knowledge to finding *differential expressed* genes or transcripts - finding those genes or transcripts that are expressed differently between groups in our experimental design.
@@ -31,21 +36,10 @@ library(DESeq2)
 GSE96870 <- readRDS("data/GSE96870_se.rds")
 ```
 
-The following plot is the plot of the expression counts for the `Asl` gene across all samples in our dataset grouped by `time`. There appears to be a difference in expression across the samples by timepoint, but there is a lot of variation that we can see in the data.
+Last week, we talked about the uneven library sizes and how they can affect our expression estimates for each sample. Our solution to this was to *scale* each sample and expression estimates so the had the same library size.
 
 ```{r}
-expression_plot <- 
-  GSE96870 |>
-    filter(.feature == "Asl") |>
-    ggplot(aes(x = Label, y = counts, color = time)) +
-    geom_point() +
-    theme(axis.text.x = element_text(angle = 90)) + theme_minimal()
-expression_plot
-```
-
-The issue is that the library sizes of each sample is different. If we compare the counts of each library, we'll see they vary.
-
-```{r}
+#| echo: false
 library(patchwork)
 
 expression_plot <- 
@@ -68,32 +62,18 @@ count_plot <-
     ggtitle("Library Size for each Sample") 
 
 expression_plot/ count_plot 
-```
 
-You will notice that the counts for `Asl` across the samples vary by Library size (if you can't see it, look at the patterns of ups and downs). For us to truly compare the expression differences between our timepoints in our samples, we need to remove the effect of *library size* before we make the comparison.
 
-```{r}
-#| warning: false
 GSE96870_filtered <- GSE96870[rowSums(assay(GSE96870, "counts")) > 5,]
-
 GSE96870_deseq <- DESeq2::DESeqDataSet(GSE96870_filtered, design = ~ sex + time)
-
 GSE96870_normalized <-  DESeq2::estimateSizeFactors(GSE96870_deseq)
-
-scaling_coeffs <- sizeFactors(GSE96870_normalized)
-
-scaling_coeffs
-```
-These are the scaling factors. If we look at `GSE96870_normalized`, we will see that an extra column called `sizeFactor` has been added:
-
-```{r}
 GSE96870_normalized |>
   select(.feature, .sample, counts, sizeFactor)
+
 ```
 
-If we divide `counts` by `sizeFactor`, then we get our `scaled` counts.
-
 ```{r}
+#| echo: false
 expression_normalized <- GSE96870_normalized |>
     filter(.feature == "Asl") |>
     mutate(scaled = counts / sizeFactor) |>
@@ -107,15 +87,15 @@ expression_normalized <- GSE96870_normalized |>
 
 As you can see, some, but not all of the intra-timepoint variation was removed, especially within the `Day0` timepoint. We will attempt to account for this variability in our model.
 
-:::{.callout-note}
-## What about Single Cell Data?
+This week we'll talk about the model fitting procedure. 
 
-Single cell data actually uses a similar approach to discover differentially expressed genes: the *pseudo-bulk* approach. That is, counts for like cells are treated like a single bulk RNA sample. Then the pseudo-bulk samples can be tested for differential expression much like we're going to do.
-:::
+## What groups are we going to compare?
+
+In our analysis, we are going to compare the two timepoints in our study: `Day0` and `Day8`. 
+
+We want to find genes that have expression differences between these two timepoints.
 
 ## The General Differential Expression Workflow
-
-So, now we know part of what we're working toward: assessing whether there is a timepoint effect while accounting for variability in our data.
 
 In the general workflow, we are in the box below. 
 
@@ -124,7 +104,7 @@ graph TD
 A[Reading in Data] --> B
 B[Metadata] --> C
 C[Data Exploration] --> D
-subgraph "DESeq2 / EdgeR"
+subgraph "DESeq2"
 D[Filtering and Normalization] --> E
 E[Design Matrix] --> F
 F[Dispersion Estimation] --> G
@@ -134,39 +114,266 @@ G --> H[Annotation and Gene Set Analysis]
 G --> I[Clustering and Visualization]
 G --> J[Pathway and Network Analysis]
 ```
+## Filtering and Normalization
+
+We already talked about filtering out low expression counts and normalizing by library size in the previous week.
+
+
 ## Models as Filters
 
 When we are calculating differential expression, we are using our model fitting as a filter for good and bad candidates. Our statistical test will generate a *p-value*, and we somehow use this p-value as a filtering criteria.
 
+We have two ways of filtering candidates:
+
+1. Filter by Mean Fold Change in expression
+2. Filter by model fit (p-value)
+
 So far, so good. What some things that might make the modeling difficult?
 
-1. Variation in library size
-2. Low expression counts
+1. Variation in library size (handled by normalization)
+2. Low expression counts or zero expression counts (handled by modeling)
+
+We'll explore the distinctions the model makes in the next section.
+
+## Fold Change
+
+Fold change represents the **effect size**, or our expression difference.
+
+We calculate fold change by taking the mean expression for group 1 (`day0`) and dividing it from the mean expression for group 2.
+
+For example, for `asl`:
+
+```{r}
+GSE_means <- GSE96870_normalized |>
+  filter(time %in% c("Day0", "Day8")) |>
+  filter(.feature == "Asl") |>
+  mutate(scaled = counts / sizeFactor, time=factor(time)) |>
+  group_by(time) |>
+  summarize(mean_expression = mean(scaled))
 
 
-## What groups are we going to compare?
+GSE96870_normalized |>
+    filter(.feature == "Asl") |>
+     filter(time %in% c("Day0", "Day8")) |>
+    mutate(scaled = counts / sizeFactor) |>
+    ggplot() +
+    geom_point(aes(x=time, y=scaled, color=time)) +
+    geom_errorbar(mapping=aes(x=time, 
+                              ymin=mean_expression, 
+                              ymax=mean_expression), 
+                  data=GSE_means) +
+  annotate(geom="text", x=1.2, y=490, label="Mean Day0") +
+    annotate(geom="text", x=2.2, y=1030, label="Mean Day8") 
+```
+Let's calculate the mean expression by `time`:
 
-In our analysis, we are going to compare the two timepoints in our study: `Day0` and `Day8`. 
+```{r}
+GSE_means <- GSE96870_normalized |>
+  filter(time %in% c("Day0", "Day8")) |>
+  filter(.feature == "Asl") |>
+  mutate(scaled = counts / sizeFactor, time=factor(time)) |>
+  group_by(time) |>
+  summarize(mean_expression = mean(scaled))
+
+GSE_means
+```
+
+To calculate the fold-change, we divide `day8` mean expression (1012) by `day0` mean expression (466), getting a fold change of `r signif(1012/466, digits=2)`. The positive value means that `mean(day0)` < `mean(day8)`.
+
+Note that a negative fold change means that the fold change is in the opposite direction: `mean(day0)` > `mean(day8)`.
+
+## Volcano Plot
+
+Below is a Shiny app that lets you explore the two groups in our data, `day0`, and `day8`. Be patient, it takes a moment to load.
+
+Volcano plots are one way of displaying our results of differential expression analysis. They are a little bit hard to understand because they are on log scale, so let's review what these axes represent.
+
+1. On our x-axis, Log2 fold expression. A handy rule of thumb is that a fold change of 2 means log2(2) = 1 on our axes.
+2. On our y-axis, -log2 p-value. The thing to remember, is as log2pvalue goes up, the *lower* the p-value.
+
+We often put lines at log2foldchange = 1 and -1, and a line at log2(0.05), or our threshold for the p-value.
+
+```{=html}
+<iframe width="780" height="600" src="https://hutchdatascience.org/bioconductor_genomics/volcano/"></iframe>
+```
+
+Try the following out:
+
+1. Pick a high fold change / high log2pvalue candidate and click on it. Do you agree that it is a good expression candidate? Look at the overlap in expression values.
+2. Pick a couple of high fold change / low log2pvalue candidates. Do you agree they are bad candidates? Why?
+3. Pick one of the lowest p-value candidates and look at the expression differences.
+
+It's important to have an intuition for how the model is discriminating between expression candidates.
+
+## Model Fitting
+
+The model that we use in `DESeq2` is to fit negative binomial distributions to the data. This is because:
+
+1. Our data begins at 0 and goes up
+2. It is skewed (most of the genes have very low expression)
+
+The main thing we are fitting is the *dispersion of the data*, which is like the variance of the data, . The main thing to remember is that lower expression values are less reliable than the higher expression values. 
+
+
+
+We use `estimateDispersions()` in `DESeq2` to fit our model. 
 
 ```{r}
 GSE96970_est <- DESeq2::estimateDispersions(GSE96870_normalized)
 plotDispEsts(GSE96970_est)
 ```
 
+Let's dive more into this plot. Each point represents the dispersion.
+
+Our model fits the overall dispersion across all genes and all mean expression counts.
+
+Our beginning points are highlighted in black. After fitting, our points become those in blue. Notice that our dispersion estimates are actually "shrinking", especially for those candidates that have high dispersion. 
+
+## Shrinkage
+
+The model is actually making lower expressed values reduce the amount of dispersion.
+
+Genes with high dispersion experience the most amount of shrinkage. They actually pay a penalty in that their fold-change estimates *shrink*. The crucial thing to note is that low dispersion candidates experience very little shrinkage.
+
+After model fitting and shrinkage, the next step is to actually conduct the statistical test.
+
 ```{r}
 model_fit <- DESeq2::nbinomWaldTest(GSE96970_est)
-model_fit
 ```
+
+After running the statistical test, we need to extract the comparison we're interested in using the `results` function. We need to specify the comparison and groups we're interested in to the `contrast` argument, and can specify a log Fold Change threshold 
+
+```{r}
+GSE_results <- DESeq2::results(model_fit, 
+                               contrast = c("time", "Day8", "Day0"), 
+                               lfcThreshold = 0.5,
+                               alpha = 0.05)
+summary(GSE_results)
+
+resultsNames(GSE_results)
+shrinkage <- lfcShrink(model_fit, coef="time_Day8_vs_Day0", lfcThreshold = 0.5)
+```
+
+We can visualize the shrinkage directly by plotting before (black) and after (blue) fold change vs pvalue. 
+
+```{r}
+set.seed(111)
+
+after <- shrinkage |>
+  as.data.frame() |>
+  select(after_fit = log2FoldChange, svalue)
+
+before <- GSE_results |>
+  as.data.frame() |>
+  select(before_fit = log2FoldChange, pvalue, padj)
+
+both <- bind_cols(before, after)
+
+small_both <- both[sample(nrow(both), 300),]
+
+small_both |>
+  ggplot() +
+  geom_point(aes(x=pvalue, y=before_fit), color="black") +
+  geom_point(aes(x=pvalue, y=after_fit), color="blue") +
+  geom_segment(aes(x=pvalue, y=before_fit, yend=after_fit),arrow=arrow(length = unit(2, "mm"))) +
+  xlab("p-value") + ylab("fold change")
+```
+Another way to visualize shrinkage is with an *MA plot* - this plots the log2 fold change on the y-axis and mean of normalized counts on the y-axis.
+
+```{r}
+plotMA(GSE_results, main= "Before Shrinkage")
+```
+
+Before shrinkage, we can see there are a lot of high fold change candidates at low normalized counts. Compare this to after shrinkage:
+
+```{r}
+plotMA(shrinkage, main="After Shrinkage")
+```
+
+We can see that the shrinkage procedure has shrunk a lot of these high-fold change candidates at lower counts - notice the low counts look "tighter".
+
+## Adjustment for multiple comparisons
+
+The last thing we need to do is adjust for multiple comparisons. We are doing over 20,000 statistical tests, and with each test we make, the probability that we have a *false discovery* increase. So we need a way to correct for multiple comparisons.
+
+We adjust our p-value distribution using what's called a FDR (False discovery rate) procedure. Here is the original p-value distribution, and the p-value distribution after adjustment.
+
+```{r}
+before <- GSE_results |>
+  ggplot() +
+  geom_histogram(aes(x=pvalue), fill="black", alpha=0.5, bins=40) +
+  xlab("original p-value") +
+  ylab("log2 Fold Change")
+
+after <- GSE_results |>
+  ggplot() +
+  geom_histogram(aes(x=padj), fill="blue", alpha=0.5, bins=40) +
+  xlab("adjusted p-value") +
+  ylab("log2 Fold Change")
+
+before / after
+```
+
+Note that a lot of p-values get pushed towards a value of 1 - a lot more than the untransformed p-values.
+
+The main thing to understand about this adjustment procedure is that it reduces the proportion of *False Discoveries* - which are candidates we think pass the p-value threshold but are not real discoveries. False discoveries are similar to False Positives, but with a different prioritization framework. 
+
+## Going back to Volcano Plots
+
+```{r}
+small_both |>
+  ggplot() +
+  geom_point(aes(y=padj, x=before_fit), color="black") +
+  geom_point(aes(y=padj, x=after_fit), color="blue") +
+  geom_segment(aes(y=padj, x=before_fit, xend=after_fit),arrow=arrow(length = unit(2, "mm"))) +
+  geom_hline(yintercept = 0.05, lty=2) +
+  annotate(geom="text", x=0, y=0.1, label="alpha") +
+  xlab("log2 fold change")
+```
+
+This is beginning to look familiar, doesn't it? If we transform `padj` by taking the log2, we arrive at our original volcano plot:
+
+```{r}
+small_both |>
+  ggplot() +
+  geom_point(aes(y=-log2(padj), x=before_fit), color="black") +
+  geom_point(aes(y=-log2(padj), x=after_fit), color="blue") +
+  geom_segment(aes(y=-log2(padj), x=before_fit, xend=after_fit),arrow=arrow(length = unit(2, "mm"))) +
+  geom_hline(yintercept = -log2(0.05), lty=2) +
+  annotate(geom="text", x=0, y=0.1, label="alpha") +
+  xlab("log2 fold change") +
+  geom_vline(xintercept = -1) +
+  geom_vline(xintercept = 1)
+
+```
+
+This may not look like volcano plots you have seen before. Most volcano plots, we don't show the transformed p-values or shrunken fold changes.
+
+```{r}
+GSE_results |>
+  ggplot() +
+  geom_point(aes(y=-log2(pvalue), x=log2FoldChange), color="black", alpha=0.5) +
+  geom_hline(yintercept = -log2(0.05), lty=2) +
+  annotate(geom="text", x=0, y=0.1, label="alpha") +
+  xlab("log2 fold change") +
+  geom_vline(xintercept = -1) +
+  geom_vline(xintercept = 1)
+
+```
+
+
 
 ## Contrasts
 
 ```{r}
+#| eval: false
 #mcols(model_fit)
 mcols(mcols(model_fit))
 ```
 
 
 ```{r}
+#| eval: false
 GSE_results <- DESeq2::results(model_fit, contrast = c("time", "Day8", "Day0"), lfcThreshold = 0.5,alpha = 0.05)
 summary(GSE_results)
 
@@ -176,166 +383,16 @@ shrinkage <- lfcShrink(model_fit, coef="time_Day8_vs_Day0", lfcThreshold = 0.5)
 #before <- plotMA(GSE_results,MLE=TRUE)
 before <- plotMA(GSE_results, main= "Before Shrinkage")
 after <- plotMA(shrinkage, main="After Shrinkage")
-before + after
 ```
-
-Get the original expression data
-
-```{r}
-colnames(GSE96870)
-```
-
-
-```{r}
-gsecounts <- assay(GSE96870[GSE96870$time %in% c("Day0", "Day8"),])
-
-```
-
-```{r}
-
-test <- as.data.frame(GSE_results)
-test$gene <- rownames(test)
-
-#test_small <- test[sample(nrow(test), size=2000),]
-test_small <- read_csv("data/plots/sampled_results.csv")
-
-test_small |>
-  ggplot() +
-  aes(y=-log2(padj), x=log2FoldChange) +
-  geom_point() +
-  geom_hline(yintercept = -log2(0.05)) +
-  geom_vline(xintercept = -1) +
-  geom_vline(xintercept = 1)
-
-positive_candidates <- test_small |>
-  filter(padj < 0.05) |>
-  filter(log2FoldChange > 1) |>
-  slice_sample(n=10)
-```
-```{r}
-library(ggbeeswarm)
-make_expression_plot <- function(gene){
-  pval <- test_small |>
-    filter(gene == gene) |>
-    pull(padj)
-  
-  FC <- test_small |>
-    filter(gene == gene) |>
-    pull(log2FoldChange)
-  
-  FC <- 2^FC
-  
-out_plot <-  GSE96870_normalized |>
-    filter(.feature == gene) |>
-    filter(time %in% c("Day0", "Day8")) |>
-    ggplot() +
-  aes(y=counts, x=time) +
-   geom_boxplot(aes(fill=time)) +
-  geom_beeswarm(cex=5) +
-#   facet_wrap(~.feature, scales="free")+
-  ggtitle(gene, subtitle = paste0( "p=", signif(pval,digits = 2),  ", FC=", signif(FC, digits=2))) + theme_minimal() +
-  theme(legend.position = "none") 
-
-  #out_plot
-    ggsave(filename = paste0("data/plots/", gene, ".jpg"),device = jpeg(),units = "px", height=600, width=600)
-    dev.off()
-}
-
-make_expression_plot("Glod5")
-```
-
-```{r}
-library(purrr)
-
-walk(test_small$gene[1:50], make_expression_plot)
-```
-
-```{r}
-positive_data <- GSE96870_normalized |>
-  mutate(count_norm = counts / sizeFactor) |>
-  filter(time %in% c("Day0", "Day8")) |>
-  filter(.feature %in% positive_candidates$gene) 
-
-positive_plots <- positive_data |>
-  filter(.feature != "Col5a3") |>
-  ggplot() +
-  aes(y=count_norm, x=time) +
-   geom_boxplot(aes(fill=time)) +
-  geom_point() +
-   facet_wrap(~.feature, scales="free")+
-  ggtitle("Good Candidates") + theme_minimal()
- 
-positive_plots
-```
-
-```{r}
-library(plotly)
-
-
-
-```
-
-
-```{r}
-negative_candidates <- test_small |>
-  filter(padj > 0.1) |>
-  filter(log2FoldChange > 1) |>
-  slice_sample(n = 10)
-
-negative_data <- GSE96870_normalized |>
-  mutate(count_norm = counts / sizeFactor) |>
-  filter(time %in% c("Day0", "Day8")) |>
-  filter(.feature %in% negative_candidates$gene) 
-
-negative_plots <- negative_data |>
-  ggplot() +
-  aes(y=count_norm, x=time) +
-   geom_boxplot(aes(fill=time)) +
-  geom_point() +
-  facet_wrap(~.feature, scales="free")+
-  ggtitle("Bad Candidates") + theme_minimal()
- 
-(positive_plots + theme(legend.position = "none", axis.text.x = element_text())) + (negative_plots + theme(legend.position = "none"))
-```
-
-## Commands Used in `edgeR` package
-
-|Procedure|Command|
-|---------|-------|
-|Filtering|
-
-## Data Filtering in `edgeR`
-
-- We need to filter out those genes with low expression (low count number) before we run analysis. Alternatively, we can select genes to test by using Coefficient of Variation to find the most variable genes.
-
-
-## Data Normalization in `edgeR`
-
-One of the things we need to account for is library size of our samples. Experimentally, there is variability in the number of reads across samples. 
-
-## Two group comparison
-
-
-
-## Multiple Groups
-
-In general, we want to use a Generalized Linear Model to discover differences between groups.
-
-```{mermaid}
-graph TD
-  A["ANOVA\n(across all groups)"] --> B["Contrasts\n(between groups)"]
-```
-
-One thing to keep in mind is that unless we know which group comparisons we want to focus on, we first have to do the ANOVA (analysis of variance) test to see if there are *any* differences among all groups.
-
-Only then can we move on to individual comparisons and discover differentially expressed genes for each group comparison. 
-
-## Multiple Groups, Multiple Factors
 
 
 ## Take Home Points
 
+- Fold change represents the effect size - the mean expression value of 1 group divided by the mean expression value of the 2nd group.
 - We need to filter out those genes with low expression (low count number) before we run analysis. Alternatively, we can select genes to test by using Coefficient of Variation to find the most variable genes.
 - Count Data must be normalized by the library size to compare across samples.
 - We model data using distributions, and use those models to find expression differences.
-- `edgeR` and `DESeq2` are complementary approaches. Results from one method may be different than the other.
+- There are two quantities we adjust during the modeling procedure:
+  - Fold change using our dispersion estimation / shrinkage procedure, which penalizes lower count candidates by *shrinking their fold change*. Low dispersion candidates are not as penalized as much by the shrinkage procedure
+  - P-values using False Discovery Rate Adjustment, which adjusts for multiple comparisons
+- In the end, we have high fold-change, low p-value candidates for further analysis.
