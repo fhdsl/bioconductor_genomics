@@ -87,7 +87,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#going-back-to-volcano-plots" id="toc-going-back-to-volcano-plots" class="nav-link" data-scroll-target="#going-back-to-volcano-plots">Going back to Volcano Plots</a></li>
   <li><a href="#enhancedvolcano" id="toc-enhancedvolcano" class="nav-link" data-scroll-target="#enhancedvolcano">EnhancedVolcano</a></li>
   <li><a href="#the-entire-deseq2-workflow" id="toc-the-entire-deseq2-workflow" class="nav-link" data-scroll-target="#the-entire-deseq2-workflow">The Entire <code>DESeq2</code> workflow</a></li>
-  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
   <li><a href="#take-home-points" id="toc-take-home-points" class="nav-link" data-scroll-target="#take-home-points">Take Home Points</a></li>
   </ul></nav>
 </div>
@@ -581,24 +580,21 @@ design formula are characters, converting to factors</code></pre>
 </div>
 </div>
 </div>
-</section><section id="exercises" class="level2"><h2 class="anchored" data-anchor-id="exercises">Exercises</h2>
-<ol type="1">
-<li>Try looking at the expression of <code>Asl</code> in <code>GSE_results</code> - what adjusted p-value does it have?</li>
-<li>Run the above DESeq workflow using the contrast <code>c("time", "Day4", "Day0")</code> and make a volcano plot. Use the same <code>lfcThreshold</code> and <code>alpha</code> cutoffs.</li>
-<li>See how many genes overlap between the two results sets. You may have to use <code><a href="https://rdrr.io/r/base/data.frame.html">data.frame()</a></code> to convert the results into something you can compare.</li>
-</ol></section><section id="take-home-points" class="level2"><h2 class="anchored" data-anchor-id="take-home-points">Take Home Points</h2>
+</section><section id="take-home-points" class="level2"><h2 class="anchored" data-anchor-id="take-home-points">Take Home Points</h2>
 <ul>
 <li>Fold change represents the effect size - the mean expression value of 1 group divided by the mean expression value of the 2nd group.</li>
-<li>We need to filter out those genes with low expression (low count number) before we run analysis. Alternatively, we can select genes to test by using Coefficient of Variation to find the most variable genes.</li>
+<li>We need to filter out those genes with low expression (low count number) before we run analysis.</li>
 <li>Count Data must be normalized by the library size to compare across samples.</li>
-<li>We model data using distributions, and use those models to find expression differences.</li>
+<li>We model data using the negative binomial distributions, and use the models to find expression differences.</li>
 <li>There are two quantities we adjust during the modeling procedure:
 <ul>
-<li>Fold change using our dispersion estimation / shrinkage procedure, which penalizes lower count candidates by <em>shrinking their fold change</em>. Low dispersion candidates are not as penalized as much by the shrinkage procedure</li>
-<li>P-values using False Discovery Rate Adjustment, which adjusts for multiple comparisons</li>
+<li>
+<strong>Fold change</strong> using our dispersion estimation / shrinkage procedure, which penalizes lower count candidates by <em>shrinking their fold change</em>. Low dispersion candidates are not as penalized as much by the shrinkage procedure</li>
+<li>
+<strong>P-values</strong> using False Discovery Rate Adjustment, which adjusts for multiple comparisons</li>
 </ul>
 </li>
-<li>In the end, we have high fold-change, low p-value candidates for further analysis.</li>
+<li>In the end, we have high fold-change, low p-value candidates for further downstream analysis.</li>
 </ul></section></main><!-- /main column --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
