@@ -33,6 +33,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="index_files/libs/bootstrap/bootstrap-0b9e35696ea153a55a49e2492062f191.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="index_files/libs/quarto-diagram/mermaid.min.js"></script>
+<script src="index_files/libs/quarto-diagram/mermaid-init.js"></script>
+<link href="index_files/libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="style.css">
@@ -84,6 +87,32 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>Identify</strong> and <strong>Annotate</strong> Gene Sets for downstream analysis</li>
 <li><strong>Load</strong> data from RNAseq experiments into Bioconductor</li>
 </ul>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">graph TD
+A[Reading in Data] --&gt; B
+B[Metadata] --&gt; C
+subgraph DESeq2
+C[Data Exploration] --&gt; D
+D[Review Experiment Design] --&gt; E
+end
+E[Filtering and Normalization] --&gt; F
+F[Dispersion Estimation] --&gt; G
+G[Differential Expression]
+G --&gt; H[Annotation and Gene Set Analysis]
+G --&gt; I[Clustering and Visualization]
+G --&gt; J[Pathway and Network Analysis]
+classDef box fill:#DDD
+class DESeq2 box
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
 </section>
 <section id="course-outline" class="level2">
 <h2 class="anchored" data-anchor-id="course-outline">Course Outline</h2>
