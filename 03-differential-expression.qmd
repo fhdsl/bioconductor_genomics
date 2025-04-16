@@ -19,9 +19,9 @@ If you are new to differential expression, it is worth talking with the Bioinfor
 You did consult with them about the experimental design of your experiment before you sent the samples to be processed, I hope.
 :::
 
-## Count Data is Discrete Data
+## Setup
 
-What does it mean when we say a set of samples is differentially expressed when we are using count data?
+Remember, we started with a `SummarizedExperiment` object and now we have to transform it into an object that is usable with `DESeq2`. 
 
 ```{r}
 #| warning: false
@@ -33,6 +33,10 @@ library(DESeq2)
 
 GSE96870 <- readRDS("data/GSE96870_se.rds")
 ```
+
+
+
+## DESeq
 
 Last week, we talked about the uneven library sizes and how they can affect our expression estimates for each sample. Our solution to this was to *scale* each sample and expression estimates so the had the same library size.
 
@@ -65,7 +69,6 @@ count_plot <-
 
 expression_plot/ count_plot 
 
-
 GSE96870_filtered <- GSE96870[rowSums(assay(GSE96870, "counts")) > 5,]
 GSE96870_deseq <- DESeq2::DESeqDataSet(GSE96870_filtered, design = ~ sex + time)
 GSE96870_normalized <-  DESeq2::estimateSizeFactors(GSE96870_deseq)
@@ -89,24 +92,18 @@ expression_normalized <- GSE96870_normalized |>
 
 As you can see, some, but not all of the intra-timepoint variation was removed, especially within the `Day0` timepoint. We will attempt to account for this variability in our model.
 
-This week we'll talk about the model fitting procedure. 
-
-## What groups are we going to compare?
-
-In our analysis, we are going to compare the two timepoints in our study: `Day0` and `Day8`. 
-
-We want to find genes that have expression differences between these two timepoints.
+This week we'll talk about the model fitting procedure, which includes estimating the dispersion of the data. 
 
 ## The General Differential Expression Workflow
 
-In the general workflow, we are in the box below. 
+In the general workflow, we are in the grey box below. 
 
 ```{mermaid}
 graph TD
 A[Reading in Data] --> B
 B[Metadata] --> C
 C[Data Exploration] --> D
-subgraph "DESeq2"
+subgraph DESeq2
 D[Filtering and Normalization] --> E
 E[Design Matrix] --> F
 F[Dispersion Estimation] --> G
@@ -115,19 +112,28 @@ end
 G --> H[Annotation and Gene Set Analysis]
 G --> I[Clustering and Visualization]
 G --> J[Pathway and Network Analysis]
+classDef box fill:#DDD
+class DESeq2 box
 ```
+
+## What groups are we going to compare?
+
+In our analysis, we are going to compare the two timepoints in our study: `Day0` and `Day8`. 
+
+We want to find genes that have expression differences between these two timepoints.
+
+
 ## Filtering and Normalization
 
 We already talked about filtering out low expression counts and normalizing by library size in the previous week.
 
-
-## Models as Filters
+## Modeling to Identify Candidate Genes
 
 When we are calculating differential expression, we are using our model fitting as a filter for good and bad candidates. Our statistical test will generate a *p-value*, and we somehow use this p-value as a filtering criteria.
 
 We have two ways of filtering candidates:
 
-1. Filter by Mean Fold Change in expression
+1. Filter by Mean Fold Change in expression (see below section)
 2. Filter by model fit (p-value)
 
 So far, so good. What some things that might make the modeling difficult?
@@ -141,9 +147,9 @@ We'll explore the distinctions the model makes in the next section.
 
 Fold change represents the **effect size**, or our expression difference.
 
-We calculate fold change by taking the mean expression for group 1 (`day0`) and dividing it from the mean expression for group 2.
+We calculate fold change by taking the mean expression for group 1 (`Day0`) and dividing it from the mean expression for group 2 (`Day8`).
 
-For example, for `asl`:
+For example, for `Asl`:
 
 ```{r fold-change}
 GSE_means <- GSE96870_normalized |>
@@ -184,6 +190,8 @@ To calculate the fold-change, we divide `day8` mean expression (1012) by `day0` 
 
 Note that a negative fold change means that the fold change is in the opposite direction: `mean(day0)` > `mean(day8)`.
 
+One thing to note: for `DESeq2`, we don't use the mean expression this way. We first need to fit the data using negative binomial distributions, and then report the fold change using the parameters of these distributions. 
+
 ## Volcano Plot
 
 Below is a Shiny app that lets you explore the two groups in our data, `day0`, and `day8`. Be patient, it takes a moment to load.
@@ -199,22 +207,23 @@ We often put lines at log2foldchange = 1 and -1, and a line at log2(0.05), or ou
 <iframe width="780" height="600" src="https://hutchdatascience.org/bioconductor_genomics/volcano/"></iframe>
 ```
 
-Try the following out:
+:::{.callout}
+## Exercise
 
 1. Pick a high fold change / high log2pvalue candidate and click on it. Do you agree that it is a good expression candidate? Look at the overlap in expression values.
 2. Pick a couple of high fold change / low log2pvalue candidates. Do you agree they are bad candidates? Why?
 3. Pick one of the lowest p-value candidates and look at the expression differences.
+:::
 
 It's important to have an intuition for how the model is discriminating between expression candidates.
 
-## Model Fitting
+## Estimating Dispersions in the model
 
-The model that we use in `DESeq2` is to fit negative binomial distributions to the data. This is because:
+The main thing we are fitting is the *dispersion of the data*, which is like the variance of the data. We do this by estimating a function to our data. Our function depends on the mean expression count of our candidate.
 
-1. Our data begins at 0 and goes up
-2. It is skewed (most of the genes have very low expression)
+The main thing to remember is that lower expression values are less reliable than the higher expression values. They will have an overall higher dispersion, and thus are more likely to be false positives:
 
-The main thing we are fitting is the *dispersion of the data*, which is like the variance of the data, . The main thing to remember is that lower expression values are less reliable than the higher expression values. 
+
 
 We use `estimateDispersions()` in `DESeq2` to fit our model. 
 
@@ -229,48 +238,69 @@ Our model fits the overall dispersion across all genes and all mean expression c
 
 Our beginning points are highlighted in black. After fitting, our points become those in blue. Notice that our dispersion estimates are actually "shrinking", especially for those candidates that have high dispersion. 
 
-## Shrinkage
+## Model Fitting
 
-The model is actually making lower expressed values reduce the amount of dispersion.
+After calculating dispersion, the next step is to actually conduct the statistical test. This is done with a negative binomial test called the Wald test.
 
-Genes with high dispersion experience the most amount of shrinkage. They actually pay a penalty in that their fold-change estimates *shrink*. The crucial thing to note is that low dispersion candidates experience very little shrinkage.
+The Wald test incorporates the sizeFactors, the dispersion estimates, and the design matrix to model the data. The model is estimating the Fold Change of our gene candidates given this information. 
 
-After model fitting and shrinkage, the next step is to actually conduct the statistical test.
+Remember, we are working towards identifying candidates that meet our log fold-change requirements and our model statistic.
 
 ```{r}
 model_fit <- DESeq2::nbinomWaldTest(GSE96970_est)
 ```
 
-After running the statistical test, we need to extract the comparison we're interested in using the `results` function. We need to specify the comparison and groups we're interested in to the `contrast` argument, and can specify a log Fold Change threshold 
+After running the statistical test, we need to extract the comparison we're interested in using the `results()` function. We need to specify the comparison and groups we're interested in to the `contrast` argument, and can specify a log2 Fold Change threshold as an argument, as well as an alpha (significance cutoff).
+
+Here we are choosing a log2FC of 0.5 (which corresponds to a fold change of 2).
 
 ```{r shrinkage}
 GSE_results <- DESeq2::results(model_fit, 
                                contrast = c("time", "Day8", "Day0"), 
-                               lfcThreshold = 0.5,
+                               lfcThreshold = 1,
                                alpha = 0.05)
 summary(GSE_results)
 
-resultsNames(GSE_results)
 shrinkage <- lfcShrink(model_fit, coef="time_Day8_vs_Day0", lfcThreshold = 0.5)
 ```
 
-We can visualize the shrinkage directly by plotting before (black) and after (blue) fold change vs pvalue. 
+Looking at this result set, we see that we have 34 candidates with fold change > 2, and 31 candidates with fold change < 2, that meet our alpha cutoff of 0.05. Our original fold change 
+
+## Shrinkage of Fold Change estimates
+
+The model that we use in `DESeq2` is to fit negative binomial distributions to the data. This is because:
+
+1. Our data begins at 0 and goes up
+2. It is skewed (most of the genes have very low expression)
+
+We incorporate the shrinkage information into our model. In effect, shrinkage reduces the fold-change estimates, but biased towards the high dispersion candidates.
+
+Genes with high dispersion experience the most amount of shrinkage. They actually pay a penalty in that their fold-change estimates *shrink*. The crucial thing to note is that low dispersion candidates experience very little shrinkage.
+
+We can visualize the shrinkage directly by plotting before (black) and after (blue) fold change vs p-value. 
 
 ```{r shrink2}
+#| echo: false
+# set random seed (used to select a small subset of 300 of the data)
 set.seed(111)
 
+#pull the shrinkage information
 after <- shrinkage |>
   as.data.frame() |>
   select(after_fit = log2FoldChange, svalue)
 
+#pull the bFold change estimates from the model
 before <- GSE_results |>
   as.data.frame() |>
   select(before_fit = log2FoldChange, pvalue, padj)
 
+#put them together into a single data frame
 both <- bind_cols(before, after)
 
+# sample the subset to 300 (makes it easier to visualize)
 small_both <- both[sample(nrow(both), 300),]
 
+# plot the original FC and the shrunken estimates
 small_both |>
   ggplot() +
   geom_point(aes(x=pvalue, y=before_fit), color="black") +
@@ -283,7 +313,6 @@ Another way to visualize shrinkage is with an *MA plot* - this plots the log2 fo
 ```{r ma-before}
 plotMA(GSE_results, main= "Before Shrinkage")
 ```
-
 Before shrinkage, we can see there are a lot of high fold change candidates at low normalized counts. Compare this to after shrinkage:
 
 ```{r ma-after}
@@ -294,7 +323,7 @@ We can see that the shrinkage procedure has shrunk a lot of these high-fold chan
 
 ## Adjustment for multiple comparisons
 
-The last thing we need to do is adjust for multiple comparisons. We are doing over 20,000 statistical tests, and with each test we make, the probability that we have a *false discovery* increase. So we need a way to correct for multiple comparisons.
+The last thing we need to do is adjust our p-values for multiple comparisons. We are doing over 20,000 statistical tests, and with each test we make, the probability that we have a *false discovery* increase. So we need a way to correct for multiple comparisons.
 
 We adjust our p-value distribution using what's called a FDR (False discovery rate) procedure. Here is the original p-value distribution, and the p-value distribution after adjustment.
 
@@ -320,29 +349,17 @@ The main thing to understand about this adjustment procedure is that it reduces 
 
 ## Going back to Volcano Plots
 
-```{r}
-small_both |>
-  ggplot() +
-  geom_point(aes(y=padj, x=before_fit), color="black") +
-  geom_point(aes(y=padj, x=after_fit), color="blue") +
-  geom_segment(aes(y=padj, x=before_fit, xend=after_fit),arrow=arrow(length = unit(2, "mm"))) +
-  geom_hline(yintercept = 0.05, lty=2) +
-  annotate(geom="text", x=0, y=0.1, label="alpha") +
-  xlab("log2 fold change")
-```
-
-This is beginning to look familiar, doesn't it? If we transform `padj` by taking the log2, we arrive at our original volcano plot:
+This is beginning to look familiar, doesn't it? If we transform `padj` by taking the -log10, we arrive at our transformed volcano plot:
 
 ```{r}
-small_both |>
+GSE_results |>
   ggplot() +
-  geom_point(aes(y=-log2(padj), x=before_fit), color="black") +
-  geom_hline(yintercept = -log2(0.05), lty=2) +
+  geom_point(aes(y=-log10(padj), x=log2FoldChange), color="black") +
+  geom_hline(yintercept = -log10(0.05), lty=2) +
   annotate(geom="text", x=0, y=0.1, label="alpha") +
   xlab("log2 fold change") +
   geom_vline(xintercept = -1) +
   geom_vline(xintercept = 1)
-
 ```
 
 This may not look like volcano plots you have seen before. Most volcano plots, we don't show the transformed p-values or shrunken fold changes.
@@ -350,38 +367,50 @@ This may not look like volcano plots you have seen before. Most volcano plots, w
 ```{r}
 GSE_results |>
   ggplot() +
-  geom_point(aes(y=-log2(pvalue), x=log2FoldChange), color="black", alpha=0.5) +
-  geom_hline(yintercept = -log2(0.05), lty=2) +
+  geom_point(aes(y=-log10(pvalue), x=log2FoldChange), color="black", alpha=0.5) +
+  geom_hline(yintercept = -log10(0.05), lty=2) +
   annotate(geom="text", x=0, y=0.1, label="alpha") +
   xlab("log2 fold change") +
   geom_vline(xintercept = -1) +
   geom_vline(xintercept = 1)
-
 ```
 
+## EnhancedVolcano
 
-
-## Contrasts
+There is a package called [EnhancedVolcano](https://bioconductor.org/packages/release/bioc/vignettes/EnhancedVolcano/inst/doc/EnhancedVolcano.html) that lets you plot volcano plots. 
 
 ```{r}
-#| eval: false
-#mcols(model_fit)
-mcols(mcols(model_fit))
+library(EnhancedVolcano)
+
+EnhancedVolcano(GSE_results,  
+                lab = rownames(GSE_results),
+                x = 'log2FoldChange',
+                y = 'pvalue')
 ```
 
+The plots are highly customizable, as you can see from the above link.
+
+## The Entire `DESeq2` workflow
+
+We have taken apart the Differential expression process, but as you analyze your data, all of this is done within the `DESeq()` function:
 
 ```{r}
-#| eval: false
-GSE_results <- DESeq2::results(model_fit, contrast = c("time", "Day8", "Day0"), lfcThreshold = 0.5,alpha = 0.05)
-summary(GSE_results)
+GSE96870_deseq <- 
+  DESeqDataSet(GSE96870, design = ~ sex + time)  #make DESeqDataset
 
-resultsNames(GSE_results)
-shrinkage <- lfcShrink(model_fit, coef="time_Day8_vs_Day0", lfcThreshold = 0.5)
+GSE96870_filtered <- GSE96870_deseq[rowSums(assay(GSE96870_deseq)) > 5,] 
+GSE96870_fit <- DESeq(GSE96870_filtered) #run estimateSizeFactors, estimateDispersions, nbinomialWaldTest
+GSE_results <- results(GSE96870_fit, 
+                       contrast = c("time", "Day8", "Day0"), 
+                       lfcThreshold = 1,
+                       alpha = 0.05) #calculate results from the contrast
 
-#before <- plotMA(GSE_results,MLE=TRUE)
-before <- plotMA(GSE_results, main= "Before Shrinkage")
-after <- plotMA(shrinkage, main="After Shrinkage")
+EnhancedVolcano(GSE_results,  
+                lab = rownames(GSE_results),
+                x = 'log2FoldChange',
+                y = 'pvalue')
 ```
+
 
 
 ## Take Home Points

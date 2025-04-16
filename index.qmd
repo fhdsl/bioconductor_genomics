@@ -15,6 +15,24 @@ Please note that this course requires the [Intro to R](https://hutchdatascience.
 - **Identify** and **Annotate** Gene Sets for downstream analysis
 - **Load** data from RNAseq experiments into Bioconductor
 
+```{mermaid}
+graph TD
+A[Reading in Data] --> B
+B[Metadata] --> C
+subgraph DESeq2
+C[Data Exploration] --> D
+D[Review Experiment Design] --> E
+end
+E[Filtering and Normalization] --> F
+F[Dispersion Estimation] --> G
+G[Differential Expression]
+G --> H[Annotation and Gene Set Analysis]
+G --> I[Clustering and Visualization]
+G --> J[Pathway and Network Analysis]
+classDef box fill:#DDD
+class DESeq2 box
+```
+
 ## Course Outline
 
 |Week|Topic|Video|Office Hours|
