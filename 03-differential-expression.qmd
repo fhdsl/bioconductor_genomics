@@ -2,9 +2,7 @@
 title: "Differential Expression using DESeq2/edgeR"
 filters: 
   - shinylive
-format:
-  html:
-    embed-resources: true
+format: html
 ---
 
 Last week we talked about Experimental Design. This week we're going to apply that knowledge to finding *differential expressed* genes or transcripts - finding those genes or transcripts that are expressed differently between groups in our experimental design.
@@ -38,13 +36,16 @@ GSE96870 <- readRDS("data/GSE96870_se.rds")
 
 Last week, we talked about the uneven library sizes and how they can affect our expression estimates for each sample. Our solution to this was to *scale* each sample and expression estimates so the had the same library size.
 
-```{r}
+```{r norm-library}
 #| echo: false
 library(patchwork)
+
+#GSE96870 <- GSE96870[GSE96870$time %in% c("Day0", "Day8"),] 
 
 expression_plot <- 
   GSE96870 |>
     filter(.feature == "Asl") |>
+#    filter(time %in% c("Day0", "Day8")) |>
     ggplot(aes(x = Label, y = counts, color = time)) +
     geom_point() + theme_minimal() +
     theme(axis.text.x = element_blank()) + 
@@ -52,6 +53,7 @@ expression_plot <-
 
 count_plot <- 
   GSE96870 |>
+#    filter(time %in% c("Day0", "Day8")) |>
     group_by(Label) |>
     summarise(total_counts=sum(counts)) |>
     mutate(time = colData(GSE96870)[["time"]]) |>
@@ -72,7 +74,7 @@ GSE96870_normalized |>
 
 ```
 
-```{r}
+```{r norm-example}
 #| echo: false
 expression_normalized <- GSE96870_normalized |>
     filter(.feature == "Asl") |>
@@ -143,7 +145,7 @@ We calculate fold change by taking the mean expression for group 1 (`day0`) and 
 
 For example, for `asl`:
 
-```{r}
+```{r fold-change}
 GSE_means <- GSE96870_normalized |>
   filter(time %in% c("Day0", "Day8")) |>
   filter(.feature == "Asl") |>
@@ -214,11 +216,9 @@ The model that we use in `DESeq2` is to fit negative binomial distributions to t
 
 The main thing we are fitting is the *dispersion of the data*, which is like the variance of the data, . The main thing to remember is that lower expression values are less reliable than the higher expression values. 
 
-
-
 We use `estimateDispersions()` in `DESeq2` to fit our model. 
 
-```{r}
+```{r dispersion}
 GSE96970_est <- DESeq2::estimateDispersions(GSE96870_normalized)
 plotDispEsts(GSE96970_est)
 ```
@@ -243,7 +243,7 @@ model_fit <- DESeq2::nbinomWaldTest(GSE96970_est)
 
 After running the statistical test, we need to extract the comparison we're interested in using the `results` function. We need to specify the comparison and groups we're interested in to the `contrast` argument, and can specify a log Fold Change threshold 
 
-```{r}
+```{r shrinkage}
 GSE_results <- DESeq2::results(model_fit, 
                                contrast = c("time", "Day8", "Day0"), 
                                lfcThreshold = 0.5,
@@ -256,7 +256,7 @@ shrinkage <- lfcShrink(model_fit, coef="time_Day8_vs_Day0", lfcThreshold = 0.5)
 
 We can visualize the shrinkage directly by plotting before (black) and after (blue) fold change vs pvalue. 
 
-```{r}
+```{r shrink2}
 set.seed(111)
 
 after <- shrinkage |>
@@ -280,13 +280,13 @@ small_both |>
 ```
 Another way to visualize shrinkage is with an *MA plot* - this plots the log2 fold change on the y-axis and mean of normalized counts on the y-axis.
 
-```{r}
+```{r ma-before}
 plotMA(GSE_results, main= "Before Shrinkage")
 ```
 
 Before shrinkage, we can see there are a lot of high fold change candidates at low normalized counts. Compare this to after shrinkage:
 
-```{r}
+```{r ma-after}
 plotMA(shrinkage, main="After Shrinkage")
 ```
 
@@ -298,7 +298,7 @@ The last thing we need to do is adjust for multiple comparisons. We are doing ov
 
 We adjust our p-value distribution using what's called a FDR (False discovery rate) procedure. Here is the original p-value distribution, and the p-value distribution after adjustment.
 
-```{r}
+```{r pval}
 before <- GSE_results |>
   ggplot() +
   geom_histogram(aes(x=pvalue), fill="black", alpha=0.5, bins=40) +
@@ -337,8 +337,6 @@ This is beginning to look familiar, doesn't it? If we transform `padj` by taking
 small_both |>
   ggplot() +
   geom_point(aes(y=-log2(padj), x=before_fit), color="black") +
-  geom_point(aes(y=-log2(padj), x=after_fit), color="blue") +
-  geom_segment(aes(y=-log2(padj), x=before_fit, xend=after_fit),arrow=arrow(length = unit(2, "mm"))) +
   geom_hline(yintercept = -log2(0.05), lty=2) +
   annotate(geom="text", x=0, y=0.1, label="alpha") +
   xlab("log2 fold change") +

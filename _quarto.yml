@@ -1,5 +1,13 @@
 project:
   output-dir: docs
+  render: 
+    - "*.qmd"
+    - "!prepdata.qmd"
+    - "!03-diff-exp-new.qmd"
+    - "!nrf.qmd"
+
+#execute: 
+#  freeze: true
 
 book:
   title: Bioconductor for Genomics
@@ -8,14 +16,14 @@ book:
 
   page-navigation: true
   search: true
-  repo-url: https://github.com/fhdsl/bioconductor_for_genomics
+  repo-url: https://github.com/fhdsl/bioconductor_genomics
   repo-actions: [edit] 
 
   chapters:
     - index.qmd
     - 00_concepts.qmd
     - 01_introduction.qmd
-#    - 02_week2.qmd
+    - 02_week2.qmd
     - 03-differential-expression.qmd
 
   sidebar: 
@@ -58,6 +66,3 @@ format:
   
     image: img/favicon.ico
     license: "CC BY"
-knitr:
-  opts_chunk:
-    fig.path: "resources/images/figure/"

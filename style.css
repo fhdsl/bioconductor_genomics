@@ -60,7 +60,7 @@ div.notice{
   background-size: 70px;
   background-position: 15px center;
   background-color: #e8ebee;
-  background-image: url("/img/box-images/note.png");
+  background-image: url("img/box-images/note.png");
 }
 
 
@@ -70,7 +70,7 @@ div.warning{
   background-size: 70px;
   background-position: 15px center;
   background-color: #e8ebee;
-  background-image: url("/img/box-images/warning.png");
+  background-image: url("img/box-images/warning.png");
 }
 
 div.github{
@@ -79,7 +79,7 @@ div.github{
   background-size: 70px;
   background-position: 15px center;
   background-color: #e8ebee;
-  background-image: url("/img/box-images/github.png");
+  background-image: url("img/box-images/github.png");
 }
 
 div.dictionary{
@@ -88,7 +88,7 @@ div.dictionary{
   background-size: 70px;
   background-position: 15px center;
   background-color: #e8ebee;
-  background-image: url("/img/box-images/dictionary.png");
+  background-image: url("img/box-images/dictionary.png");
 }
 
 div.reflection{
@@ -97,7 +97,7 @@ div.reflection{
   background-size: 90px;
   background-position: 15px center;
   background-color: #e8ebee;
-  background-image: url("/img/box-images/thinking_face.png");
+  background-image: url("img/box-images/thinking_face.png");
 }
 
 div.wip{
@@ -106,7 +106,7 @@ div.wip{
   background-size: 70px;
   background-position: 15px center;
   background-color: #f4d03f;
-  background-image: url("/img/box-images/under_construction.png");
+  background-image: url("img/box-images/under_construction.png");
 }
 
 /* Navbar */

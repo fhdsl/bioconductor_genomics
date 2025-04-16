@@ -1,0 +1,80 @@
+---
+title: "NRF-data"
+---
+
+
+
+```{r}
+library(SummarizedExperiment)
+library(tidySummarizedExperiment)
+library(tidyverse)
+
+gse <- readRDS("data/GSE222256.rds")
+
+gse_222256 <- gse$GSE222256_series_matrix.txt.gz
+gse_se <- makeSummarizedExperimentFromExpressionSet(gse_222256)
+
+counts <- read_tsv("data/GSE222256_raw_counts.tsv")
+
+#assay(gse_se) <- counts
+library(janitor)
+
+features <- counts$geneid
+counts <- counts[,-1]
+
+coldat <- colData(gse_se) |> as.data.frame() |> janitor::clean_names() |>
+  mutate(genotype_ch1 = factor(genotype_ch1),
+         characteristics_ch1_2 = factor(characteristics_ch1_2))
+coldat
+
+
+```
+```{r}
+counts2 <- as.matrix(counts)
+rownames(counts2) <- features
+
+```
+
+```{r}
+rownames(coldat)
+colnames(counts2)
+```
+
+```{r}
+colnames(counts2) <- rownames(coldat)
+
+se <- SummarizedExperiment(
+    assays = list(counts = counts2),
+    colData = coldat
+)
+
+
+```
+
+```{r}
+library(DESeq2)
+
+desdata <- DESeq2::DESeqDataSet(se, design = ~ treatment_ch1 + genotype_ch1)
+desdata <- estimateSizeFactors(desdata)
+desdata <- estimateDispersions(desdata)
+plotDispEsts(desdata)
+```
+
+```{r}
+desdata <- nbinomWaldTest(desdata)
+
+```
+
+```{r}
+coldat$genotype.ch1
+
+```
+
+```{r}
+resGeno <- results(desdata, contrast = c("genotype_ch1", "Nrf2 kockout", "C151S"))
+head(resGeno[order(resGeno$pvalue), ])
+```
+
+```{r}
+resTreat <- results(desdata, contrast = c("genotype_ch1", "Nrf2 kockout", "C151S"))
+```
