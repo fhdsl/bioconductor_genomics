@@ -1,0 +1,13 @@
+---
+title: "Week 1 Exercises"
+---
+
+1. Look at the GEO Accession number for the dataset we're working with: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE96870
+  - What is the Goal of this Study?
+  - What comparisons are being made?
+  - What were the key findings of the study in terms of expression differences? What plots did they use to communicate their findings?
+2. Look at the `colData()` for the study.
+  - How many samples are there?
+  - How many replicates are there for a single timepoint?
+  - How do the replicates differ within a single timepoint?
+3. 

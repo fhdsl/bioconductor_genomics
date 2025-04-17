@@ -181,7 +181,16 @@ colData(female)
 
 This tight interaction of metadata and assay data is critical when we start doing differential analysis. The experimental design will help determine whether we can make the comparisons we want to make and the conclusions we can draw from the dataset.
 
-For manipulating the `SummarizedExperiment` object, we 
+For manipulating the `SummarizedExperiment` object, we will use the `tidySummarizedExperiment` package to subset it - essentially this package lets us use `dplyr` on the objects
+
+:::{.callout-note}
+## A Common Bioconductor Pattern
+
+Depending on the package, we will tend to *overwrite* objects as we run methods on them, such as the following.
+
+
+
+:::
 
 ## `tidySummarizedExperiment`
 

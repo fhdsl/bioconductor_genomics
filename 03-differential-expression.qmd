@@ -240,7 +240,9 @@ It's important to have an intuition for how the model is discriminating between 
 
 The main thing we are fitting is the *dispersion of the data*, which is like the variance of the data. We do this by estimating a function to our data. 
 
-Our function depends on the mean expression count of our candidate.
+
+
+Our function depends on the mean expression count of our candidate. That means we actually look across all genes that have a similar mean expression and use it to estimate the function, instead of a single gene. 
 
 
 
