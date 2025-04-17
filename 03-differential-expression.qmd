@@ -5,11 +5,33 @@ filters:
 format: html
 ---
 
+## Learning Objectives
+
+- **Explore** model results in `DESeq2` and **gain intuition** for what the statistical model is doing
+- **Explain** diagnosis plots such as Dispersion and MA plots and **interpret** them
+- **Explain** the role of each `DESeq2` step
+- **Extract** `DESeq2` results given a specific contrast for comparison
+- **Plot** a Volcano plot and **interpret** it
+
 Last week we talked about Experimental Design. This week we're going to apply that knowledge to finding *differential expressed* genes or transcripts - finding those genes or transcripts that are expressed differently between groups in our experimental design.
 
 That is, in general, are there genes for the samples in group A that have different counts than the samples in group B?
 
 We'll Explore the `DESeq2` package as one method to find differentially expressed genes. There is also the `edgeR` package. 
+
+## DESeq2 Functions
+
+These are the functions from the `DESeq2` packages that we will cover
+
+| Stage                                                    | Function                                         |
+| -------------------------------------------------------- | ------------------------------------------------ |
+| Filter low expressed<br>candidates                       | `rowSums() < 5`                                  |
+| Estimate size factors<br>to normalize by library<br>size | `estimateSizeFactors()`                          |
+| Estimate dispersion function                             | `estimateDispersion()`,<br>`plotDispEstimates()` |
+| Fit model to negative binomial distribution              | `nbinomWaldTest()`                               |
+| Return model statistics given contrast                   | `results()`                                      |
+| Return Shrinkage Estimates                               | `shrinkage()`, `plotMA()`                        |
+| Plot Volcano Plot of results                             | `EnhancedVolcano()`                              |
 
 :::{.callout-note}
 ## Am I doing this right?
@@ -33,8 +55,6 @@ library(DESeq2)
 
 GSE96870 <- readRDS("data/GSE96870_se.rds")
 ```
-
-
 
 ## DESeq
 
@@ -92,7 +112,7 @@ expression_normalized <- GSE96870_normalized |>
 
 As you can see, some, but not all of the intra-timepoint variation was removed, especially within the `Day0` timepoint. We will attempt to account for this variability in our model.
 
-This week we'll talk about the model fitting procedure, which includes estimating the dispersion of the data. 
+This week we'll talk about the model fitting procedure, which includes estimating the dispersion of the data, and conducting the statistical test. 
 
 ## The General Differential Expression Workflow
 
@@ -121,7 +141,6 @@ class DESeq2 box
 In our analysis, we are going to compare the two timepoints in our study: `Day0` and `Day8`. 
 
 We want to find genes that have expression differences between these two timepoints.
-
 
 ## Filtering and Normalization
 
@@ -219,7 +238,11 @@ It's important to have an intuition for how the model is discriminating between 
 
 ## Estimating Dispersions in the model
 
-The main thing we are fitting is the *dispersion of the data*, which is like the variance of the data. We do this by estimating a function to our data. Our function depends on the mean expression count of our candidate.
+The main thing we are fitting is the *dispersion of the data*, which is like the variance of the data. We do this by estimating a function to our data. 
+
+Our function depends on the mean expression count of our candidate.
+
+
 
 The main thing to remember is that lower expression values are less reliable than the higher expression values. They will have an overall higher dispersion, and thus are more likely to be false positives:
 
@@ -237,6 +260,12 @@ Let's dive more into this plot. Each point represents the dispersion.
 Our model fits the overall dispersion across all genes and all mean expression counts.
 
 Our beginning points are highlighted in black. After fitting, our points become those in blue. Notice that our dispersion estimates are actually "shrinking", especially for those candidates that have high dispersion. 
+
+This is a good plot to examine to ensure your data is a good fit for the DESeq2 model. Evaluate the plot to see if:
+
+- The data to generally scatter around the curve, with the dispersion decreasing with increasing mean expression levels.
+- How much shrinkage you get across the whole range of means in your data. For any experiment with low degrees of freedom, you will expect to see more shrinkage.
+- The data scatter in a cloud or different shapes, then you might want to explore your data more to see if you have contamination (mitochondrial, etc.) or outlier samples.
 
 ## Model Fitting
 
@@ -390,6 +419,19 @@ EnhancedVolcano(GSE_results,
 
 The plots are highly customizable, as you can see from the above link.
 
+```{r}
+EnhancedVolcano(GSE_results,  
+                lab = rownames(GSE_results),
+                x = 'log2FoldChange',
+                y = 'pvalue',
+                title="Day 0 vs Day 8",
+                pCutoff = 1e-4,
+                FCcutoff= 2,
+                col=c('black', 'black', 'black', 'red3'),
+                colAlpha = 0.5)
+
+```
+
 ## The Entire `DESeq2` workflow
 
 We have taken apart the Differential expression process, but as you analyze your data, all of this is done within the `DESeq()` function:
@@ -398,8 +440,10 @@ We have taken apart the Differential expression process, but as you analyze your
 GSE96870_deseq <- 
   DESeqDataSet(GSE96870, design = ~ sex + time)  #make DESeqDataset
 
-GSE96870_filtered <- GSE96870_deseq[rowSums(assay(GSE96870_deseq)) > 5,] 
+GSE96870_filtered <- GSE96870_deseq[rowSums(assay(GSE96870_deseq)) > 5,] #filter out low expressing candidates
+
 GSE96870_fit <- DESeq(GSE96870_filtered) #run estimateSizeFactors, estimateDispersions, nbinomialWaldTest
+
 GSE_results <- results(GSE96870_fit, 
                        contrast = c("time", "Day8", "Day0"), 
                        lfcThreshold = 1,
@@ -411,15 +455,13 @@ EnhancedVolcano(GSE_results,
                 y = 'pvalue')
 ```
 
-
-
 ## Take Home Points
 
 - Fold change represents the effect size - the mean expression value of 1 group divided by the mean expression value of the 2nd group.
-- We need to filter out those genes with low expression (low count number) before we run analysis. Alternatively, we can select genes to test by using Coefficient of Variation to find the most variable genes.
+- We need to filter out those genes with low expression (low count number) before we run analysis.
 - Count Data must be normalized by the library size to compare across samples.
-- We model data using distributions, and use those models to find expression differences.
+- We model data using the negative binomial distributions, and use the models to find expression differences.
 - There are two quantities we adjust during the modeling procedure:
-  - Fold change using our dispersion estimation / shrinkage procedure, which penalizes lower count candidates by *shrinking their fold change*. Low dispersion candidates are not as penalized as much by the shrinkage procedure
-  - P-values using False Discovery Rate Adjustment, which adjusts for multiple comparisons
-- In the end, we have high fold-change, low p-value candidates for further analysis.
+  - **Fold change** using our dispersion estimation / shrinkage procedure, which penalizes lower count candidates by *shrinking their fold change*. Low dispersion candidates are not as penalized as much by the shrinkage procedure
+  - **P-values** using False Discovery Rate Adjustment, which adjusts for multiple comparisons
+- In the end, we have high fold-change, low p-value candidates for further downstream analysis.

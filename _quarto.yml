@@ -5,6 +5,7 @@ project:
     - "!prepdata.qmd"
     - "!03-diff-exp-new.qmd"
     - "!nrf.qmd"
+    - "!*exercises.qmd"
 
 #execute: 
 #  freeze: true

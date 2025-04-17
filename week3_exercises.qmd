@@ -1,0 +1,40 @@
+---
+title: "Week 3 Exercises"
+---
+
+## The Entire `DESeq2` workflow
+
+We have taken apart the Differential expression process, but as you analyze your data, all of the modeling is done within the `DESeq()` function:
+
+```{r}
+library(SummarizedExperiment)
+library(tidySummarizedExperiment)
+library(tidyverse)
+library(DESeq2)
+library(EnhancedVolcano)
+
+GSE96870 <- readRDS("data/GSE96870_se.rds")
+
+GSE96870_deseq <- 
+  DESeqDataSet(GSE96870, design = ~ sex + time)  #make DESeqDataset
+
+GSE96870_filtered <- GSE96870_deseq[rowSums(assay(GSE96870_deseq)) > 5,] #filter out low expressing candidates
+
+GSE96870_fit <- DESeq(GSE96870_filtered) #run estimateSizeFactors, estimateDispersions, nbinomialWaldTest
+
+GSE_results <- results(GSE96870_fit, 
+                       contrast = c("time", "Day8", "Day0"), 
+                       lfcThreshold = 1,
+                       alpha = 0.05) #calculate results from the contrast
+
+EnhancedVolcano(GSE_results,  
+                lab = rownames(GSE_results),
+                x = 'log2FoldChange',
+                y = 'pvalue')
+```
+
+## Exercises
+
+1. Run the above workflow and try looking at the expression of `Asl` in `GSE_results` - what adjusted p-value does it have?
+2. (Required Exercise for Badge) Run the above DESeq workflow using the contrast `c("time", "Day4", "Day0")` and make a volcano plot.  Use the same `lfcThreshold` and `alpha` cutoffs. How does it compare to the `Day8` versus `Day0` contrast?
+3. See how many genes overlap between the two results sets. You may have to use `data.frame()` to convert the results into something you can compare.

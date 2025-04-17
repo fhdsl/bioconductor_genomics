@@ -13,14 +13,15 @@ library(readr)
 library(ggplot2)
 library(plotly)
 library(ggbeeswarm)
+library(ggdist)
 test_small <- read_csv("sampled_results.csv")
-test_small <- test_small |> mutate(log2p = -log2(pvalue))
+test_small <- test_small |> mutate(log10p = -log10(pvalue))
 test_small <- test_small |> mutate(FC = 2^abs(log2FoldChange) * ifelse(log2FoldChange > 0, 1, -1))
 test_small$key <- test_small$gene
 expression_small <- read_csv("small_expression.csv")
 candidates <- test_small |>
   filter(padj < 0.05) |>
-  filter(FC >= 1 | FC <=-1)
+  filter(log2FoldChange >= 1 | log2FoldChange <=-1)
 covariates <- read_csv("covariates.csv")
 genes <- test_small$gene
 
@@ -52,12 +53,12 @@ server <- function(input, output) {
   
   output$plotly2 <- renderPlotly({
     plot_small <- test_small |>
-      ggplot(aes(y=log2p, x=FC, pval=pvalue, key=key)) +
+      ggplot(aes(y=log10p, x=log2FoldChange, pval=pvalue, key=key)) +
       geom_point(alpha=0.2) +
-      geom_point(aes(y=log2p, x=FC, pval=pvalue, key=key), data=candidates, color="blue") +
-      geom_hline(yintercept = -log2(0.05)) +
-      geom_vline(xintercept = -2) +
-      geom_vline(xintercept = 2)
+      geom_point(aes(y=log10p, x=log2FoldChange, pval=pvalue, key=key), data=candidates, color="blue") +
+      geom_hline(yintercept = -log10(0.05)) +
+      geom_vline(xintercept = -1) +
+      geom_vline(xintercept = 1)
     
     out <- ggplotly(plot_small) 
       event_register(out,'plotly_click')
@@ -106,6 +107,16 @@ server <- function(input, output) {
       aes(y=expression, x=time) +
       geom_boxplot(aes(fill=time)) +
       geom_beeswarm(cex=5) +
+      # stat_halfeye(
+      #   aes(fill=time),
+      #   # adjust bandwidth
+      #   adjust = 0.5,
+      #   # move to the right
+      #   justification = -0.5,
+      #   # remove the slub interval
+      #   .width = 0,
+      #   point_colour = "black"
+      # ) +
       #   facet_wrap(~.feature, scales="free")+
       labs(title=gene, 
            subtitle = paste0( "p=", signif(pval,digits = 2),  

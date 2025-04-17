@@ -181,6 +181,8 @@ colData(female)
 
 This tight interaction of metadata and assay data is critical when we start doing differential analysis. The experimental design will help determine whether we can make the comparisons we want to make and the conclusions we can draw from the dataset.
 
+For manipulating the `SummarizedExperiment` object, we 
+
 ## `tidySummarizedExperiment`
 
 The `SummarizedExperiment` object does not act like the normal `data.frame`/`tibble` we expect, especially in filtering and subsetting.
@@ -272,3 +274,4 @@ GSE96870 |>
 
 Most of the other Bioconductor Data Structures derive from some variant of the `SummarizedExperiment`. They might add some functionality that is core to the package they belong to, such as `DEseq2`. This includes `seurat` objects for Single Cell sequencing.
 :::
+
