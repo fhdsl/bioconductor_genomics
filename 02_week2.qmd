@@ -14,6 +14,28 @@ format:
 -   **Construct** a design matrix that reflects the study's experimental design
 -   **Analyze** the process of filtering out genes with low read counts
 
+## The General Differential Expression Workflow
+
+So, now we know part of what we're working toward: assessing whether there is a timepoint effect while accounting for variability in our data.
+
+In the general workflow, we are in the box below.
+
+```{mermaid}
+graph TD
+A[Reading in Data] --> B
+B[Metadata] --> C
+subgraph " "
+C[Data Exploration] --> D
+D[Review Experiment Design] --> E
+end
+E[Filtering and Normalization] --> F
+F[Dispersion Estimation] --> G
+G[Differential Expression]
+G --> H[Annotation and Gene Set Analysis]
+G --> I[Clustering and Visualization]
+G --> J[Pathway and Network Analysis]
+```
+
 ## Experimental Design of RNAseq Experiments
 
 Today, we will look how experimental design plays a large role in the way we analyze RNA-seq data. Experimental design seeks to make sense data variation via careful design of conditions.
@@ -24,7 +46,7 @@ If you are not familiar with some of these technical terms in the quote, we will
 
 ### Single, randomized group
 
-We will first start with looking at the most simple experimental design: a single, randomized group. Once we are comfortable with this, then we will return to a two group comparision in classic differential gene expression.
+We will first start with looking at the most simple experimental design: a single, randomized group. Once we are comfortable with this, then we will return to a two group comparison in classic differential gene expression.
 
 When we run experiments, we are usually analyzing a subset of the population, called a sample. Let's define them clearly:
 
@@ -58,7 +80,7 @@ expression_plot <-
     filter(.feature == "Asl" & time == "Day0") |>
     ggplot(aes(x = Label, y = counts)) +
     geom_point() +
-    theme(axis.text.x = element_text(angle = 90)) + theme_minimal()
+    theme_minimal() + theme(axis.text.x = element_text(angle = 90))
 expression_plot
 ```
 
@@ -76,11 +98,11 @@ In light of this example, let's define two types of replicates:
 
 -   **Technical replicates:** use the same biological sample to repeat the technical or experimental steps in order to accurately measure experimental variation.
 
--   **Biological replicates** use different biological samples of the same condition to measure the biological variation between samples.
+-   **Biological replicates:** use different biological samples of the same condition to measure the biological variation between samples.
 
 ### Two-group comparisons
 
-In classical differntial gene expression, you are often conducting a two-group comparison between case and control. Our case samples arise from the case population, and our control samples arise from the control population. When we look at the measurements of a gene, we look at the *difference* of sample mean betewen case and controls, which is on a log-transformed scale called **log-fold change**. As the sample size gets larger, our gene's sample log-fold change gets closer to the population log-fold change. Similarly, the sample variance for from case and control groups for this gene gets closer to their respective population variances.
+In classical differential gene expression, you are often conducting a two-group comparison between case and control. Our case samples arise from the case population, and our control samples arise from the control population. When we look at the measurements of a gene, we look at the *difference* of sample mean between case and controls, which is on a log-transformed scale called **log-fold change**. As the sample size gets larger, our gene's sample log-fold change gets closer to the population log-fold change. Similarly, the sample variance for from case and control groups for this gene gets closer to their respective population variances.
 
 In the ideal experimental set-up, you want all of your samples to be randomly sampled and differ only by the case and control conditions. However, that rarely happens in real life. There are other variables lurking, also known as **confounding variables,** that may also have an impact on the outcome you want to measure.
 
@@ -94,7 +116,7 @@ In the ideal experimental set-up, you want all of your samples to be randomly sa
 
 -   What else?
 
-This means you need to think carefully what the sample log-fold change are telling you: does the sample log-fold change relate more to your experimental condition, or something else, such as batch effects? A variable can **confound** your experiment when you can't tell whether this variable or your experimental design is affecting the outcome.
+This means you need to think carefully what the sample log-fold change are telling you: does the sample log-fold change relate more to your experimental condition, or a possible confounder, such as batch effects? A variable can **confound** your experiment when you can't tell whether this variable or your experimental design is affecting the outcome.
 
 Example: We know that sex has large effects on gene expression, and if all of our control mice were female and all of the treatment mice were male, then our treatment effect would be confounded by the variable sex. We could not differentiate the effect of treatment from the effect of sex.
 
@@ -110,18 +132,21 @@ Solutions:
 
 -   If not possible, make sure that all experimental conditions have a similar amount of variability of the confounding variable - ie. the both case and control groups have a balance of males and females, and various batches.
 
-    -   ![Source: Modern Statistics for Modern Biology, Chapter 13](https://web.stanford.edu/class/bios221/book/13-chap_files/figure-html/fig-blockbox-1.png){width="350"}
+    -   
+
+        ![Source: Modern Statistics for Modern Biology, Chapter 13](https://web.stanford.edu/class/bios221/book/13-chap_files/figure-html/fig-blockbox-1.png){width="350"}
+
     -   Save this information; we can eliminate these variability in the modeling process.
 
 Let's look at our experimental design. Have our potential confounders been accounted for?
 
 ```{r}
-as.data.frame(colData(GSE96870_Case_Control))
+as.data.frame(colData(GSE96870_Case_Control)) |> select(sex, infection, time, tissue)
 ```
 
 ## Specific confounding issues in RNA-seq experiments
 
-Besides looking at our metadata, there are two confounding variables that happen in nearly every RNA-seq experiment that people have spent a great deal of time developing tools to reduce confounding.
+Besides looking at our metadata, there are two confounding variables that happen in nearly every RNA-seq experiment that people have spent a great deal of time developing tools to reduce their confounding.
 
 ### Library Size
 
@@ -135,7 +160,7 @@ expression_plot <-
     filter(.feature == "Asl") |>
     ggplot(aes(x = Label, y = counts, color = time)) +
     geom_point() +
-    theme(axis.text.x = element_text(angle = 90)) + theme_minimal()
+    theme_minimal() + theme(axis.text.x = element_text(angle = 90),  axis.title.x=element_blank())
 expression_plot
 ```
 
@@ -149,7 +174,7 @@ expression_plot <-
     filter(.feature == "Asl") |>
     ggplot(aes(x = Label, y = counts, color = time)) +
     geom_point() + theme_minimal() +
-    theme(axis.text.x = element_blank()) + 
+    theme(axis.text.x = element_blank(),  axis.title.x=element_blank()) + 
     ggtitle("Asl Expression count") 
 
 count_plot <- 
@@ -159,7 +184,7 @@ count_plot <-
     ggplot() +
     aes(x=Label, y=total_counts, fill=time) +
     geom_bar(stat="identity") + theme_minimal() +
-    theme(axis.text.x = element_text(angle = 90)) +
+    theme(axis.text.x = element_text(angle = 90), axis.title.x=element_blank()) +
     ggtitle("Library Size for each Sample") 
 
 expression_plot/count_plot 
@@ -171,7 +196,7 @@ The easiest way to remove this confounder is to divide gene count of each sample
 
 ### RNA Composition
 
-The second source of confounding has to do with the relative measurement of RNA-seq. Consider a single sample you just perforemd RNA-seq on. The assay provides a measure of the relative abundance of each gene in each RNA sample, but does not provide any measure of the total RNA output  - it is a relative measurement. That is, the proportion of reads attributed to a given gene in a library depends on the expression properties of the whole sample rather than just the expression level of that gene.
+The second source of confounding has to do with the relative measurement of RNA-seq. Consider a single sample you just perforemd RNA-seq on. The assay provides a measure of the relative abundance of each gene in each RNA sample, but does not provide any measure of the total RNA output - it is a relative measurement. That is, the proportion of reads attributed to a given gene in a library depends on the expression properties of the whole sample rather than just the expression level of that gene.
 
 Then, if a small proportion of highly expressed genes consume a substantial proportion of the total library size for a particular sample, this will cause the remaining genes to be under-sampled for that sample, confounding our analysis analysis.
 
