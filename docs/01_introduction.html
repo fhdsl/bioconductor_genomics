@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.6.42">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Introduction: Bioconductor S4 Objects / SummarizedExperiment</title>
+<title>3&nbsp; Introduction: Bioconductor S4 Objects / SummarizedExperiment – Bioconductor for Genomics</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -53,54 +53,171 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 </style>
 
-<script src="01_introduction_files/libs/clipboard/clipboard.min.js"></script>
-<script src="01_introduction_files/libs/quarto-html/quarto.js"></script>
-<script src="01_introduction_files/libs/quarto-html/popper.min.js"></script>
-<script src="01_introduction_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="01_introduction_files/libs/quarto-html/anchor.min.js"></script>
-<link href="01_introduction_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="01_introduction_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="01_introduction_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="01_introduction_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="01_introduction_files/libs/bootstrap/bootstrap-0b9e35696ea153a55a49e2492062f191.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><link href="01_introduction_files/libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="01_introduction_files/libs/pagedtable-1.1/js/pagedtable.js"></script><link rel="stylesheet" href="style.css">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./02_week2.html" rel="next">
+<link href="./00_concepts.html" rel="prev">
+<link href="./img/favicon.ico" rel="icon">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-a1c1d0abbd8b67b8b47aad02bae1bfc9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script><link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="nav-sidebar floating">
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-  <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_introduction.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Introduction: Bioconductor S4 Objects / <code>SummarizedExperiment</code></span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="https://hutchdatascience.org/" class="sidebar-logo-link">
+      <img src="./img/logo.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none"></a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Bioconductor for Genomics</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/fhdsl/bioconductor_genomics" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Bioconductor for Genomics</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./00_concepts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">RNAseq Concepts</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_introduction.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Introduction: Bioconductor S4 Objects / <code>SummarizedExperiment</code></span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_week2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Experimental Design / QC</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-differential-expression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Differential Expression using DESeq2/edgeR</span></span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
-  <li><a href="#general-purpose-of-rnaseq-experiments" id="toc-general-purpose-of-rnaseq-experiments" class="nav-link" data-scroll-target="#general-purpose-of-rnaseq-experiments">General Purpose of RNAseq Experiments</a></li>
-  <li><a href="#what-are-we-trying-to-accomplish" id="toc-what-are-we-trying-to-accomplish" class="nav-link" data-scroll-target="#what-are-we-trying-to-accomplish">What are we trying to accomplish?</a></li>
-  <li><a href="#experimental-design-of-rnaseq-experiments" id="toc-experimental-design-of-rnaseq-experiments" class="nav-link" data-scroll-target="#experimental-design-of-rnaseq-experiments">Experimental Design of RNAseq Experiments</a></li>
-  <li><a href="#what-is-bioconductor" id="toc-what-is-bioconductor" class="nav-link" data-scroll-target="#what-is-bioconductor">What is Bioconductor?</a></li>
+<li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">3.1</span> Learning Objectives</a></li>
+  <li><a href="#general-purpose-of-rnaseq-experiments" id="toc-general-purpose-of-rnaseq-experiments" class="nav-link" data-scroll-target="#general-purpose-of-rnaseq-experiments"><span class="header-section-number">3.2</span> General Purpose of RNAseq Experiments</a></li>
+  <li><a href="#what-are-we-trying-to-accomplish" id="toc-what-are-we-trying-to-accomplish" class="nav-link" data-scroll-target="#what-are-we-trying-to-accomplish"><span class="header-section-number">3.3</span> What are we trying to accomplish?</a></li>
+  <li><a href="#experimental-design-of-rnaseq-experiments" id="toc-experimental-design-of-rnaseq-experiments" class="nav-link" data-scroll-target="#experimental-design-of-rnaseq-experiments"><span class="header-section-number">3.4</span> Experimental Design of RNAseq Experiments</a></li>
+  <li><a href="#what-is-bioconductor" id="toc-what-is-bioconductor" class="nav-link" data-scroll-target="#what-is-bioconductor"><span class="header-section-number">3.5</span> What is Bioconductor?</a></li>
   <li>
-<a href="#s4-bioconductor-objects" id="toc-s4-bioconductor-objects" class="nav-link" data-scroll-target="#s4-bioconductor-objects">S4 Bioconductor Objects</a>
+<a href="#s4-bioconductor-objects" id="toc-s4-bioconductor-objects" class="nav-link" data-scroll-target="#s4-bioconductor-objects"><span class="header-section-number">3.6</span> S4 Bioconductor Objects</a>
   <ul class="collapse">
-<li><a href="#validation" id="toc-validation" class="nav-link" data-scroll-target="#validation">Validation</a></li>
+<li><a href="#validation" id="toc-validation" class="nav-link" data-scroll-target="#validation"><span class="header-section-number">3.6.1</span> Validation</a></li>
   </ul>
 </li>
-  <li><a href="#summarizedexperiment" id="toc-summarizedexperiment" class="nav-link" data-scroll-target="#summarizedexperiment"><code>SummarizedExperiment</code></a></li>
-  <li><a href="#assay-data" id="toc-assay-data" class="nav-link" data-scroll-target="#assay-data">Assay Data</a></li>
-  <li><a href="#metadata" id="toc-metadata" class="nav-link" data-scroll-target="#metadata">Metadata</a></li>
-  <li><a href="#subsetting-summarizedexperiment" id="toc-subsetting-summarizedexperiment" class="nav-link" data-scroll-target="#subsetting-summarizedexperiment">Subsetting <code>SummarizedExperiment</code></a></li>
+  <li><a href="#summarizedexperiment" id="toc-summarizedexperiment" class="nav-link" data-scroll-target="#summarizedexperiment"><span class="header-section-number">3.7</span> <code>SummarizedExperiment</code></a></li>
   <li>
-<a href="#tidysummarizedexperiment" id="toc-tidysummarizedexperiment" class="nav-link" data-scroll-target="#tidysummarizedexperiment"><code>tidySummarizedExperiment</code></a>
+<a href="#assay-data" id="toc-assay-data" class="nav-link" data-scroll-target="#assay-data"><span class="header-section-number">3.8</span> Assay Data</a>
   <ul class="collapse">
-<li><a href="#filtering-data" id="toc-filtering-data" class="nav-link" data-scroll-target="#filtering-data">Filtering Data</a></li>
-  <li><a href="#getting-counts-across-the-experiment" id="toc-getting-counts-across-the-experiment" class="nav-link" data-scroll-target="#getting-counts-across-the-experiment">Getting Counts across the experiment</a></li>
-  <li><a href="#try-it-out" id="toc-try-it-out" class="nav-link" data-scroll-target="#try-it-out">Try it out</a></li>
-  <li><a href="#plotting" id="toc-plotting" class="nav-link" data-scroll-target="#plotting">Plotting</a></li>
+<li><a href="#think-about-it" id="toc-think-about-it" class="nav-link" data-scroll-target="#think-about-it"><span class="header-section-number">3.8.1</span> Think about it</a></li>
   </ul>
 </li>
-  <li><a href="#take-home-messages" id="toc-take-home-messages" class="nav-link" data-scroll-target="#take-home-messages">Take Home Messages</a></li>
-  </ul></nav>
-</div>
+  <li>
+<a href="#metadata" id="toc-metadata" class="nav-link" data-scroll-target="#metadata"><span class="header-section-number">3.9</span> Metadata</a>
+  <ul class="collapse">
+<li><a href="#think-about-it-1" id="toc-think-about-it-1" class="nav-link" data-scroll-target="#think-about-it-1"><span class="header-section-number">3.9.1</span> Think about it</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#subsetting-summarizedexperiment" id="toc-subsetting-summarizedexperiment" class="nav-link" data-scroll-target="#subsetting-summarizedexperiment"><span class="header-section-number">3.10</span> Subsetting <code>SummarizedExperiment</code></a>
+  <ul class="collapse">
+<li><a href="#try-it-out" id="toc-try-it-out" class="nav-link" data-scroll-target="#try-it-out"><span class="header-section-number">3.10.1</span> Try it out</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#tidysummarizedexperiment" id="toc-tidysummarizedexperiment" class="nav-link" data-scroll-target="#tidysummarizedexperiment"><span class="header-section-number">3.11</span> <code>tidySummarizedExperiment</code></a>
+  <ul class="collapse">
+<li><a href="#filtering-data" id="toc-filtering-data" class="nav-link" data-scroll-target="#filtering-data"><span class="header-section-number">3.11.1</span> Filtering Data</a></li>
+  <li><a href="#getting-counts-across-the-experiment" id="toc-getting-counts-across-the-experiment" class="nav-link" data-scroll-target="#getting-counts-across-the-experiment"><span class="header-section-number">3.11.2</span> Getting Counts across the experiment</a></li>
+  <li><a href="#try-it-out-1" id="toc-try-it-out-1" class="nav-link" data-scroll-target="#try-it-out-1"><span class="header-section-number">3.11.3</span> Try it out</a></li>
+  <li><a href="#plotting" id="toc-plotting" class="nav-link" data-scroll-target="#plotting"><span class="header-section-number">3.11.4</span> Plotting</a></li>
+  <li><a href="#try-it-out-2" id="toc-try-it-out-2" class="nav-link" data-scroll-target="#try-it-out-2"><span class="header-section-number">3.11.5</span> Try it Out</a></li>
+  </ul>
+</li>
+  <li><a href="#take-home-messages" id="toc-take-home-messages" class="nav-link" data-scroll-target="#take-home-messages"><span class="header-section-number">3.12</span> Take Home Messages</a></li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/fhdsl/bioconductor_genomics/edit/main/01_introduction.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
+    </div>
+<!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title">Introduction: Bioconductor S4 Objects / <code>SummarizedExperiment</code>
+<h1 class="title">
+<span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Introduction: Bioconductor S4 Objects / <code>SummarizedExperiment</code></span>
 </h1>
 </div>
 
@@ -115,7 +232,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   
 
 
-</header><section id="learning-objectives" class="level2"><h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
+</header><section id="learning-objectives" class="level2" data-number="3.1"><h2 data-number="3.1" class="anchored" data-anchor-id="learning-objectives">
+<span class="header-section-number">3.1</span> Learning Objectives</h2>
 <ul>
 <li>
 <strong>Explain</strong> the basics of how RNAseq experiments are conducted</li>
@@ -127,16 +245,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <strong>Explain</strong> the basic structure of Bioconductor S4 objects</li>
 <li>
 <strong>Explain</strong> and <strong>Utilize</strong> <code>SummarizedExperiment</code> objects</li>
-</ul></section><section id="general-purpose-of-rnaseq-experiments" class="level2"><h2 class="anchored" data-anchor-id="general-purpose-of-rnaseq-experiments">General Purpose of RNAseq Experiments</h2>
+</ul></section><section id="general-purpose-of-rnaseq-experiments" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="general-purpose-of-rnaseq-experiments">
+<span class="header-section-number">3.2</span> General Purpose of RNAseq Experiments</h2>
 <p>Bulk RNAseq experiments are meant to distinguish expression differences between samples or groups of samples.</p>
 <p><a href="00_concepts.html">Please see the concepts section</a> for more in depth details of the processing of RNA-seq experiments.</p>
-</section><section id="what-are-we-trying-to-accomplish" class="level2"><h2 class="anchored" data-anchor-id="what-are-we-trying-to-accomplish">What are we trying to accomplish?</h2>
+</section><section id="what-are-we-trying-to-accomplish" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="what-are-we-trying-to-accomplish">
+<span class="header-section-number">3.3</span> What are we trying to accomplish?</h2>
 <p>In RNAseq, we are interested in assessing <em>expression differences</em> between samples at either the gene or transcript level.</p>
 <p>In order to do this, we need <em>phenotype information</em> about the samples in our experiment. Specifically, we need to have information about:</p>
 <ul>
 <li>conditions (Tissue type)</li>
 <li>possible confounders (gender, time)</li>
-</ul></section><section id="experimental-design-of-rnaseq-experiments" class="level2"><h2 class="anchored" data-anchor-id="experimental-design-of-rnaseq-experiments">Experimental Design of RNAseq Experiments</h2>
+</ul></section><section id="experimental-design-of-rnaseq-experiments" class="level2" data-number="3.4"><h2 data-number="3.4" class="anchored" data-anchor-id="experimental-design-of-rnaseq-experiments">
+<span class="header-section-number">3.4</span> Experimental Design of RNAseq Experiments</h2>
 <p>When we design our RNAseq experiment, we want to be able to:</p>
 <ul>
 <li>Number and type of <strong>replicates</strong>
@@ -148,26 +269,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>The important thing to note is that if you’re unsure about the experimental design, <em>contact the Bioinformatics Core</em>. They can help you design the experiment based on what samples you have.</p>
 <p>We’ll talk much more about experimental design next week.</p>
-</section><section id="what-is-bioconductor" class="level2"><h2 class="anchored" data-anchor-id="what-is-bioconductor">What is Bioconductor?</h2>
+</section><section id="what-is-bioconductor" class="level2" data-number="3.5"><h2 data-number="3.5" class="anchored" data-anchor-id="what-is-bioconductor">
+<span class="header-section-number">3.5</span> What is Bioconductor?</h2>
 <p>Data in bioinformatics is often complex. To deal with this, developers define specialised data containers (termed classes) that match the properties of the data they need to handle.</p>
 <p>This aspect is central to the <strong>Bioconductor</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> project which uses the same <strong>core data infrastructure</strong> across packages. This certainly contributed to Bioconductor’s success. Bioconductor package developers are advised to make use of existing infrastructure to provide coherence, interoperability, and stability to the project as a whole.</p>
-</section><section id="s4-bioconductor-objects" class="level2"><h2 class="anchored" data-anchor-id="s4-bioconductor-objects">S4 Bioconductor Objects</h2>
+</section><section id="s4-bioconductor-objects" class="level2" data-number="3.6"><h2 data-number="3.6" class="anchored" data-anchor-id="s4-bioconductor-objects">
+<span class="header-section-number">3.6</span> S4 Bioconductor Objects</h2>
 <p>At the heart of Bioconductor are the <a href="https://bioconductor.org/help/course-materials/2017/Zurich/S4-classes-and-methods.html">S4 Objects</a>. You can think of these data structures as ways to package together:</p>
 <ul>
 <li>Assay Data, such as an RNAseq count matrix</li>
 <li>Metadata (data about the experiment), including Experimental Design</li>
 </ul>
-<p>Part of why Bioconductor works is this data packaging. We can write routines to act on the data in these S4 Objects as part of a processing <em>workflow</em>. As long as we output a Bioconductor S4 object, our routines can work as part of a pipeline. These routines are called <code><a href="https://rdrr.io/r/utils/methods.html">methods()</a></code>, and may come from a variety of packages.</p>
-<p>You can think of the Bioconductor S4 objects as taking the place of <code>data.frame</code>s in <code>dplyr</code> pipelines - they are the common format that all of the Bioconductor methods work on. They allow Bioconductor methods to be <code>interoperable</code>.</p>
-<section id="validation" class="level3"><h3 class="anchored" data-anchor-id="validation">Validation</h3>
+<p>Part of why Bioconductor works is this data packaging. We can write functions to act on the data in these S4 Objects as part of a processing <em>workflow</em>. As long as we output a Bioconductor S4 object, our routines can work as part of a pipeline. These routines are called <code><a href="https://rdrr.io/r/utils/methods.html">methods()</a></code>, and may come from a variety of packages.</p>
+<div class="callout callout-style-simple callout-none no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+What is a method?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You may have heard of <em>functions</em> and <em>methods</em> - what is the difference?</p>
+<p>A working definition of a method is that it is a function that works on a particular object type, such as the <code>SummarizedExperiment</code> type we’re going to investigate in a little bit.</p>
+<p><em>Method</em> is a little bit more specific than a <em>function</em>.</p>
+</div>
+</div>
+<p>You can think of the Bioconductor S4 objects as taking the place of <code>data.frame</code>s in <code>dplyr</code> pipelines - they are the common format that all of the Bioconductor methods work on. They allow Bioconductor methods to be interoperable - we can mix and match methods from various packages to customize our analysis.</p>
+<section id="validation" class="level3" data-number="3.6.1"><h3 data-number="3.6.1" class="anchored" data-anchor-id="validation">
+<span class="header-section-number">3.6.1</span> Validation</h3>
 <p>The other big part of S4 objects is <em>validation</em>. This can be a bit hard to wrap your head around.</p>
-<p>The Bioconductor designers put special validation checks on the input data for the Bioconductor objects when you load data into them. The following is what is called the <em>Constructor</em> for the <code>SummarizedExperiment</code> object.</p>
+<p>The Bioconductor designers put special validation checks on the input data for the Bioconductor objects when you load data into them. The following is what is called the <em>Constructor</em> for the <code>SummarizedExperiment</code> object. This is what we use to make a brand new <code>SummarizedExperiment</code> object from its pieces.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">SummarizedExperiment</span><span class="op">(</span>assays<span class="op">=</span><span class="fu">SimpleList</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                     rowData<span class="op">=</span><span class="cn">NULL</span>, rowRanges<span class="op">=</span><span class="cn">NULL</span>,</span>
 <span>                     colData<span class="op">=</span><span class="fu">DataFrame</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                     metadata<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                     checkDimnames<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Each argument to the <code>SummarizedExperiment</code> constructor defines restrictions on that slot.</p>
+<p>Each argument to the <code>SummarizedExperiment</code> constructor defines restrictions on that slot. For example, there is a slot called <code>assays</code></p>
 <p>The <code>checkDimnames</code> argument is critical. In order to do any work with an experiment you need to map samples to <code>colNames</code> (the experimental matrix). For example, to calculate differential expression between samples, you need to specify the different groups to compare and which samples map to which groups. Thus, the column names in the AssayData must be identical to the row names in <code>colData</code>.</p>
 <div class="callout callout-style-simple callout-none no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -183,7 +322,9 @@ If it isn’t in <code>colData</code>, it doesn’t exist
 <p>So make sure your <code>colData</code> contains sample names for all your samples.</p>
 </div>
 </div>
-</section></section><section id="summarizedexperiment" class="level2"><h2 class="anchored" data-anchor-id="summarizedexperiment"><code>SummarizedExperiment</code></h2>
+</section></section><section id="summarizedexperiment" class="level2" data-number="3.7"><h2 data-number="3.7" class="anchored" data-anchor-id="summarizedexperiment">
+<span class="header-section-number">3.7</span> <code>SummarizedExperiment</code>
+</h2>
 <p>The following diagram shows how the different <em>data slots</em> in the <code>SummarizedExperiment</code> relate to each other.</p>
 <p><img src="images/SE.svg" class="img-fluid"></p>
 <p>We’ll take a look at data in a <code>SummarizedExperiment</code> object:</p>
@@ -229,9 +370,10 @@ colData names(12): title geo_accession ... Label Group</code></pre>
 </div>
 </div>
 <p>So far, so good.</p>
-</section><section id="assay-data" class="level2"><h2 class="anchored" data-anchor-id="assay-data">Assay Data</h2>
+</section><section id="assay-data" class="level2" data-number="3.8"><h2 data-number="3.8" class="anchored" data-anchor-id="assay-data">
+<span class="header-section-number">3.8</span> Assay Data</h2>
 <p>Everything in <code>SummarizedExperiment</code> is built around the Assay data that we store in it.</p>
-<p>Each element of the Assay data list contains a <code>data.frame</code> with the following contents:</p>
+<p>Each element of the Assay data list contains a <code>matrix</code> with the following contents:</p>
 <ul>
 <li>
 <strong>Rows</strong>: correspond to Gene Locus or possibly Transcripts</li>
@@ -288,11 +430,33 @@ Assays Are Not just for RNAseq data
 <p>Assay Data is very flexible. For example, there are flow cytometry objects where the rows correspond to cell surface markers, and columns that correspond to each cell. Similarly, <code>SingleCellExperiment</code> objects (which are derived from <code>SummarizedExperiment</code>) have rows that correspond to Genes and columns that correspond to individual cells.</p>
 </div>
 </div>
-</section><section id="metadata" class="level2"><h2 class="anchored" data-anchor-id="metadata">Metadata</h2>
+<section id="think-about-it" class="level3" data-number="3.8.1"><h3 data-number="3.8.1" class="anchored" data-anchor-id="think-about-it">
+<span class="header-section-number">3.8.1</span> Think about it</h3>
+<p>Are the colnames of our object identical to the colnames of the assay object? Try it out:</p>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">GSE96870</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "GSM2545337" "GSM2545338" "GSM2545348" "GSM2545353" "GSM2545343"
+ [6] "GSM2545349" "GSM2545354" "GSM2545339" "GSM2545344" "GSM2545352"
+[11] "GSM2545362" "GSM2545340" "GSM2545345" "GSM2545350" "GSM2545363"
+[16] "GSM2545336" "GSM2545342" "GSM2545351" "GSM2545380" "GSM2545341"
+[21] "GSM2545346" "GSM2545347"</code></pre>
+</div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">GSE96870</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "GSM2545337" "GSM2545338" "GSM2545348" "GSM2545353" "GSM2545343"
+ [6] "GSM2545349" "GSM2545354" "GSM2545339" "GSM2545344" "GSM2545352"
+[11] "GSM2545362" "GSM2545340" "GSM2545345" "GSM2545350" "GSM2545363"
+[16] "GSM2545336" "GSM2545342" "GSM2545351" "GSM2545380" "GSM2545341"
+[21] "GSM2545346" "GSM2545347"</code></pre>
+</div>
+</div>
+</section></section><section id="metadata" class="level2" data-number="3.9"><h2 data-number="3.9" class="anchored" data-anchor-id="metadata">
+<span class="header-section-number">3.9</span> Metadata</h2>
 <p>Metadata is information about the experiment that is not part of the Assay Data.</p>
 <p>The most important part of the metadata is the <code>colData</code> slot. This slot contains information about the samples (the columns) of the assay. This is where we store the Experimental Design that we talked about.</p>
 <div class="cell">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span><span class="op">(</span><span class="va">GSE96870</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span><span class="op">(</span><span class="va">GSE96870</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>DataFrame with 22 rows and 12 columns
                      title geo_accession     organism         age         sex
@@ -337,6 +501,19 @@ GSM2545347 Male_Day8_24   Male_Day8  </code></pre>
 </div>
 </div>
 <p>In our experimental design, we have males and females, timepoints, and different kinds of tissues.</p>
+<section id="think-about-it-1" class="level3" data-number="3.9.1"><h3 data-number="3.9.1" class="anchored" data-anchor-id="think-about-it-1">
+<span class="header-section-number">3.9.1</span> Think about it</h3>
+<p>What do the <code><a href="https://rdrr.io/r/base/colnames.html">rownames()</a></code> of <code>colData(GSE96870)</code> correspond to?</p>
+<div class="cell">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span><span class="op">(</span><span class="va">GSE96870</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "GSM2545337" "GSM2545338" "GSM2545348" "GSM2545353" "GSM2545343"
+ [6] "GSM2545349" "GSM2545354" "GSM2545339" "GSM2545344" "GSM2545352"
+[11] "GSM2545362" "GSM2545340" "GSM2545345" "GSM2545350" "GSM2545363"
+[16] "GSM2545336" "GSM2545342" "GSM2545351" "GSM2545380" "GSM2545341"
+[21] "GSM2545346" "GSM2545347"</code></pre>
+</div>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -350,11 +527,12 @@ Keep your <code>SummarizedExperiment</code> whole
 <p>It might be tempting to extract the assay data and the metadata and work with them separately. But as we’ll see in the following section, these two slots work together and enable all sorts of analysis.</p>
 </div>
 </div>
-</section><section id="subsetting-summarizedexperiment" class="level2"><h2 class="anchored" data-anchor-id="subsetting-summarizedexperiment">Subsetting <code>SummarizedExperiment</code>
+</section></section><section id="subsetting-summarizedexperiment" class="level2" data-number="3.10"><h2 data-number="3.10" class="anchored" data-anchor-id="subsetting-summarizedexperiment">
+<span class="header-section-number">3.10</span> Subsetting <code>SummarizedExperiment</code>
 </h2>
 <p>We saw that we have the <code>checkNames</code> constraint. This is because we can use the <code>colData</code> and the <code>assayData</code> in our object to do subsetting using the metadata.</p>
 <div class="cell">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">female</span> <span class="op">&lt;-</span> <span class="va">GSE96870</span><span class="op">[</span>,<span class="va">GSE96870</span><span class="op">$</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"Female"</span><span class="op">]</span></span>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">female</span> <span class="op">&lt;-</span> <span class="va">GSE96870</span><span class="op">[</span>,<span class="va">GSE96870</span><span class="op">$</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"Female"</span><span class="op">]</span></span>
 <span><span class="va">female</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>class: RangedSummarizedExperiment 
@@ -366,7 +544,7 @@ rowData names(3): ENTREZID product gbkey
 colnames(12): GSM2545337 GSM2545338 ... GSM2545351 GSM2545380
 colData names(12): title geo_accession ... Label Group</code></pre>
 </div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span><span class="op">(</span><span class="va">female</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span><span class="op">(</span><span class="va">female</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>DataFrame with 12 rows and 12 columns
                      title geo_accession     organism         age         sex
@@ -411,16 +589,64 @@ GSM2545380 Female_Day8_19 Female_Day8</code></pre>
 </div>
 </div>
 <p>This tight interaction of metadata and assay data is critical when we start doing differential analysis. The experimental design will help determine whether we can make the comparisons we want to make and the conclusions we can draw from the dataset.</p>
-</section><section id="tidysummarizedexperiment" class="level2"><h2 class="anchored" data-anchor-id="tidysummarizedexperiment"><code>tidySummarizedExperiment</code></h2>
+<div class="callout callout-style-simple callout-none no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Remember the Comma
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Remember that the <code>,</code> (comma) is used to distinguish between rows and columns. Rows correspond to <em>genes</em> and columns correpsond to <em>samples</em>.</p>
+<p>In the above example, we are subsetting the samples, so our criteria goes after the comma.</p>
+</div>
+</div>
+<p>For manipulating the <code>SummarizedExperiment</code> object, we will use the <code>tidySummarizedExperiment</code> package to subset it - essentially this package lets us use <code>dplyr</code> on the <code>SummarizedExperiment</code> and <code>DESeqDataset</code> objects.</p>
+<section id="try-it-out" class="level3" data-number="3.10.1"><h3 data-number="3.10.1" class="anchored" data-anchor-id="try-it-out">
+<span class="header-section-number">3.10.1</span> Try it out</h3>
+<p>Try subsetting <code>GSE96870</code> to have <code>time == "Day0"</code>. How many samples are left?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>day0 <span class="ot">&lt;-</span> GSE96870[,GSE96870<span class="sc">$-----</span> <span class="er">==</span> <span class="sc">-------</span>]</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>day0</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colData</span>(day0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+A Common Bioconductor Pattern
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Depending on the package, we will tend to <em>overwrite</em> objects as we run methods on them, such as the following.</p>
+<p>In <code>DESeq2</code>, each method will add something to the object (usually extra columns or a results table).</p>
+<p>Here’s an example:</p>
+<div class="cell">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/SummarizedExperiment">SummarizedExperiment</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/thelovelab/DESeq2">DESeq2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">GSE96870</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/DESeqDataSet.html">DESeqDataSet</a></span><span class="op">(</span><span class="va">GSE96870</span>, design <span class="op">=</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">time</span><span class="op">)</span>  <span class="co">#make DESeqDataset</span></span>
+<span><span class="va">GSE96870</span> <span class="op">&lt;-</span> <span class="va">GSE96870</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/MatrixGenerics/man/rowSums.html">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">GSE96870</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">5</span>,<span class="op">]</span> <span class="co">#filter out low expressing candidates</span></span>
+<span><span class="va">GSE96870</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/DESeq.html">DESeq</a></span><span class="op">(</span><span class="va">GSE96870</span><span class="op">)</span> <span class="co">#run estimateSizeFactors, estimateDispersions, nbinomialWaldTest</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section></section><section id="tidysummarizedexperiment" class="level2" data-number="3.11"><h2 data-number="3.11" class="anchored" data-anchor-id="tidysummarizedexperiment">
+<span class="header-section-number">3.11</span> <code>tidySummarizedExperiment</code>
+</h2>
 <p>The <code>SummarizedExperiment</code> object does not act like the normal <code>data.frame</code>/<code>tibble</code> we expect, especially in filtering and subsetting.</p>
 <p>The <code>tidySummarizedExperiment</code> package will be helpful for us to understand and visualize the <code>SummarizedExperiment</code> package. Once we do that, our <code>SummarizedExperiment</code> object will act more like a <code>data.frame</code>.</p>
 <p>Basically, <code>tidySummarizedExperiment</code> treats the data as a long data frame that combines both the assay and metadata. This format is helpful in doing more work with the <code>tidyverse</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stemangiola/tidySummarizedExperiment">tidySummarizedExperiment</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stemangiola/tidySummarizedExperiment">tidySummarizedExperiment</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: ttservice</code></pre>
 </div>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A SummarizedExperiment-tibble abstraction: 919,292 × 23
 # Features=41786 | Samples=22 | Assays=counts
@@ -442,10 +668,11 @@ GSM2545380 Female_Day8_19 Female_Day8</code></pre>
 #   seqnames &lt;fct&gt;, start &lt;int&gt;, end &lt;int&gt;, width &lt;int&gt;, strand &lt;fct&gt;</code></pre>
 </div>
 </div>
-<section id="filtering-data" class="level3"><h3 class="anchored" data-anchor-id="filtering-data">Filtering Data</h3>
+<section id="filtering-data" class="level3" data-number="3.11.1"><h3 data-number="3.11.1" class="anchored" data-anchor-id="filtering-data">
+<span class="header-section-number">3.11.1</span> Filtering Data</h3>
 <p>We can use <code>dplyr</code> to filter the data using the <code>tidySummarizedExperiment</code> package:</p>
 <div class="cell">
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870</span> <span class="op">|&gt;</span></span>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"Female"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A SummarizedExperiment-tibble abstraction: 501,432 × 23
@@ -468,10 +695,11 @@ GSM2545380 Female_Day8_19 Female_Day8</code></pre>
 #   seqnames &lt;fct&gt;, start &lt;int&gt;, end &lt;int&gt;, width &lt;int&gt;, strand &lt;fct&gt;</code></pre>
 </div>
 </div>
-</section><section id="getting-counts-across-the-experiment" class="level3"><h3 class="anchored" data-anchor-id="getting-counts-across-the-experiment">Getting Counts across the experiment</h3>
+</section><section id="getting-counts-across-the-experiment" class="level3" data-number="3.11.2"><h3 data-number="3.11.2" class="anchored" data-anchor-id="getting-counts-across-the-experiment">
+<span class="header-section-number">3.11.2</span> Getting Counts across the experiment</h3>
 <p>We can produce summaries of the counts of each sample library:</p>
 <div class="cell">
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870</span> <span class="op">|&gt;</span></span>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">group_by</span><span class="op">(</span><span class="va">.sample</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">summarise</span><span class="op">(</span>total_counts<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -485,10 +713,11 @@ GSM2545380 Female_Day8_19 Female_Day8</code></pre>
 </div>
 </div>
 </div>
-</section><section id="try-it-out" class="level3"><h3 class="anchored" data-anchor-id="try-it-out">Try it out</h3>
+</section><section id="try-it-out-1" class="level3" data-number="3.11.3"><h3 data-number="3.11.3" class="anchored" data-anchor-id="try-it-out-1">
+<span class="header-section-number">3.11.3</span> Try it out</h3>
 <p>Try summarizing the <code>total_counts</code> by <code>sex</code> or by <code>infection</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A SummarizedExperiment-tibble abstraction: 919,292 × 23
 # Features=41786 | Samples=22 | Assays=counts
@@ -510,10 +739,11 @@ GSM2545380 Female_Day8_19 Female_Day8</code></pre>
 #   seqnames &lt;fct&gt;, start &lt;int&gt;, end &lt;int&gt;, width &lt;int&gt;, strand &lt;fct&gt;</code></pre>
 </div>
 </div>
-</section><section id="plotting" class="level3"><h3 class="anchored" data-anchor-id="plotting">Plotting</h3>
+</section><section id="plotting" class="level3" data-number="3.11.4"><h3 data-number="3.11.4" class="anchored" data-anchor-id="plotting">
+<span class="header-section-number">3.11.4</span> Plotting</h3>
 <p>We can look at the distribution of counts across samples by using <code>.sample</code> as our grouping variable in <code>ggplot()</code>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870</span> <span class="op">|&gt;</span></span>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">counts</span> <span class="op">+</span> <span class="fl">1</span>, group<span class="op">=</span><span class="va">.sample</span>, color<span class="op">=</span><span class="va">infection</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">geom_density</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">scale_x_log10</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -527,7 +757,7 @@ GSM2545380 Female_Day8_19 Female_Day8</code></pre>
 </div>
 <p>Our data (individual gene counts) is highly skewed. If we log-transform the data, then the skew is lessened. The boxplots of log counts are helpful for detecting batch effects.</p>
 <div class="cell">
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870</span> <span class="op">|&gt;</span></span>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="va">counts</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span>, group<span class="op">=</span><span class="va">.sample</span>, fill<span class="op">=</span><span class="va">infection</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">geom_boxplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -540,14 +770,17 @@ GSM2545380 Female_Day8_19 Female_Day8</code></pre>
 </div>
 <p>Take a look at the above box plot. Are there differences in distribution between samples?</p>
 <p>In order to compare expression levels between samples, we will need to adjust, or <em>normalize</em> by library size. We’ll investigate this further when we get to differential expression.</p>
+</section><section id="try-it-out-2" class="level3" data-number="3.11.5"><h3 data-number="3.11.5" class="anchored" data-anchor-id="try-it-out-2">
+<span class="header-section-number">3.11.5</span> Try it Out</h3>
 <p>Try mapping another variable to <code>fill</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>GSE96870 <span class="sc">|&gt;</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y=</span><span class="fu">log2</span>(counts <span class="sc">+</span> <span class="dv">1</span>), <span class="at">group=</span>.sample, <span class="at">fill=</span><span class="sc">------</span>)) <span class="sc">+</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>GSE96870 <span class="sc">|&gt;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y=</span><span class="fu">log2</span>(counts <span class="sc">+</span> <span class="dv">1</span>), <span class="at">group=</span>.sample, <span class="at">fill=</span><span class="sc">------</span>)) <span class="sc">+</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section></section><section id="take-home-messages" class="level2"><h2 class="anchored" data-anchor-id="take-home-messages">Take Home Messages</h2>
+</section></section><section id="take-home-messages" class="level2" data-number="3.12"><h2 data-number="3.12" class="anchored" data-anchor-id="take-home-messages">
+<span class="header-section-number">3.12</span> Take Home Messages</h2>
 <ul>
 <li>We package multiple parts of the data (assay data and metadata) into a <code>SummarizedExperiment</code> object:
 <ul>
@@ -584,10 +817,12 @@ What about all of the other kinds of objects?
 <p>Most of the other Bioconductor Data Structures derive from some variant of the <code>SummarizedExperiment</code>. They might add some functionality that is core to the package they belong to, such as <code>DEseq2</code>. This includes <code>seurat</code> objects for Single Cell sequencing.</p>
 </div>
 </div>
+
+
 </section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
 <ol>
 <li id="fn1"><p>The <a href="https://www.bioconductor.org">Bioconductor</a> project was initiated by Robert Gentleman, one of the two creators of the R language. Bioconductor provides tools dedicated to omics data analysis. Bioconductor uses the R statistical programming language and is open source and open development.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol></section></main><!-- /main column --><script id="quarto-html-after-body" type="application/javascript">
+</ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -1008,9 +1243,43 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./00_concepts.html" class="pagination-link" aria-label="RNAseq Concepts">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">RNAseq Concepts</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./02_week2.html" class="pagination-link" aria-label="Experimental Design / QC">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Experimental Design / QC</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
-
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">
+<p>This book was built with <a href="https://quarto.org/" style="color: #fff;">Quarto</a> using <a href="https://github.com/fhdsl/OTTR_Quarto" style="color: #fff;">OTTR</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+<p>All illustrations <a href="https://creativecommons.org/licenses/by/4.0/" style="color: #fff;">CC-BY. </a> <br> All other materials <a href="https://creativecommons.org/licenses/by/4.0/" style="color: #fff;"> CC-BY </a> unless noted otherwise.</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/fhdsl/bioconductor_genomics/edit/main/01_introduction.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/fhdsl/intro_to_sql">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://fhdata.slack.com/join/signup#/domain-signup">
+      <i class="bi bi-slack" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+</div>
+  </div>
+</footer>
 
 
 </body></html>

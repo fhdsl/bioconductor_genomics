@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>RNAseq Concepts</title>
+<title>2&nbsp; RNAseq Concepts – Bioconductor for Genomics</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,50 +23,159 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="00_concepts_files/libs/clipboard/clipboard.min.js"></script>
-<script src="00_concepts_files/libs/quarto-html/quarto.js"></script>
-<script src="00_concepts_files/libs/quarto-html/popper.min.js"></script>
-<script src="00_concepts_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="00_concepts_files/libs/quarto-html/anchor.min.js"></script>
-<link href="00_concepts_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="00_concepts_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="00_concepts_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="00_concepts_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="00_concepts_files/libs/bootstrap/bootstrap-0b9e35696ea153a55a49e2492062f191.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="00_concepts_files/libs/quarto-diagram/mermaid.min.js"></script>
-<script src="00_concepts_files/libs/quarto-diagram/mermaid-init.js"></script>
-<link href="00_concepts_files/libs/quarto-diagram/mermaid.css" rel="stylesheet">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./01_introduction.html" rel="next">
+<link href="./index.html" rel="prev">
+<link href="./img/favicon.ico" rel="icon">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-a1c1d0abbd8b67b8b47aad02bae1bfc9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="nav-sidebar floating">
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-  <nav id="TOC" role="doc-toc" class="toc-active">
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./00_concepts.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">RNAseq Concepts</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="https://hutchdatascience.org/" class="sidebar-logo-link">
+      <img src="./img/logo.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Bioconductor for Genomics</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/fhdsl/bioconductor_genomics" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Bioconductor for Genomics</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./00_concepts.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">RNAseq Concepts</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Introduction: Bioconductor S4 Objects / <code>SummarizedExperiment</code></span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_week2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Experimental Design / QC</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-differential-expression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Differential Expression using DESeq2/edgeR</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#what-are-we-measuring-in-an-rna-seq-experiment" id="toc-what-are-we-measuring-in-an-rna-seq-experiment" class="nav-link active" data-scroll-target="#what-are-we-measuring-in-an-rna-seq-experiment">What are we measuring in an RNA-seq experiment?</a></li>
-  <li><a href="#rna-seq-quantification-from-reads-to-count-matrix" id="toc-rna-seq-quantification-from-reads-to-count-matrix" class="nav-link" data-scroll-target="#rna-seq-quantification-from-reads-to-count-matrix">RNA-seq quantification: from reads to count matrix</a>
+  <li><a href="#what-are-we-measuring-in-an-rna-seq-experiment" id="toc-what-are-we-measuring-in-an-rna-seq-experiment" class="nav-link active" data-scroll-target="#what-are-we-measuring-in-an-rna-seq-experiment"><span class="header-section-number">3</span> What are we measuring in an RNA-seq experiment?</a></li>
+  <li><a href="#rna-seq-quantification-from-reads-to-count-matrix" id="toc-rna-seq-quantification-from-reads-to-count-matrix" class="nav-link" data-scroll-target="#rna-seq-quantification-from-reads-to-count-matrix"><span class="header-section-number">4</span> RNA-seq quantification: from reads to count matrix</a>
   <ul class="collapse">
-  <li><a href="#challenge-discuss-the-following-points-with-your-neighbor" id="toc-challenge-discuss-the-following-points-with-your-neighbor" class="nav-link" data-scroll-target="#challenge-discuss-the-following-points-with-your-neighbor">Challenge: Discuss the following points with your neighbor</a></li>
-  <li><a href="#the-analysis-process" id="toc-the-analysis-process" class="nav-link" data-scroll-target="#the-analysis-process">The Analysis Process</a></li>
+  <li><a href="#challenge-discuss-the-following-points-with-your-neighbor" id="toc-challenge-discuss-the-following-points-with-your-neighbor" class="nav-link" data-scroll-target="#challenge-discuss-the-following-points-with-your-neighbor"><span class="header-section-number">4.1</span> Challenge: Discuss the following points with your neighbor</a></li>
+  <li><a href="#the-analysis-process" id="toc-the-analysis-process" class="nav-link" data-scroll-target="#the-analysis-process"><span class="header-section-number">4.2</span> The Analysis Process</a></li>
   </ul></li>
-  <li><a href="#finding-the-reference-sequences" id="toc-finding-the-reference-sequences" class="nav-link" data-scroll-target="#finding-the-reference-sequences">Finding the reference sequences</a>
+  <li><a href="#finding-the-reference-sequences" id="toc-finding-the-reference-sequences" class="nav-link" data-scroll-target="#finding-the-reference-sequences"><span class="header-section-number">5</span> Finding the reference sequences</a>
   <ul class="collapse">
-  <li><a href="#challenge" id="toc-challenge" class="nav-link" data-scroll-target="#challenge">Challenge</a></li>
+  <li><a href="#challenge" id="toc-challenge" class="nav-link" data-scroll-target="#challenge"><span class="header-section-number">5.1</span> Challenge</a></li>
   </ul></li>
   </ul>
-</nav>
-</div>
+<div class="toc-actions"><ul><li><a href="https://github.com/fhdsl/bioconductor_genomics/edit/main/00_concepts.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
+    </div>
+<!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">RNAseq Concepts</h1>
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">RNAseq Concepts</span></h1>
 </div>
 
 
@@ -84,8 +193,8 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>This section covers some basics of the RNA-seq process, including how we go from making an RNA-seq library to making a count matrix.</p>
-<section id="what-are-we-measuring-in-an-rna-seq-experiment" class="level1">
-<h1>What are we measuring in an RNA-seq experiment?</h1>
+<section id="what-are-we-measuring-in-an-rna-seq-experiment" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> What are we measuring in an RNA-seq experiment?</h1>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/alternative_splicing_sub.png" class="img-fluid figure-img"></p>
@@ -110,8 +219,8 @@ ul.task-list li input[type="checkbox"] {
 <p>Millions of such reads (or pairs of reads) will be generated in an experiment, and these will be represented in a (pair of) FASTQ files.</p>
 <p>Each read is represented by four consecutive lines in such a file: first a line with a unique read identifier, next the inferred sequence of the read, then another identifier line, and finally a line containing the base quality for each inferred nucleotide, representing the probability that the nucleotide in the corresponding position has been correctly identified.</p>
 </section>
-<section id="rna-seq-quantification-from-reads-to-count-matrix" class="level1">
-<h1>RNA-seq quantification: from reads to count matrix</h1>
+<section id="rna-seq-quantification-from-reads-to-count-matrix" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> RNA-seq quantification: from reads to count matrix</h1>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/rna-quant.jpeg" class="img-fluid figure-img"></p>
@@ -132,16 +241,16 @@ ul.task-list li input[type="checkbox"] {
 <p>Other tools used in RNA-seq quantification include: TopHat2, bowtie2, kallisto, HTseq, among many others.</p>
 <p>The choice of an appropriate RNA-seq quantification depends on the quality of the transcriptome annotation, the quality of the RNA-seq library preparation, the presence of contaminating sequences, among many factors. Often, it can be informative to compare the quantification results of multiple approaches.</p>
 <p>Because the best quantification method is species- and experiment-dependent, and often requires large amounts of computing resources, this workshop will not cover any specifics of how to generate the counts. Instead, we recommend checking out the references above and consulting with a local bioinformatics expert if you need help.</p>
-<section id="challenge-discuss-the-following-points-with-your-neighbor" class="level2 challenge">
-<h2 class="anchored" data-anchor-id="challenge-discuss-the-following-points-with-your-neighbor">Challenge: Discuss the following points with your neighbor</h2>
+<section id="challenge-discuss-the-following-points-with-your-neighbor" class="level2 challenge" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="challenge-discuss-the-following-points-with-your-neighbor"><span class="header-section-number">4.1</span> Challenge: Discuss the following points with your neighbor</h2>
 <ol type="1">
 <li>Which of the mentioned RNA-Seq quantification tools have you heard about? Do you know other pros and cons of the methods?</li>
 <li>Have you done your own RNA-Seq experiment? If so, what quantification tool did you use and why did you choose it?</li>
 <li>Do you have access to specific tools / local bioinformatics expert / computational resources for quantification? If you don’t, how might you gain access?</li>
 </ol>
 </section>
-<section id="the-analysis-process" class="level2">
-<h2 class="anchored" data-anchor-id="the-analysis-process">The Analysis Process</h2>
+<section id="the-analysis-process" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="the-analysis-process"><span class="header-section-number">4.2</span> The Analysis Process</h2>
 <p>Once we have the count matrix, this is where Bioconductor comes in. Keep in mind the basic Analysis process:</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -162,8 +271,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </section>
 </section>
-<section id="finding-the-reference-sequences" class="level1">
-<h1>Finding the reference sequences</h1>
+<section id="finding-the-reference-sequences" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Finding the reference sequences</h1>
 <p>In order to quantify abundances of known genes or transcripts from RNA-seq data, we need a reference database informing us of the sequence of these features, to which we can then compare our reads.</p>
 <p>This information can be obtained from different online repositories.</p>
 <p>It is highly recommended to choose one of these for a particular project, and not mix information from different sources.</p>
@@ -174,14 +283,15 @@ ul.task-list li input[type="checkbox"] {
 <li><a href="https://www.ensembl.org/info/data/ftp/index.html">Ensembl</a> provides reference files for a large set of organisms, including <a href="https://plants.ensembl.org/info/data/ftp/index.html">plants</a> and <a href="https://fungi.ensembl.org/info/data/ftp/index.html">fungi</a>.</li>
 <li><a href="https://hgdownload.soe.ucsc.edu/downloads.html">UCSC</a> also provides reference files for many organisms.</li>
 </ul>
-<section id="challenge" class="level2 challenge">
-<h2 class="anchored" data-anchor-id="challenge">Challenge</h2>
+<section id="challenge" class="level2 challenge" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="challenge"><span class="header-section-number">5.1</span> Challenge</h2>
 <p>Download the latest mouse transcriptome fasta file from GENCODE. What do the entries look like? Tip: to read the file into R, consider the <code>readDNAStringSet()</code> function from the <code>Biostrings</code> package.</p>
 </section>
+
+
 </section>
 
-</main>
-<!-- /main column -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -604,7 +714,45 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Bioconductor for Genomics">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Bioconductor for Genomics</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./01_introduction.html" class="pagination-link" aria-label="Introduction: Bioconductor S4 Objects / `SummarizedExperiment`">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Introduction: Bioconductor S4 Objects / <code>SummarizedExperiment</code></span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>This book was built with <a href="https://quarto.org/" style="color: #fff;">Quarto</a> using <a href="https://github.com/fhdsl/OTTR_Quarto" style="color: #fff;">OTTR</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+<p>All illustrations <a href="https://creativecommons.org/licenses/by/4.0/" style="color: #fff;">CC-BY. </a> <br> All other materials <a href="https://creativecommons.org/licenses/by/4.0/" style="color: #fff;"> CC-BY </a> unless noted otherwise.</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/fhdsl/bioconductor_genomics/edit/main/00_concepts.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/fhdsl/intro_to_sql">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://fhdata.slack.com/join/signup#/domain-signup">
+      <i class="bi bi-slack" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
 
 
 

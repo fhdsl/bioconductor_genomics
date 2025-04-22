@@ -2,368 +2,591 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Quarto Based OTTR Course",
+    "title": "Bioconductor for Genomics",
     "section": "",
-    "text": "Quarto Based OTTR Course\nThis course is part of a series of courses for the Informatics Technology for Cancer Research (ITCR) called the Informatics Technology for Cancer Research Education Resource. This material was created by the ITCR Training Network (ITN) which is a collaborative effort of researchers around the United States to support cancer informatics and data science training through resources, technology, and events. This initiative is funded by the following grant: National Cancer Institute (NCI) UE5 CA254170. Our courses feature tools developed by ITCR Investigators and make it easier for principal investigators, scientists, and analysts to integrate cancer informatics into their workflows. Please see our website at www.itcrtraining.org for more information.",
+    "text": "0.1 Learning Objectives\nThis course will introduce you to the basic data structures and genomic data analysis in Bioconductor. Specifically, we will focus on the basics of RNAseq analysis, including differential expression, annotation, and gene set analysis. We will also focus on loading data and metadata into data structures such as SummarizedExperiment. By the end of this course, you should be familiar with a basic RNAseq analysis workflow utilizing RNAseq count data.\nPlease note that this course requires the Intro to R course as a prerequisite, or the equivalent course. Please note that this course does not cover RNAseq workflows such as MultiQC and alignment.\ngraph TD\nA[Reading in Data] --&gt; B\nB[Metadata] --&gt; C\nsubgraph DESeq2\nC[Data Exploration] --&gt; D\nD[Review Experiment Design] --&gt; E\nend\nE[Filtering and Normalization] --&gt; F\nF[Dispersion Estimation] --&gt; G\nG[Differential Expression]\nG --&gt; H[Annotation and Gene Set Analysis]\nG --&gt; I[Clustering and Visualization]\nG --&gt; J[Pathway and Network Analysis]\nclassDef box fill:#DDD\nclass DESeq2 box",
     "crumbs": [
-      "Quarto Based OTTR Course"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Bioconductor for Genomics</span>"
     ]
   },
   {
-    "objectID": "index.html#available-course-formats",
-    "href": "index.html#available-course-formats",
-    "title": "Quarto Based OTTR Course",
-    "section": "Available Course Formats",
-    "text": "Available Course Formats\nThis course is available in multiple formats which allows you to take it in the way that best suites your needs. You can take it for certificate which can be for free or fee.\n\nThe material for this course can be viewed without login requirement on this website. This format might be most appropriate for you if you rely on screen-reader technology.\nThis course can be taken for free certification through Leanpub.\nThis course can be taken on Coursera for certification here (but it is not available for free on Coursera).\nOur courses are open source, you can find the source material for this course on GitHub.",
-    "crumbs": [
-      "Quarto Based OTTR Course"
-    ]
-  },
-  {
-    "objectID": "intro.html",
-    "href": "intro.html",
-    "title": "1  Introduction to the Course",
+    "objectID": "index.html#learning-objectives",
+    "href": "index.html#learning-objectives",
+    "title": "Bioconductor for Genomics",
     "section": "",
-    "text": "1.1 Motivation\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu sem integer vitae justo eget magna. Viverra nibh cras pulvinar mattis. Est placerat in egestas erat imperdiet sed euismod. Diam quam nulla porttitor massa id neque. Fringilla urna porttitor rhoncus dolor purus non enim. Quis commodo odio aenean sed adipiscing diam donec. Facilisi morbi tempus iaculis urna id volutpat. Natoque penatibus et magnis dis parturient montes. Semper feugiat nibh sed pulvinar proin gravida hendrerit lectus. Lectus magna fringilla urna porttitor rhoncus dolor purus non enim. Pellentesque pulvinar pellentesque habitant morbi tristique senectus et. Lacus suspendisse faucibus interdum posuere lorem ipsum dolor sit. Egestas sed tempus urna et. Tincidunt eget nullam non nisi est sit amet. Erat imperdiet sed euismod nisi porta lorem mollis. Sit amet mauris commodo quis. Massa massa ultricies mi quis hendrerit dolor magna eget.",
+    "text": "Explain and Utilize Bioconductor data structures such as SummarizedExperiment to integrate metadata and assay data in your analysis\nExplore, QC, and clean a RNAseq dataset\nUtilize Differential Expression analysis on an RNAseq dataset using Bioconductor Packages\nIdentify and Annotate Gene Sets for downstream analysis\nLoad data from RNAseq experiments into Bioconductor",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction to the Course</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Bioconductor for Genomics</span>"
     ]
   },
   {
-    "objectID": "intro.html#target-audience",
-    "href": "intro.html#target-audience",
-    "title": "1  Introduction to the Course",
-    "section": "1.2 Target Audience",
-    "text": "1.2 Target Audience\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Massa massa ultricies mi quis hendrerit dolor magna. Lobortis scelerisque fermentum dui faucibus. Vulputate odio ut enim blandit volutpat maecenas volutpat blandit. Molestie a iaculis at erat pellentesque adipiscing commodo elit.",
+    "objectID": "index.html#instructors",
+    "href": "index.html#instructors",
+    "title": "Bioconductor for Genomics",
+    "section": "0.2 Instructors",
+    "text": "0.2 Instructors\nIf you need to schedule some time to talk, please schedule with Ted.\n\nTed Laderas, Director of Training and Community, Office of the Chief Data Officer\nChris Lo, Data Science Trainer, Office of the Chief Data Officer",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction to the Course</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Bioconductor for Genomics</span>"
     ]
   },
   {
-    "objectID": "intro.html#curriculum",
-    "href": "intro.html#curriculum",
-    "title": "1  Introduction to the Course",
-    "section": "1.3 Curriculum",
-    "text": "1.3 Curriculum\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Massa massa ultricies mi quis hendrerit dolor magna. Lobortis scelerisque fermentum dui faucibus. Vulputate odio ut enim blandit volutpat maecenas volutpat blandit. Molestie a iaculis at erat pellentesque adipiscing commodo elit.",
+    "objectID": "index.html#introductions",
+    "href": "index.html#introductions",
+    "title": "Bioconductor for Genomics",
+    "section": "0.3 Introductions",
+    "text": "0.3 Introductions\nIn chat, please introduce yourself:\n\nYour Name & Your Group\nWhat you want to learn in this course\nFavorite Spring activity",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction to the Course</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Bioconductor for Genomics</span>"
     ]
   },
   {
-    "objectID": "first-section-new-chapter.html",
-    "href": "first-section-new-chapter.html",
-    "title": "\n2  New Chapter\n",
+    "objectID": "index.html#course-outline",
+    "href": "index.html#course-outline",
+    "title": "Bioconductor for Genomics",
+    "section": "0.4 Course Outline",
+    "text": "0.4 Course Outline\n\n\n\nWeek\nDate\nTopic\nVideo\nOffice Hours\n\n\n\n\nWeek 0\n-\nConcepts of RNA sequencing\n\n\n\n\nWeek 1*\nApril 23\nBioconductor Data Structures / What you need to know about S4 classes / SummarizedExperiment (Ted)\n\n\n\n\nWeek 2\nApril 30\nExperimental Design / QC / Visualization (Chris)\n\n\n\n\nWeek 3\nMay 7\nDifferential Expression (Ted)\n\n\n\n\nWeek 4*\nMay 14\nGene sets and annotation (Ted)\n\n\n\n\nWeek 5\nMay 21\nInstalling Bioconductor Packages / Loading Data into Bioconductor Data Structures (Ted)\n\n\n\n\nWeek 6*\nMay 28\nWrap up / Running Bioconductor at FH / Using fHR (Ted)\n\n\n\n\n\n*Ted on Campus",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Bioconductor for Genomics</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#format-of-class",
+    "href": "index.html#format-of-class",
+    "title": "Bioconductor for Genomics",
+    "section": "0.5 Format of Class",
+    "text": "0.5 Format of Class\nI will teach online and in person on the starred(*) weeks above, though you have the option of attending in the DaSL Lounge (Arnold M1-B406) when I am not there, which will have snacks and drinks available. Chris will be hosting in person on these dates.\nI will be asking you to ask/answer questions in Teams chat, so I highly recommend that you sign into the Teams meeting (muted) if you are in-person.\nI will host co-working sessions/office hours on Monday mornings (invite will be sent out), which is an opportunity to work on exercises and ask questions.\nPlease ask questions in the Teams Classroom Chat outside of class (there is the General). Your questions are helpful to others and helps us avoid answering the same questions over and over again. If you know the answer to a question, please try and answer the question. We are all learning together.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Bioconductor for Genomics</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#weekly-check-in",
+    "href": "index.html#weekly-check-in",
+    "title": "Bioconductor for Genomics",
+    "section": "0.6 Weekly Check In",
+    "text": "0.6 Weekly Check In\nWeekly Check In Form - please fill out to let us know if you have any issues or want to share what you’ve learned. We look at the answers in aggregate and we anonymize responses (unless you want us to know).",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Bioconductor for Genomics</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#posit-cloud-project",
+    "href": "index.html#posit-cloud-project",
+    "title": "Bioconductor for Genomics",
+    "section": "0.7 Posit Cloud Project",
+    "text": "0.7 Posit Cloud Project\nYou will receive an invite to the Posit.cloud project where we will do our assignments. Later in class, we will focus on installing Bioconductor on your own machines.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Bioconductor for Genomics</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#posit-cloud-intro",
+    "href": "index.html#posit-cloud-intro",
+    "title": "Bioconductor for Genomics",
+    "section": "0.8 Posit Cloud Intro",
+    "text": "0.8 Posit Cloud Intro\nHere is a short video introducing you to the Posit Cloud interface if you haven’t worked with it before.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Bioconductor for Genomics</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#culture-of-the-course",
+    "href": "index.html#culture-of-the-course",
+    "title": "Bioconductor for Genomics",
+    "section": "0.9 Culture of the course",
+    "text": "0.9 Culture of the course\n\nLearning on the job is challenging\n\nI will move at learner’s pace; we are learning together.\nTeach not for mastery, but teach for empowerment to learn effectively.\n\n\nWe sometimes struggle with our data science in isolation, unaware that someone two doors down from us has gone through the same struggle.\n\nWe learn and work better with our peers.\nKnow that if you have a question, other people will have it.\nAsking questions is our way of taking care of others.\n\nWe ask you to follow Participation Guidelines and Code of Conduct.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Bioconductor for Genomics</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#badge-of-completion",
+    "href": "index.html#badge-of-completion",
+    "title": "Bioconductor for Genomics",
+    "section": "0.10 Badge of completion",
+    "text": "0.10 Badge of completion\n\nWe offer a badge of completion when you finish the course!\nWhat it is:\n\nA display of what you accomplished in the course, shareable in your professional networks such as LinkedIn, similar to online education services such as Coursera.\n\nWhat it isn’t:\n\nAccreditation through an university or degree-granting program.\n\nRequirements:\n\nComplete badge-required sections of the exercises for 4 out of 5 assignments. We’ll cover this in class.\nSubmit assignments (rendered HTML) via Teams Classroom. All assignments must have a short 2-3 description of the code and what you accomplished, or will not be accepted.\nAssignments are due at 11:59 PM the Tuesday before class.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Bioconductor for Genomics</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#acknowledgements",
+    "href": "index.html#acknowledgements",
+    "title": "Bioconductor for Genomics",
+    "section": "0.11 Acknowledgements",
+    "text": "0.11 Acknowledgements\nThis course is derived from the following sources:\n\nRNA-seq analysis with Bioconductor\nIntro to Differential Gene Expression Analysis",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Bioconductor for Genomics</span>"
+    ]
+  },
+  {
+    "objectID": "00_concepts.html",
+    "href": "00_concepts.html",
+    "title": "2  RNAseq Concepts",
     "section": "",
-    "text": "2.1 Learning Objectives\nEvery chapter also needs Learning objectives.",
+    "text": "3 What are we measuring in an RNA-seq experiment?\nThis section covers some basics of the RNA-seq process, including how we go from making an RNA-seq library to making a count matrix.\nIn order to produce an RNA molecule, a stretch of DNA is first transcribed into mRNA. Subsequently, intronic regions are spliced out, and exonic regions are combined into different isoforms of a gene.\n(figure adapted from Martin & Wang (2011)).\nIn a typical RNA-seq experiment, RNA molecules are first collected from a sample of interest. After a potential enrichment for molecules with polyA tails (predominantly mRNA), or depletion of otherwise highly abundant ribosomal RNA, the remaining molecules are fragmented into smaller pieces (there are also long-read protocols where entire molecules are considered, but those are not the focus of this lesson).\nIt is important to keep in mind that because of the splicing excluding intronic sequences, an RNA molecule (and hence a generated fragment) may not correspond to an uninterrupted region of the genome.\nThe RNA fragments are then reverse transcribed into cDNA, whereafter sequencing adapters are added to each end.\nThese adapters allow the fragments to attach to the flow cell.\nOnce attached, each fragment will be heavily amplified to generate a cluster of identical sequences on the flow cell.\nThe sequencer then determines the sequence of the first 50-200 nucleotides of the cDNA fragments in each such cluster, starting from one end, which corresponds to a read.\nMany data sets are generated with so called paired-end protocols, in which the fragments are read from both ends.\nMillions of such reads (or pairs of reads) will be generated in an experiment, and these will be represented in a (pair of) FASTQ files.\nEach read is represented by four consecutive lines in such a file: first a line with a unique read identifier, next the inferred sequence of the read, then another identifier line, and finally a line containing the base quality for each inferred nucleotide, representing the probability that the nucleotide in the corresponding position has been correctly identified.",
     "crumbs": [
-      "First Section",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>New Chapter</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>RNAseq Concepts</span>"
     ]
   },
   {
-    "objectID": "first-section-new-chapter.html#libraries",
-    "href": "first-section-new-chapter.html#libraries",
-    "title": "\n2  New Chapter\n",
-    "section": "\n2.2 Libraries",
-    "text": "2.2 Libraries\nFor this chapter, we’ll need the following packages attached:\n*Remember to add any additional packages you need to your course’s own docker image.\n\nlibrary(magrittr)",
+    "objectID": "00_concepts.html#challenge-discuss-the-following-points-with-your-neighbor",
+    "href": "00_concepts.html#challenge-discuss-the-following-points-with-your-neighbor",
+    "title": "2  RNAseq Concepts",
+    "section": "4.1 Challenge: Discuss the following points with your neighbor",
+    "text": "4.1 Challenge: Discuss the following points with your neighbor\n\nWhich of the mentioned RNA-Seq quantification tools have you heard about? Do you know other pros and cons of the methods?\nHave you done your own RNA-Seq experiment? If so, what quantification tool did you use and why did you choose it?\nDo you have access to specific tools / local bioinformatics expert / computational resources for quantification? If you don’t, how might you gain access?",
     "crumbs": [
-      "First Section",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>New Chapter</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>RNAseq Concepts</span>"
     ]
   },
   {
-    "objectID": "first-section-new-chapter.html#topic-of-section",
-    "href": "first-section-new-chapter.html#topic-of-section",
-    "title": "\n2  New Chapter\n",
-    "section": "\n2.3 Topic of Section",
-    "text": "2.3 Topic of Section\nYou can write all your text in sections like this, using ## to indicate a new header. you can use additional pound symbols to create lower levels of headers.\nSee here for additional general information about how you can format text within R Markdown files. In addition, see here for more in depth and advanced options.\n\n2.3.1 Subtopic\nHere’s a subheading (using three pound symbols) and some text in this subsection!",
+    "objectID": "00_concepts.html#the-analysis-process",
+    "href": "00_concepts.html#the-analysis-process",
+    "title": "2  RNAseq Concepts",
+    "section": "4.2 The Analysis Process",
+    "text": "4.2 The Analysis Process\nOnce we have the count matrix, this is where Bioconductor comes in. Keep in mind the basic Analysis process:\n\n\n\n\n\ngraph TD\n  A[Count Matrix] --&gt; B\n  B[QC and Exploration] --&gt; C\n  C[Normalization] --normalized counts--&gt; D\n  D[Differential Expression] --gene sets--&gt; E\n  E[Annotation of Gene Sets]",
     "crumbs": [
-      "First Section",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>New Chapter</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>RNAseq Concepts</span>"
     ]
   },
   {
-    "objectID": "first-section-new-chapter.html#code-examples",
-    "href": "first-section-new-chapter.html#code-examples",
-    "title": "\n2  New Chapter\n",
-    "section": "\n2.4 Code examples",
-    "text": "2.4 Code examples\nYou can demonstrate code like this:\n\noutput_dir &lt;- file.path(\"resources\", \"code_output\")\nif (!dir.exists(output_dir)) {\n  dir.create(output_dir)\n}\n\nAnd make plots too:\n\nhist_plot &lt;- hist(iris$Sepal.Length)\n\n\n\n\n\n\n\nYou can also save these plots to file:\n\npng(file.path(output_dir, \"test_plot.png\"))\nhist_plot\n\n$breaks\n[1] 4.0 4.5 5.0 5.5 6.0 6.5 7.0 7.5 8.0\n\n$counts\n[1]  5 27 27 30 31 18  6  6\n\n$density\n[1] 0.06666667 0.36000000 0.36000000 0.40000000 0.41333333 0.24000000 0.08000000\n[8] 0.08000000\n\n$mids\n[1] 4.25 4.75 5.25 5.75 6.25 6.75 7.25 7.75\n\n$xname\n[1] \"iris$Sepal.Length\"\n\n$equidist\n[1] TRUE\n\nattr(,\"class\")\n[1] \"histogram\"\n\ndev.off()\n\npng \n  2",
+    "objectID": "00_concepts.html#challenge",
+    "href": "00_concepts.html#challenge",
+    "title": "2  RNAseq Concepts",
+    "section": "5.1 Challenge",
+    "text": "5.1 Challenge\nDownload the latest mouse transcriptome fasta file from GENCODE. What do the entries look like? Tip: to read the file into R, consider the readDNAStringSet() function from the Biostrings package.",
     "crumbs": [
-      "First Section",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>New Chapter</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>RNAseq Concepts</span>"
     ]
   },
   {
-    "objectID": "first-section-new-chapter.html#image-example",
-    "href": "first-section-new-chapter.html#image-example",
-    "title": "\n2  New Chapter\n",
-    "section": "\n2.5 Image example",
-    "text": "2.5 Image example\nHow to include a Google slide. It’s simplest to use the ottrpal package:\n\n\n\n\n\n\n\n\nBut if you have the slide or some other image locally downloaded you can also use HTML like this:",
-    "crumbs": [
-      "First Section",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>New Chapter</span>"
-    ]
-  },
-  {
-    "objectID": "first-section-new-chapter.html#video-examples",
-    "href": "first-section-new-chapter.html#video-examples",
-    "title": "\n2  New Chapter\n",
-    "section": "\n2.6 Video examples",
-    "text": "2.6 Video examples\nYou may also want to embed videos in your course. If alternatively, you just want to include a link you can do so like this:\nCheck out this link to a video using markdown syntax.\n\n2.6.1 Using knitr\n\nTo embed videos in your course, you can use knitr::include_url() like this: Note that you should use echo=FALSE in the code chunk because we don’t want the code part of this to show up. If you are unfamiliar with how R Markdown code chunks work, read this.\n\n\n\n\n\n2.6.2 Using HTML\n\n\n\n2.6.3 Using knitr\n\n\n\n\n\n\n2.6.4 Using HTML",
-    "crumbs": [
-      "First Section",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>New Chapter</span>"
-    ]
-  },
-  {
-    "objectID": "first-section-new-chapter.html#website-examples",
-    "href": "first-section-new-chapter.html#website-examples",
-    "title": "\n2  New Chapter\n",
-    "section": "\n2.7 Website Examples",
-    "text": "2.7 Website Examples\nYet again you can use a link to a website like so:\nA Website\nYou might want to have users open a website in a new tab by default, especially if they need to reference both the course and a resource at once.\nA Website\nOr, you can embed some websites.\n\n2.7.1 Using knitr\n\nThis works:\n\n\n\n\n\n2.7.2 Using HTML",
-    "crumbs": [
-      "First Section",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>New Chapter</span>"
-    ]
-  },
-  {
-    "objectID": "first-section-new-chapter.html#stylized-boxes",
-    "href": "first-section-new-chapter.html#stylized-boxes",
-    "title": "\n2  New Chapter\n",
-    "section": "\n2.8 Stylized boxes",
-    "text": "2.8 Stylized boxes\nOccasionally, you might find it useful to emphasize a particular piece of information. To help you do so, we have provided css code and images (no need for you to worry about that!) to create the following stylized boxes.\nYou can use these boxes in your course with either of two options: using HTML code or Pandoc syntax.\n\n2.8.1 Using rmarkdown container syntax\nThe rmarkdown package allows for a different syntax to be converted to the HTML that you just saw and also allows for conversion to LaTeX. See the Bookdown documentation for more information. Note that Bookdown uses Pandoc.\n::: {.notice}\nNote using rmarkdown syntax.\n\n:::\n\nNote using rmarkdown syntax.\n\nAs an example you might do something like this:\n\nPlease click on the subsection headers in the left hand navigation bar (e.g., 2.1, 4.3) a second time to expand the table of contents and enable the scroll_highlight feature (see more)\n\n\n2.8.2 Using HTML\nTo add a warning box like the following use:\n\nFollowed by the text you want inside\n\nThis will create the following:\n\nFollowed by the text you want inside\n\nHere is a &lt;div class = \"warning\"&gt; box:\n\nNote text\n\nHere is a &lt;div class = \"github\"&gt; box:\n\nGitHub text\n\nHere is a &lt;div class = \"dictionary\"&gt; box:\n\ndictionary text\n\nHere is a &lt;div class = \"reflection\"&gt; box:\n\nreflection text\n\nHere is a &lt;div class = \"wip\"&gt; box:\n\nWork in Progress text",
-    "crumbs": [
-      "First Section",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>New Chapter</span>"
-    ]
-  },
-  {
-    "objectID": "first-section-new-chapter.html#dropdown-summaries",
-    "href": "first-section-new-chapter.html#dropdown-summaries",
-    "title": "\n2  New Chapter\n",
-    "section": "\n2.9 Dropdown summaries",
-    "text": "2.9 Dropdown summaries\n\nYou can hide additional information in a dropdown menu\n\nHere’s more words that are hidden.",
-    "crumbs": [
-      "First Section",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>New Chapter</span>"
-    ]
-  },
-  {
-    "objectID": "second-section-new-chapter.html",
-    "href": "second-section-new-chapter.html",
-    "title": "\n3  New Chapter\n",
+    "objectID": "01_introduction.html",
+    "href": "01_introduction.html",
+    "title": "\n3  Introduction: Bioconductor S4 Objects / SummarizedExperiment\n",
     "section": "",
-    "text": "3.1 Learning Objectives\nEvery chapter also needs Learning objectives.",
+    "text": "3.1 Learning Objectives",
     "crumbs": [
-      "Second Section",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>New Chapter</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Introduction: Bioconductor S4 Objects / `SummarizedExperiment`</span>"
     ]
   },
   {
-    "objectID": "second-section-new-chapter.html#libraries",
-    "href": "second-section-new-chapter.html#libraries",
-    "title": "\n3  New Chapter\n",
-    "section": "\n3.2 Libraries",
-    "text": "3.2 Libraries\nFor this chapter, we’ll need the following packages attached:\n*Remember to add any additional packages you need to your course’s own docker image.\n\nlibrary(magrittr)",
-    "crumbs": [
-      "Second Section",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>New Chapter</span>"
-    ]
-  },
-  {
-    "objectID": "second-section-new-chapter.html#topic-of-section",
-    "href": "second-section-new-chapter.html#topic-of-section",
-    "title": "\n3  New Chapter\n",
-    "section": "\n3.3 Topic of Section",
-    "text": "3.3 Topic of Section\nYou can write all your text in sections like this, using ## to indicate a new header. you can use additional pound symbols to create lower levels of headers.\nSee here for additional general information about how you can format text within R Markdown files. In addition, see here for more in depth and advanced options.\n\n3.3.1 Subtopic\nHere’s a subheading (using three pound symbols) and some text in this subsection!",
-    "crumbs": [
-      "Second Section",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>New Chapter</span>"
-    ]
-  },
-  {
-    "objectID": "second-section-new-chapter.html#code-examples",
-    "href": "second-section-new-chapter.html#code-examples",
-    "title": "\n3  New Chapter\n",
-    "section": "\n3.4 Code examples",
-    "text": "3.4 Code examples\nYou can demonstrate code like this:\n\noutput_dir &lt;- file.path(\"resources\", \"code_output\")\nif (!dir.exists(output_dir)) {\n  dir.create(output_dir)\n}\n\nAnd make plots too:\n\nhist_plot &lt;- hist(iris$Sepal.Length)\n\n\n\n\n\n\n\nYou can also save these plots to file:\n\npng(file.path(output_dir, \"test_plot.png\"))\nhist_plot\n\n$breaks\n[1] 4.0 4.5 5.0 5.5 6.0 6.5 7.0 7.5 8.0\n\n$counts\n[1]  5 27 27 30 31 18  6  6\n\n$density\n[1] 0.06666667 0.36000000 0.36000000 0.40000000 0.41333333 0.24000000 0.08000000\n[8] 0.08000000\n\n$mids\n[1] 4.25 4.75 5.25 5.75 6.25 6.75 7.25 7.75\n\n$xname\n[1] \"iris$Sepal.Length\"\n\n$equidist\n[1] TRUE\n\nattr(,\"class\")\n[1] \"histogram\"\n\ndev.off()\n\npng \n  2",
-    "crumbs": [
-      "Second Section",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>New Chapter</span>"
-    ]
-  },
-  {
-    "objectID": "second-section-new-chapter.html#image-example",
-    "href": "second-section-new-chapter.html#image-example",
-    "title": "\n3  New Chapter\n",
-    "section": "\n3.5 Image example",
-    "text": "3.5 Image example\nHow to include a Google slide. It’s simplest to use the ottrpal package:\n\n\n\n\n\n\n\n\nBut if you have the slide or some other image locally downloaded you can also use HTML like this:",
-    "crumbs": [
-      "Second Section",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>New Chapter</span>"
-    ]
-  },
-  {
-    "objectID": "second-section-new-chapter.html#video-examples",
-    "href": "second-section-new-chapter.html#video-examples",
-    "title": "\n3  New Chapter\n",
-    "section": "\n3.6 Video examples",
-    "text": "3.6 Video examples\nYou may also want to embed videos in your course. If alternatively, you just want to include a link you can do so like this:\nCheck out this link to a video using markdown syntax.\n\n3.6.1 Using knitr\n\nTo embed videos in your course, you can use knitr::include_url() like this: Note that you should use echo=FALSE in the code chunk because we don’t want the code part of this to show up. If you are unfamiliar with how R Markdown code chunks work, read this.\n\n\n\n\n\n3.6.2 Using HTML\n\n\n\n3.6.3 Using knitr\n\n\n\n\n\n\n3.6.4 Using HTML",
-    "crumbs": [
-      "Second Section",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>New Chapter</span>"
-    ]
-  },
-  {
-    "objectID": "second-section-new-chapter.html#website-examples",
-    "href": "second-section-new-chapter.html#website-examples",
-    "title": "\n3  New Chapter\n",
-    "section": "\n3.7 Website Examples",
-    "text": "3.7 Website Examples\nYet again you can use a link to a website like so:\nA Website\nYou might want to have users open a website in a new tab by default, especially if they need to reference both the course and a resource at once.\nA Website\nOr, you can embed some websites.\n\n3.7.1 Using knitr\n\nThis works:\n\n\n\n\n\n3.7.2 Using HTML",
-    "crumbs": [
-      "Second Section",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>New Chapter</span>"
-    ]
-  },
-  {
-    "objectID": "second-section-new-chapter.html#stylized-boxes",
-    "href": "second-section-new-chapter.html#stylized-boxes",
-    "title": "\n3  New Chapter\n",
-    "section": "\n3.8 Stylized boxes",
-    "text": "3.8 Stylized boxes\nOccasionally, you might find it useful to emphasize a particular piece of information. To help you do so, we have provided css code and images (no need for you to worry about that!) to create the following stylized boxes.\nYou can use these boxes in your course with either of two options: using HTML code or Pandoc syntax.\n\n3.8.1 Using rmarkdown container syntax\nThe rmarkdown package allows for a different syntax to be converted to the HTML that you just saw and also allows for conversion to LaTeX. See the Bookdown documentation for more information. Note that Bookdown uses Pandoc.\n::: {.notice}\nNote using rmarkdown syntax.\n\n:::\n\nNote using rmarkdown syntax.\n\nAs an example you might do something like this:\n\nPlease click on the subsection headers in the left hand navigation bar (e.g., 2.1, 4.3) a second time to expand the table of contents and enable the scroll_highlight feature (see more)\n\n\n3.8.2 Using HTML\nTo add a warning box like the following use:\n\nFollowed by the text you want inside\n\nThis will create the following:\n\nFollowed by the text you want inside\n\nHere is a &lt;div class = \"warning\"&gt; box:\n\nNote text\n\nHere is a &lt;div class = \"github\"&gt; box:\n\nGitHub text\n\nHere is a &lt;div class = \"dictionary\"&gt; box:\n\ndictionary text\n\nHere is a &lt;div class = \"reflection\"&gt; box:\n\nreflection text\n\nHere is a &lt;div class = \"wip\"&gt; box:\n\nWork in Progress text",
-    "crumbs": [
-      "Second Section",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>New Chapter</span>"
-    ]
-  },
-  {
-    "objectID": "second-section-new-chapter.html#dropdown-summaries",
-    "href": "second-section-new-chapter.html#dropdown-summaries",
-    "title": "\n3  New Chapter\n",
-    "section": "\n3.9 Dropdown summaries",
-    "text": "3.9 Dropdown summaries\n\nYou can hide additional information in a dropdown menu\n\nHere’s more words that are hidden.",
-    "crumbs": [
-      "Second Section",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>New Chapter</span>"
-    ]
-  },
-  {
-    "objectID": "third-section-new-chapter.html",
-    "href": "third-section-new-chapter.html",
-    "title": "\n4  New Chapter\n",
+    "objectID": "01_introduction.html#learning-objectives",
+    "href": "01_introduction.html#learning-objectives",
+    "title": "\n3  Introduction: Bioconductor S4 Objects / SummarizedExperiment\n",
     "section": "",
-    "text": "4.1 Learning Objectives\nEvery chapter also needs Learning Objectives.",
+    "text": "Explain the basics of how RNAseq experiments are conducted\n\nExplain the basics of experimental design, batch effects, and when to consult the sequencing core\n\nDistinguish between technical and biological replicates and what kinds of results to expect from each\n\nExplain the basic structure of Bioconductor S4 objects\n\nExplain and Utilize SummarizedExperiment objects",
     "crumbs": [
-      "Third Section",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>New Chapter</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Introduction: Bioconductor S4 Objects / `SummarizedExperiment`</span>"
     ]
   },
   {
-    "objectID": "third-section-new-chapter.html#libraries",
-    "href": "third-section-new-chapter.html#libraries",
-    "title": "\n4  New Chapter\n",
-    "section": "\n4.2 Libraries",
-    "text": "4.2 Libraries\nFor this chapter, we’ll need the following packages attached:\n*Remember to add any additional packages you need to your course’s own docker image.\n\nlibrary(magrittr)",
+    "objectID": "01_introduction.html#general-purpose-of-rnaseq-experiments",
+    "href": "01_introduction.html#general-purpose-of-rnaseq-experiments",
+    "title": "\n3  Introduction: Bioconductor S4 Objects / SummarizedExperiment\n",
+    "section": "\n3.2 General Purpose of RNAseq Experiments",
+    "text": "3.2 General Purpose of RNAseq Experiments\nBulk RNAseq experiments are meant to distinguish expression differences between samples or groups of samples.\nPlease see the concepts section for more in depth details of the processing of RNA-seq experiments.",
     "crumbs": [
-      "Third Section",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>New Chapter</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Introduction: Bioconductor S4 Objects / `SummarizedExperiment`</span>"
     ]
   },
   {
-    "objectID": "third-section-new-chapter.html#topic-of-section",
-    "href": "third-section-new-chapter.html#topic-of-section",
-    "title": "\n4  New Chapter\n",
-    "section": "\n4.3 Topic of Section",
-    "text": "4.3 Topic of Section\nYou can write all your text in sections like this, using ## to indicate a new header. you can use additional pound symbols to create lower levels of headers.\nSee here for additional general information about how you can format text within R Markdown files. In addition, see here for more in depth and advanced options.\n\n4.3.1 Subtopic\nHere’s a subheading (using three pound symbols) and some text in this subsection!",
+    "objectID": "01_introduction.html#what-are-we-trying-to-accomplish",
+    "href": "01_introduction.html#what-are-we-trying-to-accomplish",
+    "title": "\n3  Introduction: Bioconductor S4 Objects / SummarizedExperiment\n",
+    "section": "\n3.3 What are we trying to accomplish?",
+    "text": "3.3 What are we trying to accomplish?\nIn RNAseq, we are interested in assessing expression differences between samples at either the gene or transcript level.\nIn order to do this, we need phenotype information about the samples in our experiment. Specifically, we need to have information about:\n\nconditions (Tissue type)\npossible confounders (gender, time)",
     "crumbs": [
-      "Third Section",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>New Chapter</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Introduction: Bioconductor S4 Objects / `SummarizedExperiment`</span>"
     ]
   },
   {
-    "objectID": "third-section-new-chapter.html#code-examples",
-    "href": "third-section-new-chapter.html#code-examples",
-    "title": "\n4  New Chapter\n",
-    "section": "\n4.4 Code examples",
-    "text": "4.4 Code examples\nYou can demonstrate code like this:\n\noutput_dir &lt;- file.path(\"resources\", \"code_output\")\nif (!dir.exists(output_dir)) {\n  dir.create(output_dir)\n}\n\nAnd make plots too:\n\nhist_plot &lt;- hist(iris$Sepal.Length)\n\n\n\n\n\n\n\nYou can also save these plots to file:\n\npng(file.path(output_dir, \"test_plot.png\"))\nhist_plot\n\n$breaks\n[1] 4.0 4.5 5.0 5.5 6.0 6.5 7.0 7.5 8.0\n\n$counts\n[1]  5 27 27 30 31 18  6  6\n\n$density\n[1] 0.06666667 0.36000000 0.36000000 0.40000000 0.41333333 0.24000000 0.08000000\n[8] 0.08000000\n\n$mids\n[1] 4.25 4.75 5.25 5.75 6.25 6.75 7.25 7.75\n\n$xname\n[1] \"iris$Sepal.Length\"\n\n$equidist\n[1] TRUE\n\nattr(,\"class\")\n[1] \"histogram\"\n\ndev.off()\n\npng \n  2",
+    "objectID": "01_introduction.html#experimental-design-of-rnaseq-experiments",
+    "href": "01_introduction.html#experimental-design-of-rnaseq-experiments",
+    "title": "\n3  Introduction: Bioconductor S4 Objects / SummarizedExperiment\n",
+    "section": "\n3.4 Experimental Design of RNAseq Experiments",
+    "text": "3.4 Experimental Design of RNAseq Experiments\nWhen we design our RNAseq experiment, we want to be able to:\n\nNumber and type of replicates\n\nAvoiding confounding\n\nAddressing batch effects\n\n\nThe important thing to note is that if you’re unsure about the experimental design, contact the Bioinformatics Core. They can help you design the experiment based on what samples you have.\nWe’ll talk much more about experimental design next week.",
     "crumbs": [
-      "Third Section",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>New Chapter</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Introduction: Bioconductor S4 Objects / `SummarizedExperiment`</span>"
     ]
   },
   {
-    "objectID": "third-section-new-chapter.html#image-example",
-    "href": "third-section-new-chapter.html#image-example",
-    "title": "\n4  New Chapter\n",
-    "section": "\n4.5 Image example",
-    "text": "4.5 Image example\nHow to include a Google slide. It’s simplest to use the ottrpal package:\n\n\n\n\n\n\n\n\nBut if you have the slide or some other image locally downloaded you can also use HTML like this:",
+    "objectID": "01_introduction.html#what-is-bioconductor",
+    "href": "01_introduction.html#what-is-bioconductor",
+    "title": "\n3  Introduction: Bioconductor S4 Objects / SummarizedExperiment\n",
+    "section": "\n3.5 What is Bioconductor?",
+    "text": "3.5 What is Bioconductor?\nData in bioinformatics is often complex. To deal with this, developers define specialised data containers (termed classes) that match the properties of the data they need to handle.\nThis aspect is central to the Bioconductor1 project which uses the same core data infrastructure across packages. This certainly contributed to Bioconductor’s success. Bioconductor package developers are advised to make use of existing infrastructure to provide coherence, interoperability, and stability to the project as a whole.",
     "crumbs": [
-      "Third Section",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>New Chapter</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Introduction: Bioconductor S4 Objects / `SummarizedExperiment`</span>"
     ]
   },
   {
-    "objectID": "third-section-new-chapter.html#video-examples",
-    "href": "third-section-new-chapter.html#video-examples",
-    "title": "\n4  New Chapter\n",
-    "section": "\n4.6 Video examples",
-    "text": "4.6 Video examples\nYou may also want to embed videos in your course. If alternatively, you just want to include a link you can do so like this:\nCheck out this link to a video using markdown syntax.\n\n4.6.1 Using knitr\n\nTo embed videos in your course, you can use knitr::include_url() like this: Note that you should use echo=FALSE in the code chunk because we don’t want the code part of this to show up. If you are unfamiliar with how R Markdown code chunks work, read this.\n\n\n\n\n\n4.6.2 Using HTML\n\n\n\n4.6.3 Using knitr\n\n\n\n\n\n\n4.6.4 Using HTML",
+    "objectID": "01_introduction.html#s4-bioconductor-objects",
+    "href": "01_introduction.html#s4-bioconductor-objects",
+    "title": "\n3  Introduction: Bioconductor S4 Objects / SummarizedExperiment\n",
+    "section": "\n3.6 S4 Bioconductor Objects",
+    "text": "3.6 S4 Bioconductor Objects\nAt the heart of Bioconductor are the S4 Objects. You can think of these data structures as ways to package together:\n\nAssay Data, such as an RNAseq count matrix\nMetadata (data about the experiment), including Experimental Design\n\nPart of why Bioconductor works is this data packaging. We can write functions to act on the data in these S4 Objects as part of a processing workflow. As long as we output a Bioconductor S4 object, our routines can work as part of a pipeline. These routines are called methods(), and may come from a variety of packages.\n\n\n\n\n\n\nWhat is a method?\n\n\n\nYou may have heard of functions and methods - what is the difference?\nA working definition of a method is that it is a function that works on a particular object type, such as the SummarizedExperiment type we’re going to investigate in a little bit.\nMethod is a little bit more specific than a function.\n\n\nYou can think of the Bioconductor S4 objects as taking the place of data.frames in dplyr pipelines - they are the common format that all of the Bioconductor methods work on. They allow Bioconductor methods to be interoperable - we can mix and match methods from various packages to customize our analysis.\n\n3.6.1 Validation\nThe other big part of S4 objects is validation. This can be a bit hard to wrap your head around.\nThe Bioconductor designers put special validation checks on the input data for the Bioconductor objects when you load data into them. The following is what is called the Constructor for the SummarizedExperiment object. This is what we use to make a brand new SummarizedExperiment object from its pieces.\nSummarizedExperiment(assays=SimpleList(),\n                     rowData=NULL, rowRanges=NULL,\n                     colData=DataFrame(),\n                     metadata=list(),\n                     checkDimnames=TRUE)\nEach argument to the SummarizedExperiment constructor defines restrictions on that slot. For example, there is a slot called assays\nThe checkDimnames argument is critical. In order to do any work with an experiment you need to map samples to colNames (the experimental matrix). For example, to calculate differential expression between samples, you need to specify the different groups to compare and which samples map to which groups. Thus, the column names in the AssayData must be identical to the row names in colData.\n\n\n\n\n\n\nIf it isn’t in colData, it doesn’t exist\n\n\n\nKeep in mind that your colData must be as complete as possible. Why? The short answer is that if there isn’t a row for your sample in colData, then it basically doesn’t exist for Bioconductor methods.\nSo make sure your colData contains sample names for all your samples.",
     "crumbs": [
-      "Third Section",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>New Chapter</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Introduction: Bioconductor S4 Objects / `SummarizedExperiment`</span>"
     ]
   },
   {
-    "objectID": "third-section-new-chapter.html#website-examples",
-    "href": "third-section-new-chapter.html#website-examples",
-    "title": "\n4  New Chapter\n",
-    "section": "\n4.7 Website Examples",
-    "text": "4.7 Website Examples\nYet again you can use a link to a website like so:\nA Website\nYou might want to have users open a website in a new tab by default, especially if they need to reference both the course and a resource at once.\nA Website\nOr, you can embed some websites.\n\n4.7.1 Using knitr\n\nThis works:\n\n\n\n\n\n4.7.2 Using HTML",
+    "objectID": "01_introduction.html#summarizedexperiment",
+    "href": "01_introduction.html#summarizedexperiment",
+    "title": "\n3  Introduction: Bioconductor S4 Objects / SummarizedExperiment\n",
+    "section": "\n3.7 SummarizedExperiment\n",
+    "text": "3.7 SummarizedExperiment\n\nThe following diagram shows how the different data slots in the SummarizedExperiment relate to each other.\n\nWe’ll take a look at data in a SummarizedExperiment object:\n\nlibrary(SummarizedExperiment)\n\nGSE96870 &lt;- readRDS(\"data/GSE96870_se.rds\")\nGSE96870\n\nclass: RangedSummarizedExperiment \ndim: 41786 22 \nmetadata(0):\nassays(1): counts\nrownames(41786): Xkr4 LOC105243853 ... TrnT TrnP\nrowData names(3): ENTREZID product gbkey\ncolnames(22): GSM2545337 GSM2545338 ... GSM2545346 GSM2545347\ncolData names(12): title geo_accession ... Label Group\n\n\nIn some ways, the SummarizedExperiment object is like a data.frame, but with extra metadata. For example, our object has column names, which correspond to sample identifiers:\n\ncolnames(GSE96870)\n\n [1] \"GSM2545337\" \"GSM2545338\" \"GSM2545348\" \"GSM2545353\" \"GSM2545343\"\n [6] \"GSM2545349\" \"GSM2545354\" \"GSM2545339\" \"GSM2545344\" \"GSM2545352\"\n[11] \"GSM2545362\" \"GSM2545340\" \"GSM2545345\" \"GSM2545350\" \"GSM2545363\"\n[16] \"GSM2545336\" \"GSM2545342\" \"GSM2545351\" \"GSM2545380\" \"GSM2545341\"\n[21] \"GSM2545346\" \"GSM2545347\"\n\n\nAnd row names:\n\nrownames(GSE96870)[1:30]\n\n [1] \"Xkr4\"          \"LOC105243853\"  \"LOC105242387\"  \"LOC105242467\" \n [5] \"Rp1\"           \"Sox17\"         \"Gm7357\"        \"LOC105243855\" \n [9] \"LOC105243854\"  \"Gm7369\"        \"Gm29874\"       \"Gm6123\"       \n[13] \"Mrpl15\"        \"Lypla1\"        \"LOC105243856\"  \"Tcea1\"        \n[17] \"Gm6104\"        \"Rgs20\"         \"Gm16041\"       \"Atp6v1h\"      \n[21] \"Oprk1\"         \"Npbwr1\"        \"4732440D04Rik\" \"Rb1cc1\"       \n[25] \"Fam150a\"       \"Gm2147\"        \"LOC102631893\"  \"St18\"         \n[29] \"LOC102641523\"  \"Pcmtd1\"       \n\n\nSo far, so good.",
     "crumbs": [
-      "Third Section",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>New Chapter</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Introduction: Bioconductor S4 Objects / `SummarizedExperiment`</span>"
     ]
   },
   {
-    "objectID": "third-section-new-chapter.html#stylized-boxes",
-    "href": "third-section-new-chapter.html#stylized-boxes",
-    "title": "\n4  New Chapter\n",
-    "section": "\n4.8 Stylized boxes",
-    "text": "4.8 Stylized boxes\nOccasionally, you might find it useful to emphasize a particular piece of information. To help you do so, we have provided css code and images (no need for you to worry about that!) to create the following stylized boxes.\nYou can use these boxes in your course with either of two options: using HTML code or Pandoc syntax.\n\n4.8.1 Using rmarkdown container syntax\nThe rmarkdown package allows for a different syntax to be converted to the HTML that you just saw and also allows for conversion to LaTeX. See the Bookdown documentation for more information. Note that Bookdown uses Pandoc.\n::: {.notice}\nNote using rmarkdown syntax.\n\n:::\n\nNote using rmarkdown syntax.\n\nAs an example you might do something like this:\n\nPlease click on the subsection headers in the left hand navigation bar (e.g., 2.1, 4.3) a second time to expand the table of contents and enable the scroll_highlight feature (see more)\n\n\n4.8.2 Using HTML\nTo add a warning box like the following use:\n\nFollowed by the text you want inside\n\nThis will create the following:\n\nFollowed by the text you want inside\n\nHere is a &lt;div class = \"warning\"&gt; box:\n\nNote text\n\nHere is a &lt;div class = \"github\"&gt; box:\n\nGitHub text\n\nHere is a &lt;div class = \"dictionary\"&gt; box:\n\ndictionary text\n\nHere is a &lt;div class = \"reflection\"&gt; box:\n\nreflection text\n\nHere is a &lt;div class = \"wip\"&gt; box:\n\nWork in Progress text",
+    "objectID": "01_introduction.html#assay-data",
+    "href": "01_introduction.html#assay-data",
+    "title": "\n3  Introduction: Bioconductor S4 Objects / SummarizedExperiment\n",
+    "section": "\n3.8 Assay Data",
+    "text": "3.8 Assay Data\nEverything in SummarizedExperiment is built around the Assay data that we store in it.\nEach element of the Assay data list contains a matrix with the following contents:\n\n\nRows: correspond to Gene Locus or possibly Transcripts\n\nColumns: correspond to the samples used in your experiment.\n\nValues: correspond to the actual data. In the case of RNAseq, these are the counts that map to each row.\n\nYou can extract the assay data using the assay() method:\n\nassay_data &lt;- assay(GSE96870)\nhead(assay_data)\n\n             GSM2545337 GSM2545338 GSM2545348 GSM2545353 GSM2545343 GSM2545349\nXkr4               2410       2159       2275       1910       2235       1881\nLOC105243853          0          1          1          0          3          0\nLOC105242387        121        110        161        214        130        154\nLOC105242467          5          5          2          1          2          4\nRp1                   2          0          3          1          1          6\nSox17               239        218        302        322        296        286\n             GSM2545354 GSM2545339 GSM2545344 GSM2545352 GSM2545362 GSM2545340\nXkr4               1771       1980       1779       1890       2315       1977\nLOC105243853          0          4          3          1          1          0\nLOC105242387        124        120        131        272        189        172\nLOC105242467          4          5          2          3          2          2\nRp1                   3          3          1          5          3          2\nSox17               273        220        233        267        197        261\n             GSM2545345 GSM2545350 GSM2545363 GSM2545336 GSM2545342 GSM2545351\nXkr4               1528       2584       1645       1891       1757       1837\nLOC105243853          0          0          0          0          1          1\nLOC105242387        160        124        223        204        177        221\nLOC105242467          2          7          1         12          3          1\nRp1                   2          5          1          2          3          3\nSox17               271        325        310        251        179        201\n             GSM2545380 GSM2545341 GSM2545346 GSM2545347\nXkr4               1723       1945       1644       1585\nLOC105243853          1          0          1          3\nLOC105242387        251        173        180        176\nLOC105242467          4          6          1          2\nRp1                   0          1          2          2\nSox17               246        232        205        230\n\n\n\n\n\n\n\n\nAssays Are Not just for RNAseq data\n\n\n\nAssay Data is very flexible. For example, there are flow cytometry objects where the rows correspond to cell surface markers, and columns that correspond to each cell. Similarly, SingleCellExperiment objects (which are derived from SummarizedExperiment) have rows that correspond to Genes and columns that correspond to individual cells.\n\n\n\n3.8.1 Think about it\nAre the colnames of our object identical to the colnames of the assay object? Try it out:\n\ncolnames(GSE96870)\n\n [1] \"GSM2545337\" \"GSM2545338\" \"GSM2545348\" \"GSM2545353\" \"GSM2545343\"\n [6] \"GSM2545349\" \"GSM2545354\" \"GSM2545339\" \"GSM2545344\" \"GSM2545352\"\n[11] \"GSM2545362\" \"GSM2545340\" \"GSM2545345\" \"GSM2545350\" \"GSM2545363\"\n[16] \"GSM2545336\" \"GSM2545342\" \"GSM2545351\" \"GSM2545380\" \"GSM2545341\"\n[21] \"GSM2545346\" \"GSM2545347\"\n\ncolnames(assay(GSE96870))\n\n [1] \"GSM2545337\" \"GSM2545338\" \"GSM2545348\" \"GSM2545353\" \"GSM2545343\"\n [6] \"GSM2545349\" \"GSM2545354\" \"GSM2545339\" \"GSM2545344\" \"GSM2545352\"\n[11] \"GSM2545362\" \"GSM2545340\" \"GSM2545345\" \"GSM2545350\" \"GSM2545363\"\n[16] \"GSM2545336\" \"GSM2545342\" \"GSM2545351\" \"GSM2545380\" \"GSM2545341\"\n[21] \"GSM2545346\" \"GSM2545347\"",
     "crumbs": [
-      "Third Section",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>New Chapter</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Introduction: Bioconductor S4 Objects / `SummarizedExperiment`</span>"
     ]
   },
   {
-    "objectID": "third-section-new-chapter.html#dropdown-summaries",
-    "href": "third-section-new-chapter.html#dropdown-summaries",
-    "title": "\n4  New Chapter\n",
-    "section": "\n4.9 Dropdown summaries",
-    "text": "4.9 Dropdown summaries\n\nYou can hide additional information in a dropdown menu\n\nHere’s more words that are hidden.",
+    "objectID": "01_introduction.html#metadata",
+    "href": "01_introduction.html#metadata",
+    "title": "\n3  Introduction: Bioconductor S4 Objects / SummarizedExperiment\n",
+    "section": "\n3.9 Metadata",
+    "text": "3.9 Metadata\nMetadata is information about the experiment that is not part of the Assay Data.\nThe most important part of the metadata is the colData slot. This slot contains information about the samples (the columns) of the assay. This is where we store the Experimental Design that we talked about.\n\ncolData(GSE96870)\n\nDataFrame with 22 rows and 12 columns\n                     title geo_accession     organism         age         sex\n               &lt;character&gt;   &lt;character&gt;  &lt;character&gt; &lt;character&gt; &lt;character&gt;\nGSM2545337 CNS_RNA-seq_11C    GSM2545337 Mus musculus     8 weeks      Female\nGSM2545338 CNS_RNA-seq_12C    GSM2545338 Mus musculus     8 weeks      Female\nGSM2545348 CNS_RNA-seq_27C    GSM2545348 Mus musculus     8 weeks      Female\nGSM2545353  CNS_RNA-seq_3C    GSM2545353 Mus musculus     8 weeks      Female\nGSM2545343 CNS_RNA-seq_20C    GSM2545343 Mus musculus     8 weeks        Male\n...                    ...           ...          ...         ...         ...\nGSM2545351  CNS_RNA-seq_2C    GSM2545351 Mus musculus     8 weeks      Female\nGSM2545380  CNS_RNA-seq_9C    GSM2545380 Mus musculus     8 weeks      Female\nGSM2545341 CNS_RNA-seq_17C    GSM2545341 Mus musculus     8 weeks        Male\nGSM2545346 CNS_RNA-seq_25C    GSM2545346 Mus musculus     8 weeks        Male\nGSM2545347 CNS_RNA-seq_26C    GSM2545347 Mus musculus     8 weeks        Male\n             infection      strain        time      tissue     mouse\n           &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;integer&gt;\nGSM2545337 NonInfected     C57BL/6        Day0  Cerebellum         9\nGSM2545338 NonInfected     C57BL/6        Day0  Cerebellum        10\nGSM2545348 NonInfected     C57BL/6        Day0  Cerebellum         8\nGSM2545353 NonInfected     C57BL/6        Day0  Cerebellum         4\nGSM2545343 NonInfected     C57BL/6        Day0  Cerebellum        11\n...                ...         ...         ...         ...       ...\nGSM2545351  InfluenzaA     C57BL/6        Day8  Cerebellum        16\nGSM2545380  InfluenzaA     C57BL/6        Day8  Cerebellum        19\nGSM2545341  InfluenzaA     C57BL/6        Day8  Cerebellum         6\nGSM2545346  InfluenzaA     C57BL/6        Day8  Cerebellum        23\nGSM2545347  InfluenzaA     C57BL/6        Day8  Cerebellum        24\n                    Label       Group\n                 &lt;factor&gt;    &lt;factor&gt;\nGSM2545337 Female_Day0_9  Female_Day0\nGSM2545338 Female_Day0_10 Female_Day0\nGSM2545348 Female_Day0_8  Female_Day0\nGSM2545353 Female_Day0_4  Female_Day0\nGSM2545343 Male_Day0_11   Male_Day0  \n...                   ...         ...\nGSM2545351 Female_Day8_16 Female_Day8\nGSM2545380 Female_Day8_19 Female_Day8\nGSM2545341 Male_Day8_6    Male_Day8  \nGSM2545346 Male_Day8_23   Male_Day8  \nGSM2545347 Male_Day8_24   Male_Day8  \n\n\nIn our experimental design, we have males and females, timepoints, and different kinds of tissues.\n\n3.9.1 Think about it\nWhat do the rownames() of colData(GSE96870) correspond to?\n\nrownames(colData(GSE96870))\n\n [1] \"GSM2545337\" \"GSM2545338\" \"GSM2545348\" \"GSM2545353\" \"GSM2545343\"\n [6] \"GSM2545349\" \"GSM2545354\" \"GSM2545339\" \"GSM2545344\" \"GSM2545352\"\n[11] \"GSM2545362\" \"GSM2545340\" \"GSM2545345\" \"GSM2545350\" \"GSM2545363\"\n[16] \"GSM2545336\" \"GSM2545342\" \"GSM2545351\" \"GSM2545380\" \"GSM2545341\"\n[21] \"GSM2545346\" \"GSM2545347\"\n\n\n\n\n\n\n\n\nKeep your SummarizedExperiment whole\n\n\n\nIt might be tempting to extract the assay data and the metadata and work with them separately. But as we’ll see in the following section, these two slots work together and enable all sorts of analysis.",
     "crumbs": [
-      "Third Section",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>New Chapter</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Introduction: Bioconductor S4 Objects / `SummarizedExperiment`</span>"
     ]
   },
   {
-    "objectID": "conclusion.html",
-    "href": "conclusion.html",
-    "title": "5  Conclusion",
+    "objectID": "01_introduction.html#subsetting-summarizedexperiment",
+    "href": "01_introduction.html#subsetting-summarizedexperiment",
+    "title": "\n3  Introduction: Bioconductor S4 Objects / SummarizedExperiment\n",
+    "section": "\n3.10 Subsetting SummarizedExperiment\n",
+    "text": "3.10 Subsetting SummarizedExperiment\n\nWe saw that we have the checkNames constraint. This is because we can use the colData and the assayData in our object to do subsetting using the metadata.\n\nfemale &lt;- GSE96870[,GSE96870$sex == \"Female\"]\nfemale\n\nclass: RangedSummarizedExperiment \ndim: 41786 12 \nmetadata(0):\nassays(1): counts\nrownames(41786): Xkr4 LOC105243853 ... TrnT TrnP\nrowData names(3): ENTREZID product gbkey\ncolnames(12): GSM2545337 GSM2545338 ... GSM2545351 GSM2545380\ncolData names(12): title geo_accession ... Label Group\n\ncolData(female)\n\nDataFrame with 12 rows and 12 columns\n                     title geo_accession     organism         age         sex\n               &lt;character&gt;   &lt;character&gt;  &lt;character&gt; &lt;character&gt; &lt;character&gt;\nGSM2545337 CNS_RNA-seq_11C    GSM2545337 Mus musculus     8 weeks      Female\nGSM2545338 CNS_RNA-seq_12C    GSM2545338 Mus musculus     8 weeks      Female\nGSM2545348 CNS_RNA-seq_27C    GSM2545348 Mus musculus     8 weeks      Female\nGSM2545353  CNS_RNA-seq_3C    GSM2545353 Mus musculus     8 weeks      Female\nGSM2545339 CNS_RNA-seq_13C    GSM2545339 Mus musculus     8 weeks      Female\n...                    ...           ...          ...         ...         ...\nGSM2545362  CNS_RNA-seq_5C    GSM2545362 Mus musculus     8 weeks      Female\nGSM2545336 CNS_RNA-seq_10C    GSM2545336 Mus musculus     8 weeks      Female\nGSM2545342  CNS_RNA-seq_1C    GSM2545342 Mus musculus     8 weeks      Female\nGSM2545351  CNS_RNA-seq_2C    GSM2545351 Mus musculus     8 weeks      Female\nGSM2545380  CNS_RNA-seq_9C    GSM2545380 Mus musculus     8 weeks      Female\n             infection      strain        time      tissue     mouse\n           &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;integer&gt;\nGSM2545337 NonInfected     C57BL/6        Day0  Cerebellum         9\nGSM2545338 NonInfected     C57BL/6        Day0  Cerebellum        10\nGSM2545348 NonInfected     C57BL/6        Day0  Cerebellum         8\nGSM2545353 NonInfected     C57BL/6        Day0  Cerebellum         4\nGSM2545339  InfluenzaA     C57BL/6        Day4  Cerebellum        15\n...                ...         ...         ...         ...       ...\nGSM2545362  InfluenzaA     C57BL/6        Day4  Cerebellum        20\nGSM2545336  InfluenzaA     C57BL/6        Day8  Cerebellum        14\nGSM2545342  InfluenzaA     C57BL/6        Day8  Cerebellum         5\nGSM2545351  InfluenzaA     C57BL/6        Day8  Cerebellum        16\nGSM2545380  InfluenzaA     C57BL/6        Day8  Cerebellum        19\n                    Label       Group\n                 &lt;factor&gt;    &lt;factor&gt;\nGSM2545337 Female_Day0_9  Female_Day0\nGSM2545338 Female_Day0_10 Female_Day0\nGSM2545348 Female_Day0_8  Female_Day0\nGSM2545353 Female_Day0_4  Female_Day0\nGSM2545339 Female_Day4_15 Female_Day4\n...                   ...         ...\nGSM2545362 Female_Day4_20 Female_Day4\nGSM2545336 Female_Day8_14 Female_Day8\nGSM2545342 Female_Day8_5  Female_Day8\nGSM2545351 Female_Day8_16 Female_Day8\nGSM2545380 Female_Day8_19 Female_Day8\n\n\nThis tight interaction of metadata and assay data is critical when we start doing differential analysis. The experimental design will help determine whether we can make the comparisons we want to make and the conclusions we can draw from the dataset.\n\n\n\n\n\n\nRemember the Comma\n\n\n\nRemember that the , (comma) is used to distinguish between rows and columns. Rows correspond to genes and columns correpsond to samples.\nIn the above example, we are subsetting the samples, so our criteria goes after the comma.\n\n\nFor manipulating the SummarizedExperiment object, we will use the tidySummarizedExperiment package to subset it - essentially this package lets us use dplyr on the SummarizedExperiment and DESeqDataset objects.\n\n3.10.1 Try it out\nTry subsetting GSE96870 to have time == \"Day0\". How many samples are left?\n\nday0 &lt;- GSE96870[,GSE96870$----- == -------]\nday0\ncolData(day0)\n\n\n\n\n\n\n\nA Common Bioconductor Pattern\n\n\n\nDepending on the package, we will tend to overwrite objects as we run methods on them, such as the following.\nIn DESeq2, each method will add something to the object (usually extra columns or a results table).\nHere’s an example:\n\nlibrary(SummarizedExperiment)\nlibrary(DESeq2)\n\nGSE96870 &lt;- DESeqDataSet(GSE96870, design = ~ sex + time)  #make DESeqDataset\nGSE96870 &lt;- GSE96870[rowSums(assay(GSE96870)) &gt; 5,] #filter out low expressing candidates\nGSE96870 &lt;- DESeq(GSE96870) #run estimateSizeFactors, estimateDispersions, nbinomialWaldTest",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Introduction: Bioconductor S4 Objects / `SummarizedExperiment`</span>"
+    ]
+  },
+  {
+    "objectID": "01_introduction.html#tidysummarizedexperiment",
+    "href": "01_introduction.html#tidysummarizedexperiment",
+    "title": "\n3  Introduction: Bioconductor S4 Objects / SummarizedExperiment\n",
+    "section": "\n3.11 tidySummarizedExperiment\n",
+    "text": "3.11 tidySummarizedExperiment\n\nThe SummarizedExperiment object does not act like the normal data.frame/tibble we expect, especially in filtering and subsetting.\nThe tidySummarizedExperiment package will be helpful for us to understand and visualize the SummarizedExperiment package. Once we do that, our SummarizedExperiment object will act more like a data.frame.\nBasically, tidySummarizedExperiment treats the data as a long data frame that combines both the assay and metadata. This format is helpful in doing more work with the tidyverse:\n\nlibrary(tidySummarizedExperiment)\n\nLoading required package: ttservice\n\nGSE96870\n\n# A SummarizedExperiment-tibble abstraction: 919,292 × 23\n# Features=41786 | Samples=22 | Assays=counts\n   .feature    .sample counts title geo_accession organism age   sex   infection\n   &lt;chr&gt;       &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    \n 1 Xkr4        GSM254…   2410 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 2 LOC1052438… GSM254…      0 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 3 LOC1052423… GSM254…    121 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 4 LOC1052424… GSM254…      5 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 5 Rp1         GSM254…      2 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 6 Sox17       GSM254…    239 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 7 Gm7357      GSM254…      0 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 8 LOC1052438… GSM254…      3 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 9 LOC1052438… GSM254…      0 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n10 Gm7369      GSM254…      1 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n# ℹ 40 more rows\n# ℹ 14 more variables: strain &lt;chr&gt;, time &lt;chr&gt;, tissue &lt;chr&gt;, mouse &lt;int&gt;,\n#   Label &lt;fct&gt;, Group &lt;fct&gt;, ENTREZID &lt;chr&gt;, product &lt;chr&gt;, gbkey &lt;chr&gt;,\n#   seqnames &lt;fct&gt;, start &lt;int&gt;, end &lt;int&gt;, width &lt;int&gt;, strand &lt;fct&gt;\n\n\n\n3.11.1 Filtering Data\nWe can use dplyr to filter the data using the tidySummarizedExperiment package:\n\nGSE96870 |&gt;\n  filter(sex == \"Female\")\n\n# A SummarizedExperiment-tibble abstraction: 501,432 × 23\n# Features=41786 | Samples=12 | Assays=counts\n   .feature    .sample counts title geo_accession organism age   sex   infection\n   &lt;chr&gt;       &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    \n 1 Xkr4        GSM254…   2410 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 2 LOC1052438… GSM254…      0 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 3 LOC1052423… GSM254…    121 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 4 LOC1052424… GSM254…      5 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 5 Rp1         GSM254…      2 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 6 Sox17       GSM254…    239 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 7 Gm7357      GSM254…      0 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 8 LOC1052438… GSM254…      3 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 9 LOC1052438… GSM254…      0 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n10 Gm7369      GSM254…      1 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n# ℹ 40 more rows\n# ℹ 14 more variables: strain &lt;chr&gt;, time &lt;chr&gt;, tissue &lt;chr&gt;, mouse &lt;int&gt;,\n#   Label &lt;fct&gt;, Group &lt;fct&gt;, ENTREZID &lt;chr&gt;, product &lt;chr&gt;, gbkey &lt;chr&gt;,\n#   seqnames &lt;fct&gt;, start &lt;int&gt;, end &lt;int&gt;, width &lt;int&gt;, strand &lt;fct&gt;\n\n\n\n3.11.2 Getting Counts across the experiment\nWe can produce summaries of the counts of each sample library:\n\nGSE96870 |&gt;\n    group_by(.sample) |&gt;\n    summarise(total_counts=sum(counts))\n\ntidySummarizedExperiment says: A data frame is returned for independent data analysis.\n\n\n\n  \n\n\n\n\n3.11.3 Try it out\nTry summarizing the total_counts by sex or by infection:\n\nGSE96870 \n\n# A SummarizedExperiment-tibble abstraction: 919,292 × 23\n# Features=41786 | Samples=22 | Assays=counts\n   .feature    .sample counts title geo_accession organism age   sex   infection\n   &lt;chr&gt;       &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    \n 1 Xkr4        GSM254…   2410 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 2 LOC1052438… GSM254…      0 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 3 LOC1052423… GSM254…    121 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 4 LOC1052424… GSM254…      5 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 5 Rp1         GSM254…      2 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 6 Sox17       GSM254…    239 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 7 Gm7357      GSM254…      0 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 8 LOC1052438… GSM254…      3 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n 9 LOC1052438… GSM254…      0 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n10 Gm7369      GSM254…      1 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…\n# ℹ 40 more rows\n# ℹ 14 more variables: strain &lt;chr&gt;, time &lt;chr&gt;, tissue &lt;chr&gt;, mouse &lt;int&gt;,\n#   Label &lt;fct&gt;, Group &lt;fct&gt;, ENTREZID &lt;chr&gt;, product &lt;chr&gt;, gbkey &lt;chr&gt;,\n#   seqnames &lt;fct&gt;, start &lt;int&gt;, end &lt;int&gt;, width &lt;int&gt;, strand &lt;fct&gt;\n\n\n\n3.11.4 Plotting\nWe can look at the distribution of counts across samples by using .sample as our grouping variable in ggplot().\n\nGSE96870 |&gt;\n    ggplot(aes(counts + 1, group=.sample, color=infection)) +\n    geom_density() +\n    scale_x_log10() +\n    theme_bw()\n\n\n\n\n\n\n\nOur data (individual gene counts) is highly skewed. If we log-transform the data, then the skew is lessened. The boxplots of log counts are helpful for detecting batch effects.\n\nGSE96870 |&gt;\n    ggplot(aes(y=log2(counts + 1), group=.sample, fill=infection)) +\n    geom_boxplot() +\n    theme_bw()\n\n\n\n\n\n\n\nTake a look at the above box plot. Are there differences in distribution between samples?\nIn order to compare expression levels between samples, we will need to adjust, or normalize by library size. We’ll investigate this further when we get to differential expression.\n\n3.11.5 Try it Out\nTry mapping another variable to fill.\n\nGSE96870 |&gt;\n    ggplot(aes(y=log2(counts + 1), group=.sample, fill=------)) +\n    geom_boxplot() +\n    theme_bw()",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Introduction: Bioconductor S4 Objects / `SummarizedExperiment`</span>"
+    ]
+  },
+  {
+    "objectID": "01_introduction.html#take-home-messages",
+    "href": "01_introduction.html#take-home-messages",
+    "title": "\n3  Introduction: Bioconductor S4 Objects / SummarizedExperiment\n",
+    "section": "\n3.12 Take Home Messages",
+    "text": "3.12 Take Home Messages\n\nWe package multiple parts of the data (assay data and metadata) into a SummarizedExperiment object:\n\n\nColumns correspond to samples, Rows correspond to gene locus or transcripts\n\n\nColumn names of the assay data must match a column in the colData\n\n\nExperimental Design variables are part of the colData\n\nRownames of the assay data must match the rowNames in the column data\n\n\nThe SummarizedExperiment object lets us subset by phenotype variables\n\ntidySummarizedExperiment lets us interact with the SummarizedExperiment object as if it were a long data frame with both metadata and assay data together.\n\nWe can plot and subset the SummarizedExperiment object using our regular tidyverse tools (ggplot2, dplyr, etc.) once we load the tidySummarizedExperiment package.\n\n\n\n\n\n\n\n\n\nWhat about all of the other kinds of objects?\n\n\n\nMost of the other Bioconductor Data Structures derive from some variant of the SummarizedExperiment. They might add some functionality that is core to the package they belong to, such as DEseq2. This includes seurat objects for Single Cell sequencing.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Introduction: Bioconductor S4 Objects / `SummarizedExperiment`</span>"
+    ]
+  },
+  {
+    "objectID": "01_introduction.html#footnotes",
+    "href": "01_introduction.html#footnotes",
+    "title": "\n3  Introduction: Bioconductor S4 Objects / SummarizedExperiment\n",
     "section": "",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Cras pulvinar mattis nunc sed blandit. Egestas integer eget aliquet nibh praesent tristique. Phasellus faucibus scelerisque eleifend donec pretium. Consequat ac felis donec et odio pellentesque diam volutpat. Maecenas volutpat blandit aliquam etiam erat. Aenean et tortor at risus viverra adipiscing at in. Integer quis auctor elit sed. Rhoncus dolor purus non enim praesent elementum facilisis leo vel. Amet tellus cras adipiscing enim eu turpis egestas. Fermentum iaculis eu non diam phasellus. Et netus et malesuada fames ac. Mauris a diam maecenas sed enim ut sem. Dignissim cras tincidunt lobortis feugiat vivamus at augue eget arcu. Amet est placerat in egestas erat imperdiet sed euismod. Volutpat commodo sed egestas egestas fringilla phasellus faucibus.\nNullam vehicula ipsum a arcu cursus vitae congue. Scelerisque varius morbi enim nunc. Eleifend mi in nulla posuere sollicitudin aliquam ultrices. Nunc sed blandit libero volutpat sed. Sit amet porttitor eget dolor morbi non. Pellentesque habitant morbi tristique senectus et netus. Scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam. Tortor posuere ac ut consequat semper viverra nam libero justo. Bibendum ut tristique et egestas quis ipsum suspendisse ultrices gravida. Convallis aenean et tortor at. Metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices. Hendrerit gravida rutrum quisque non tellus orci ac auctor augue. Nibh mauris cursus mattis molestie. Eu non diam phasellus vestibulum lorem sed risus ultricies tristique.\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Cras pulvinar mattis nunc sed blandit. Egestas integer eget aliquet nibh praesent tristique. Phasellus faucibus scelerisque eleifend donec pretium. Consequat ac felis donec et odio pellentesque diam volutpat. Maecenas volutpat blandit aliquam etiam erat. Aenean et tortor at risus viverra adipiscing at in. Integer quis auctor elit sed. Rhoncus dolor purus non enim praesent elementum facilisis leo vel. Amet tellus cras adipiscing enim eu turpis egestas. Fermentum iaculis eu non diam phasellus. Et netus et malesuada fames ac. Mauris a diam maecenas sed enim ut sem. Dignissim cras tincidunt lobortis feugiat vivamus at augue eget arcu. Amet est placerat in egestas erat imperdiet sed euismod. Volutpat commodo sed egestas egestas fringilla phasellus faucibus.\nNullam vehicula ipsum a arcu cursus vitae congue. Scelerisque varius morbi enim nunc. Eleifend mi in nulla posuere sollicitudin aliquam ultrices. Nunc sed blandit libero volutpat sed. Sit amet porttitor eget dolor morbi non. Pellentesque habitant morbi tristique senectus et netus. Scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam. Tortor posuere ac ut consequat semper viverra nam libero justo. Bibendum ut tristique et egestas quis ipsum suspendisse ultrices gravida. Convallis aenean et tortor at. Metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices. Hendrerit gravida rutrum quisque non tellus orci ac auctor augue. Nibh mauris cursus mattis molestie. Eu non diam phasellus vestibulum lorem sed risus ultricies tristique.",
+    "text": "The Bioconductor project was initiated by Robert Gentleman, one of the two creators of the R language. Bioconductor provides tools dedicated to omics data analysis. Bioconductor uses the R statistical programming language and is open source and open development.↩︎",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Conclusion</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Introduction: Bioconductor S4 Objects / `SummarizedExperiment`</span>"
     ]
   },
   {
-    "objectID": "references.html",
-    "href": "references.html",
-    "title": "References",
+    "objectID": "02_week2.html",
+    "href": "02_week2.html",
+    "title": "\n4  Experimental Design / QC\n",
     "section": "",
-    "text": "Shannon, C. E. (1948). A Mathematical Theory of Communication. Bell System Technical Journal, 27(3), 379–423. https://ieeexplore.ieee.org/document/6773024\nTuring, A. M. (1950). Computing Machinery and Intelligence. Mind, 59(236), 433–460. https://mind.oxfordjournals.org/content/LIX/236/433\nTuring, A. M. (1936). On Computable Numbers, with an Application to the Entscheidungsproblem. Proceedings of the London Mathematical Society, s2-42(1), 230–265. https://www.cs.virginia.edu/~robins/Turing_Paper_1936.pdf\nThompson, K. (1984). Reflections on Trusting Trust. Communications of the ACM, 27(8), 761–763. https://dl.acm.org/doi/10.1145/358198.358210\nGhemawat, S., Gobioff, H., & Leung, S.-T. (2003). The Google File System. In Proceedings of the Nineteenth ACM Symposium on Operating Systems Principles (pp. 29–43). https://research.google.com/archive/gfs-sosp2003.pdf",
+    "text": "4.1 Learning Objectives",
     "crumbs": [
-      "References"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Experimental Design / QC</span>"
+    ]
+  },
+  {
+    "objectID": "02_week2.html#learning-objectives",
+    "href": "02_week2.html#learning-objectives",
+    "title": "\n4  Experimental Design / QC\n",
+    "section": "",
+    "text": "Explain the the relationship between population mean vs. sample mean as the sample size increase\n\nDistinguish between technical and biological replicates and what kinds of results to expect from each\n\nExplain the basics of experimental design, confounding, batch effects, and when to consult the sequencing core\n\nExplain the confounding issues of library size and RNA composition\n\nConstruct a design matrix that reflects the study’s experimental design\n\nAnalyze the process of filtering out genes with low read counts",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Experimental Design / QC</span>"
+    ]
+  },
+  {
+    "objectID": "02_week2.html#experimental-design-of-rnaseq-experiments",
+    "href": "02_week2.html#experimental-design-of-rnaseq-experiments",
+    "title": "\n4  Experimental Design / QC\n",
+    "section": "\n4.2 Experimental Design of RNAseq Experiments",
+    "text": "4.2 Experimental Design of RNAseq Experiments\nToday, we will look how experimental design plays a large role in the way we analyze RNA-seq data. Experimental design seeks to make sense data variation via careful design of conditions.\nIf you are not familiar with some of these technical terms in the quote, we will go over them shortly.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Experimental Design / QC</span>"
+    ]
+  },
+  {
+    "objectID": "02_week2.html#background-what-are-we-estimating",
+    "href": "02_week2.html#background-what-are-we-estimating",
+    "title": "\n4  Experimental Design / QC\n",
+    "section": "\n4.3 Background: What are we estimating?",
+    "text": "4.3 Background: What are we estimating?\n\n4.3.1 Single, randomized group\nWe will first start with looking at the most simple experimental design: a single, randomized group. Once we are comfortable with this, then we will return to a two group comparision in classic differential gene expression.\nWhen we run experiments, we are usually analyzing a subset of the population, called a sample. Let’s define them clearly:\nPopulation: The entire collection of individual units that a researcher is interested to study.\nSample: A smaller collection of individual units that the researcher has selected to study.\nWhen we carry out our experiment, we perform some form of measurement on our samples, such as an experimental assay. Then, it is common to look at the mean and variance of our measurements to summarize our samples. This sample mean and sample variance are our best guess at the population mean and population variance.\nThere is a crucial relationship between samples, populations, and sample size: As the sample size gets larger, then the sample mean approaches the population mean and the sample variance approaches the population variance. This is called the Law of Large Numbers.\nLet’s take at the following experiment as a demo: The goal of this study was to determine the effect of an upper-respiratory infection on changes in RNA transcription occurring in the cerebellum on mouse models. Control mice were inoculated with saline at Day 0 and measured on the same day. Case mice were inoculated with Influenza A and measured at day 8 post-infection.\nLet’s take a look at RNA-seq measurement of the gene Asl for the control samples.\n\nlibrary(SummarizedExperiment)\nlibrary(tidySummarizedExperiment)\nlibrary(tidyverse)\nlibrary(DESeq2)\n\nGSE96870 &lt;- readRDS(\"data/GSE96870_se.rds\")\nGSE96870_Case_Control &lt;- GSE96870 |&gt; filter(time %in% c(\"Day0\", \"Day8\"))\n\n\nexpression_plot &lt;- \n  GSE96870_Case_Control |&gt;\n    filter(.feature == \"Asl\" & time == \"Day0\") |&gt;\n    ggplot(aes(x = Label, y = counts)) +\n    geom_point() +\n    theme(axis.text.x = element_text(angle = 90)) + theme_minimal()\nexpression_plot\n\n\n\n\n\n\n\nWe have 7 samples here, and we would compute the mean to get the sample mean for the counts, approximating the population mean.\nBy these properties, it is obvious that the more samples, the better, one might say. But your choice of samples also has an impact on the population you are approximating!\nLet’s consider the following thought experiment:\nWould you rather: Sequence 7 replicates on the same cell line, or sequence one replicate each on 7 different cell lines?\nWhat would the sample mean and sample variance of each experiment tell you?\nIn light of this example, let’s define two types of replicates:\n\nTechnical replicates: use the same biological sample to repeat the technical or experimental steps in order to accurately measure experimental variation.\nBiological replicates use different biological samples of the same condition to measure the biological variation between samples.\n\n4.3.2 Two-group comparisons\nIn classical differntial gene expression, you are often conducting a two-group comparison between case and control. Our case samples arise from the case population, and our control samples arise from the control population. When we look at the measurements of a gene, we look at the difference of sample mean betewen case and controls, which is on a log-transformed scale called log-fold change. As the sample size gets larger, our gene’s sample log-fold change gets closer to the population log-fold change. Similarly, the sample variance for from case and control groups for this gene gets closer to their respective population variances.\nIn the ideal experimental set-up, you want all of your samples to be randomly sampled and differ only by the case and control conditions. However, that rarely happens in real life. There are other variables lurking, also known as confounding variables, that may also have an impact on the outcome you want to measure.\n\nAny relevant metadata, such as age, sex, subtype\nBatch effects: the date of the experiment conducted, the person who performed the experiment, the reagents used, etc.\nThe sequencing technology\nThe amount of sequencing the sample received (more on this later in Normalization)\nWhat else?\n\nThis means you need to think carefully what the sample log-fold change are telling you: does the sample log-fold change relate more to your experimental condition, or something else, such as batch effects? A variable can confound your experiment when you can’t tell whether this variable or your experimental design is affecting the outcome.\nExample: We know that sex has large effects on gene expression, and if all of our control mice were female and all of the treatment mice were male, then our treatment effect would be confounded by the variable sex. We could not differentiate the effect of treatment from the effect of sex.\nExample: We know that batch effect has large effects on gene expression, and if all of our control samples were processed by an experienced researcher on old reagents, and our treatment samples were processed by an trainee researcher on new reagents, our treatment effect would be confounded by batch effects.\n\n\nSource: Modern Statistics for Modern Biology, Chapter 13",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Experimental Design / QC</span>"
+    ]
+  },
+  {
+    "objectID": "02_week2.html#dealing-with-confounding",
+    "href": "02_week2.html#dealing-with-confounding",
+    "title": "\n4  Experimental Design / QC\n",
+    "section": "\n4.4 Dealing with confounding",
+    "text": "4.4 Dealing with confounding\nSolutions:\n\nEnsure that the samples in all experimental conditions have the same values for the confounding variable - ie. all of the same sex, all of the same batch.\n\nIf not possible, make sure that all experimental conditions have a similar amount of variability of the confounding variable - ie. the both case and control groups have a balance of males and females, and various batches.\n\n\n\nSource: Modern Statistics for Modern Biology, Chapter 13\n\nSave this information; we can eliminate these variability in the modeling process.\n\n\n\nLet’s look at our experimental design. Have our potential confounders been accounted for?\n\nas.data.frame(colData(GSE96870_Case_Control))\n\n                     title geo_accession     organism     age    sex\nGSM2545337 CNS_RNA-seq_11C    GSM2545337 Mus musculus 8 weeks Female\nGSM2545338 CNS_RNA-seq_12C    GSM2545338 Mus musculus 8 weeks Female\nGSM2545348 CNS_RNA-seq_27C    GSM2545348 Mus musculus 8 weeks Female\nGSM2545353  CNS_RNA-seq_3C    GSM2545353 Mus musculus 8 weeks Female\nGSM2545343 CNS_RNA-seq_20C    GSM2545343 Mus musculus 8 weeks   Male\nGSM2545349 CNS_RNA-seq_28C    GSM2545349 Mus musculus 8 weeks   Male\nGSM2545354  CNS_RNA-seq_4C    GSM2545354 Mus musculus 8 weeks   Male\nGSM2545336 CNS_RNA-seq_10C    GSM2545336 Mus musculus 8 weeks Female\nGSM2545342  CNS_RNA-seq_1C    GSM2545342 Mus musculus 8 weeks Female\nGSM2545351  CNS_RNA-seq_2C    GSM2545351 Mus musculus 8 weeks Female\nGSM2545380  CNS_RNA-seq_9C    GSM2545380 Mus musculus 8 weeks Female\nGSM2545341 CNS_RNA-seq_17C    GSM2545341 Mus musculus 8 weeks   Male\nGSM2545346 CNS_RNA-seq_25C    GSM2545346 Mus musculus 8 weeks   Male\nGSM2545347 CNS_RNA-seq_26C    GSM2545347 Mus musculus 8 weeks   Male\n             infection  strain time     tissue mouse          Label       Group\nGSM2545337 NonInfected C57BL/6 Day0 Cerebellum     9  Female_Day0_9 Female_Day0\nGSM2545338 NonInfected C57BL/6 Day0 Cerebellum    10 Female_Day0_10 Female_Day0\nGSM2545348 NonInfected C57BL/6 Day0 Cerebellum     8  Female_Day0_8 Female_Day0\nGSM2545353 NonInfected C57BL/6 Day0 Cerebellum     4  Female_Day0_4 Female_Day0\nGSM2545343 NonInfected C57BL/6 Day0 Cerebellum    11   Male_Day0_11   Male_Day0\nGSM2545349 NonInfected C57BL/6 Day0 Cerebellum     7    Male_Day0_7   Male_Day0\nGSM2545354 NonInfected C57BL/6 Day0 Cerebellum     2    Male_Day0_2   Male_Day0\nGSM2545336  InfluenzaA C57BL/6 Day8 Cerebellum    14 Female_Day8_14 Female_Day8\nGSM2545342  InfluenzaA C57BL/6 Day8 Cerebellum     5  Female_Day8_5 Female_Day8\nGSM2545351  InfluenzaA C57BL/6 Day8 Cerebellum    16 Female_Day8_16 Female_Day8\nGSM2545380  InfluenzaA C57BL/6 Day8 Cerebellum    19 Female_Day8_19 Female_Day8\nGSM2545341  InfluenzaA C57BL/6 Day8 Cerebellum     6    Male_Day8_6   Male_Day8\nGSM2545346  InfluenzaA C57BL/6 Day8 Cerebellum    23   Male_Day8_23   Male_Day8\nGSM2545347  InfluenzaA C57BL/6 Day8 Cerebellum    24   Male_Day8_24   Male_Day8",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Experimental Design / QC</span>"
+    ]
+  },
+  {
+    "objectID": "02_week2.html#specific-confounding-issues-in-rna-seq-experiments",
+    "href": "02_week2.html#specific-confounding-issues-in-rna-seq-experiments",
+    "title": "\n4  Experimental Design / QC\n",
+    "section": "\n4.5 Specific confounding issues in RNA-seq experiments",
+    "text": "4.5 Specific confounding issues in RNA-seq experiments\nBesides looking at our metadata, there are two confounding variables that happen in nearly every RNA-seq experiment that people have spent a great deal of time developing tools to reduce confounding.\n\n4.5.1 Library Size\nEach sample will receive different number of reads for sequencing, and that may confound the our desired measurement of log-fold change. The total number of reads a sample received for sequencing is called the library size.\nThe following plot is the plot of the expression counts for the Asl gene across all samples in our dataset grouped by time. There appears to be a difference in expression across the samples by timepoint, but is that due to the experimental condition (Day 0 is control, Day 8 is case), or due to the number of sequencing reads each sample received?\n\nexpression_plot &lt;- \n  GSE96870_Case_Control |&gt;\n    filter(.feature == \"Asl\") |&gt;\n    ggplot(aes(x = Label, y = counts, color = time)) +\n    geom_point() +\n    theme(axis.text.x = element_text(angle = 90)) + theme_minimal()\nexpression_plot\n\n\n\n\n\n\n\nThe issue is that the library sizes of each sample is different. If we compare the counts of each library, we’ll see they vary.\n\nlibrary(patchwork)\n\nexpression_plot &lt;- \n  GSE96870_Case_Control |&gt;\n    filter(.feature == \"Asl\") |&gt;\n    ggplot(aes(x = Label, y = counts, color = time)) +\n    geom_point() + theme_minimal() +\n    theme(axis.text.x = element_blank()) + \n    ggtitle(\"Asl Expression count\") \n\ncount_plot &lt;- \n  GSE96870_Case_Control |&gt;\n    group_by(Label, time) |&gt;\n    summarise(total_counts=sum(counts)) |&gt;\n    ggplot() +\n    aes(x=Label, y=total_counts, fill=time) +\n    geom_bar(stat=\"identity\") + theme_minimal() +\n    theme(axis.text.x = element_text(angle = 90)) +\n    ggtitle(\"Library Size for each Sample\") \n\ntidySummarizedExperiment says: A data frame is returned for independent data analysis.\n\n\n`summarise()` has grouped output by 'Label'. You can override using the\n`.groups` argument.\n\nexpression_plot/count_plot \n\n\n\n\n\n\n\nYou will notice that the counts for Asl across the samples vary by Library size (if you can’t see it, look at the patterns of ups and downs). For us to truly compare the expression differences between our timepoints in our samples, we need to remove the effect of library size before we make the comparison between case and control.\nThe easiest way to remove this confounder is to divide gene count of each sample by its respective total library size. However, there’s a second confounder that needs to be simultaneously addressed…\n\n4.5.2 RNA Composition\nThe second source of confounding has to do with the relative measurement of RNA-seq. Consider a single sample you just perforemd RNA-seq on. The assay provides a measure of the relative abundance of each gene in each RNA sample, but does not provide any measure of the total RNA output - it is a relative measurement. That is, the proportion of reads attributed to a given gene in a library depends on the expression properties of the whole sample rather than just the expression level of that gene.\nThen, if a small proportion of highly expressed genes consume a substantial proportion of the total library size for a particular sample, this will cause the remaining genes to be under-sampled for that sample, confounding our analysis analysis.\n\n\nSource: Harvard Bioinformatics Training. Imagine the sequencing depths are similar between Sample A and Sample B, and every gene except for gene differentially expressed presents similar expression level between samples. The counts in Sample B would be greatly skewed by the differentially expressed gene, which takes up most of the counts. Other genes for Sample B would therefore appear to be less expressed than those same genes in Sample A.\n\nThe way we deal with this type of confounding is to make the assumption that most genes do not exhibit differential expression. DESeq2 divides gene count of each sample by its “size factor”, which is related to the sample’s library size for non-differentially expressed genes. If you want to see how it is calculated, this is a great tutorial.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Experimental Design / QC</span>"
+    ]
+  },
+  {
+    "objectID": "02_week2.html#putting-this-together-in-practice",
+    "href": "02_week2.html#putting-this-together-in-practice",
+    "title": "\n4  Experimental Design / QC\n",
+    "section": "\n4.6 Putting this together in practice",
+    "text": "4.6 Putting this together in practice\nFirst, let’s do a little bit of clean up. Take a look at the total number of reads each gene received, and remove genes that just don’t have many reads across samples to be analyzed. Here’s the first five genes.\n\nrowSums(assay(GSE96870_Case_Control))[1:5]\n\n        Xkr4 LOC105243853 LOC105242387 LOC105242467          Rp1 \n       27023           12         2396           52           29 \n\n\nLet’s look at its distribution:\n\nsummary(rowSums(assay(GSE96870_Case_Control)))\n\n   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. \n      0       1      39   12144    5198 2042743 \n\n\nWe started with 42k genes:\n\ndim(assay(GSE96870_Case_Control))\n\n[1] 41786    14\n\n\nLet’s remove any genes from the analysis if they received less than 5 reads total across samples.\n\nGSE96870_filtered &lt;- GSE96870_Case_Control[rowSums(assay(GSE96870_Case_Control)) &gt;= 5, ]\n\ndim(assay(GSE96870_filtered))\n\n[1] 26818    14\n\n\nWhich reduced us to 27k genes.\nNow, let’s create a DESeq object from our SummarizedExperiment object and our experimental design. We need to provide an experimental design formula. The design formula should have all of the factors in your metadata that account for major sources of variation in your data.\nLet’s look at our metadata to remind us all the variables in there:\n\nas.data.frame(colData(GSE96870_filtered))\n\n                     title geo_accession     organism     age    sex\nGSM2545337 CNS_RNA-seq_11C    GSM2545337 Mus musculus 8 weeks Female\nGSM2545338 CNS_RNA-seq_12C    GSM2545338 Mus musculus 8 weeks Female\nGSM2545348 CNS_RNA-seq_27C    GSM2545348 Mus musculus 8 weeks Female\nGSM2545353  CNS_RNA-seq_3C    GSM2545353 Mus musculus 8 weeks Female\nGSM2545343 CNS_RNA-seq_20C    GSM2545343 Mus musculus 8 weeks   Male\nGSM2545349 CNS_RNA-seq_28C    GSM2545349 Mus musculus 8 weeks   Male\nGSM2545354  CNS_RNA-seq_4C    GSM2545354 Mus musculus 8 weeks   Male\nGSM2545336 CNS_RNA-seq_10C    GSM2545336 Mus musculus 8 weeks Female\nGSM2545342  CNS_RNA-seq_1C    GSM2545342 Mus musculus 8 weeks Female\nGSM2545351  CNS_RNA-seq_2C    GSM2545351 Mus musculus 8 weeks Female\nGSM2545380  CNS_RNA-seq_9C    GSM2545380 Mus musculus 8 weeks Female\nGSM2545341 CNS_RNA-seq_17C    GSM2545341 Mus musculus 8 weeks   Male\nGSM2545346 CNS_RNA-seq_25C    GSM2545346 Mus musculus 8 weeks   Male\nGSM2545347 CNS_RNA-seq_26C    GSM2545347 Mus musculus 8 weeks   Male\n             infection  strain time     tissue mouse          Label       Group\nGSM2545337 NonInfected C57BL/6 Day0 Cerebellum     9  Female_Day0_9 Female_Day0\nGSM2545338 NonInfected C57BL/6 Day0 Cerebellum    10 Female_Day0_10 Female_Day0\nGSM2545348 NonInfected C57BL/6 Day0 Cerebellum     8  Female_Day0_8 Female_Day0\nGSM2545353 NonInfected C57BL/6 Day0 Cerebellum     4  Female_Day0_4 Female_Day0\nGSM2545343 NonInfected C57BL/6 Day0 Cerebellum    11   Male_Day0_11   Male_Day0\nGSM2545349 NonInfected C57BL/6 Day0 Cerebellum     7    Male_Day0_7   Male_Day0\nGSM2545354 NonInfected C57BL/6 Day0 Cerebellum     2    Male_Day0_2   Male_Day0\nGSM2545336  InfluenzaA C57BL/6 Day8 Cerebellum    14 Female_Day8_14 Female_Day8\nGSM2545342  InfluenzaA C57BL/6 Day8 Cerebellum     5  Female_Day8_5 Female_Day8\nGSM2545351  InfluenzaA C57BL/6 Day8 Cerebellum    16 Female_Day8_16 Female_Day8\nGSM2545380  InfluenzaA C57BL/6 Day8 Cerebellum    19 Female_Day8_19 Female_Day8\nGSM2545341  InfluenzaA C57BL/6 Day8 Cerebellum     6    Male_Day8_6   Male_Day8\nGSM2545346  InfluenzaA C57BL/6 Day8 Cerebellum    23   Male_Day8_23   Male_Day8\nGSM2545347  InfluenzaA C57BL/6 Day8 Cerebellum    24   Male_Day8_24   Male_Day8\n\n\nThe variables that may contribute to variation to our data are: sex, time. There are variables such as infection, Label, Group that are encoded in Label and Group so we don’t need to include that information. The mouse variable is the unique identifier for each sample so that isn’t needed either.\nLet’s create our DESeq object using SummarizedExperiment object and our design formula.\n\nGSE96870_deseq &lt;- DESeqDataSet(GSE96870_filtered, design = ~ sex + time)\n\nWarning in DESeqDataSet(GSE96870_filtered, design = ~sex + time): some\nvariables in design formula are characters, converting to factors\n\n\nLet’s calculate our “size factor” to deal with the library size and RNA composition confounders via the estimateSizeFactors function. Afterwards, you can see the size factor on the rightmost column of our colData.\n\nGSE96870_normalized &lt;- estimateSizeFactors(GSE96870_deseq)\n\nas.data.frame(colData(GSE96870_normalized))\n\n                     title geo_accession     organism     age    sex\nGSM2545337 CNS_RNA-seq_11C    GSM2545337 Mus musculus 8 weeks Female\nGSM2545338 CNS_RNA-seq_12C    GSM2545338 Mus musculus 8 weeks Female\nGSM2545348 CNS_RNA-seq_27C    GSM2545348 Mus musculus 8 weeks Female\nGSM2545353  CNS_RNA-seq_3C    GSM2545353 Mus musculus 8 weeks Female\nGSM2545343 CNS_RNA-seq_20C    GSM2545343 Mus musculus 8 weeks   Male\nGSM2545349 CNS_RNA-seq_28C    GSM2545349 Mus musculus 8 weeks   Male\nGSM2545354  CNS_RNA-seq_4C    GSM2545354 Mus musculus 8 weeks   Male\nGSM2545336 CNS_RNA-seq_10C    GSM2545336 Mus musculus 8 weeks Female\nGSM2545342  CNS_RNA-seq_1C    GSM2545342 Mus musculus 8 weeks Female\nGSM2545351  CNS_RNA-seq_2C    GSM2545351 Mus musculus 8 weeks Female\nGSM2545380  CNS_RNA-seq_9C    GSM2545380 Mus musculus 8 weeks Female\nGSM2545341 CNS_RNA-seq_17C    GSM2545341 Mus musculus 8 weeks   Male\nGSM2545346 CNS_RNA-seq_25C    GSM2545346 Mus musculus 8 weeks   Male\nGSM2545347 CNS_RNA-seq_26C    GSM2545347 Mus musculus 8 weeks   Male\n             infection  strain time     tissue mouse          Label       Group\nGSM2545337 NonInfected C57BL/6 Day0 Cerebellum     9  Female_Day0_9 Female_Day0\nGSM2545338 NonInfected C57BL/6 Day0 Cerebellum    10 Female_Day0_10 Female_Day0\nGSM2545348 NonInfected C57BL/6 Day0 Cerebellum     8  Female_Day0_8 Female_Day0\nGSM2545353 NonInfected C57BL/6 Day0 Cerebellum     4  Female_Day0_4 Female_Day0\nGSM2545343 NonInfected C57BL/6 Day0 Cerebellum    11   Male_Day0_11   Male_Day0\nGSM2545349 NonInfected C57BL/6 Day0 Cerebellum     7    Male_Day0_7   Male_Day0\nGSM2545354 NonInfected C57BL/6 Day0 Cerebellum     2    Male_Day0_2   Male_Day0\nGSM2545336  InfluenzaA C57BL/6 Day8 Cerebellum    14 Female_Day8_14 Female_Day8\nGSM2545342  InfluenzaA C57BL/6 Day8 Cerebellum     5  Female_Day8_5 Female_Day8\nGSM2545351  InfluenzaA C57BL/6 Day8 Cerebellum    16 Female_Day8_16 Female_Day8\nGSM2545380  InfluenzaA C57BL/6 Day8 Cerebellum    19 Female_Day8_19 Female_Day8\nGSM2545341  InfluenzaA C57BL/6 Day8 Cerebellum     6    Male_Day8_6   Male_Day8\nGSM2545346  InfluenzaA C57BL/6 Day8 Cerebellum    23   Male_Day8_23   Male_Day8\nGSM2545347  InfluenzaA C57BL/6 Day8 Cerebellum    24   Male_Day8_24   Male_Day8\n           sizeFactor\nGSM2545337  0.9133349\nGSM2545338  0.8598908\nGSM2545348  1.0456296\nGSM2545353  1.1116468\nGSM2545343  1.1217156\nGSM2545349  1.0209117\nGSM2545354  0.9843337\nGSM2545336  1.1394808\nGSM2545342  0.8802526\nGSM2545351  1.0487852\nGSM2545380  1.1395748\nGSM2545341  0.8886238\nGSM2545346  0.9389596\nGSM2545347  1.0149250\n\n\nIf we divide counts by sizeFactor, then we get our scaled counts.\n\nexpression_plot &lt;- \n  GSE96870_Case_Control |&gt;\n    filter(.feature == \"Asl\") |&gt;\n    ggplot(aes(x = Label, y = counts, color = time)) +\n    geom_point() + scale_y_continuous(limits=c(400, 1100)) +\n   theme_minimal() + theme(axis.text.x = element_blank()) + \n    ggtitle(\"Asl Expression count\") \n\nexpression_normalized &lt;- GSE96870_normalized |&gt;\n    filter(.feature == \"Asl\") |&gt;\n    mutate(scaled = counts / sizeFactor) |&gt;\n    ggplot(aes(x = Label, y = scaled, color = time)) +\n    geom_point() + scale_y_continuous(limits=c(400, 1100)) +\n    theme_minimal() + theme(axis.text.x = element_blank()) + \n    ggtitle(\"Asl Expression count normalized\")\n\n(expression_plot + theme(legend.position = \"none\")) + expression_normalized\n\nWarning: Removed 3 rows containing missing values or values outside the scale range\n(`geom_point()`).\n\n\nWarning: Removed 2 rows containing missing values or values outside the scale range\n(`geom_point()`).\n\n\n\n\n\n\n\n\nAs you can see, some, but not all of the intra-timepoint variation was removed, especially within the Day0 timepoint.\nWhew, that’s all for experimental designs for now!\nHere’s a nice summary of what we covered to ensure good experimental designs: “Generally speaking, a well-designed experiment is one that [has enough samples] and one in which technical artifacts and biological features that may systematically affect measurements are balanced, randomized or controlled in some other way in order to minimize opportunities for multiple explanations for the effect(s) under study.” (Bacher and Kendziorski 2016)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Experimental Design / QC</span>"
+    ]
+  },
+  {
+    "objectID": "02_week2.html#appendix-how-do-i-know-how-many-samples-to-use",
+    "href": "02_week2.html#appendix-how-do-i-know-how-many-samples-to-use",
+    "title": "\n4  Experimental Design / QC\n",
+    "section": "\n4.7 Appendix: How do I know how many samples to use?",
+    "text": "4.7 Appendix: How do I know how many samples to use?\nDefine “power”:\nReference to some packages for power calculations, such as PROPER. Takes consideration of:\n\nNumber of samples\nNumber of genes measured\nNumber of genes significant\nEffect size of significant genes\np-value cutoff in multiple testing\nDefault datasets to simulate\n\nDefinition of power in multiple testing\n\nProbability we detect at least X% of genes that are truly different (at least some FC)\n\n\n\n\nlibrary(PROPER)\nsim.opts.Cheung = RNAseq.SimOptions.2grp(ngenes = 20000, p.DE=0.05, lOD=\"cheung\", lBaselineExpr=\"cheung\")\nsimres = runSims(Nreps = c(3, 5, 7, 10), sim.opts=sim.opts.Cheung, DEmethod=\"DESeq2\", nsims=5)\n\nSimulation number 1 \nSimulation number 2 \nSimulation number 3 \nSimulation number 4 \nSimulation number 5 \n\npowers = comparePower(simres, alpha.type=\"fdr\", alpha.nominal=0.1, stratify.by=\"expr\", delta=0.5)\nsummaryPower(powers)\n\n     SS1 SS2 Nominal FDR Actual FDR Marginal power Avg # of TD Avg # of FD  FDC\n[1,]   3   3         0.1       0.36           0.39          60          35 0.57\n[2,]   5   5         0.1       0.25           0.49          78          27 0.34\n[3,]   7   7         0.1       0.20           0.55          89          23 0.26\n[4,]  10  10         0.1       0.17           0.60          99          22 0.22\n\nplotPower(powers)\n\n\n\n\n\n\n\nThis suggests that you get more power out of more samples, rather than sequencing.\nThe most rigorous power benchmarks are to use controlled labatory experiments, with many samples and sequencing, and then downsample.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Experimental Design / QC</span>"
+    ]
+  },
+  {
+    "objectID": "02_week2.html#appendix-dimension-reduction-to-explore-your-data",
+    "href": "02_week2.html#appendix-dimension-reduction-to-explore-your-data",
+    "title": "\n4  Experimental Design / QC\n",
+    "section": "\n4.8 Appendix: Dimension Reduction to explore your data",
+    "text": "4.8 Appendix: Dimension Reduction to explore your data",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Experimental Design / QC</span>"
+    ]
+  },
+  {
+    "objectID": "02_week2.html#appendix-other-confounding-factors-to-consider",
+    "href": "02_week2.html#appendix-other-confounding-factors-to-consider",
+    "title": "\n4  Experimental Design / QC\n",
+    "section": "\n4.9 Appendix: Other confounding factors to consider",
+    "text": "4.9 Appendix: Other confounding factors to consider\n\nUnobserved confounders\nAre the demarcation of groups I’m comparing is independent of my molecular measurements? (double dipping): https://stat.uw.edu/seminars/double-dipping-problems-and-solutions-application-single-cell-rna-sequencing-data, https://anna-neufeld.github.io/datathin/",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Experimental Design / QC</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html",
+    "href": "03-differential-expression.html",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "",
+    "text": "5.1 Learning Objectives\nLast week we talked about Experimental Design. This week we’re going to apply that knowledge to finding differential expressed genes or transcripts - finding those genes or transcripts that are expressed differently between groups in our experimental design.\nThat is, in general, are there genes for the samples in group A that have different counts than the samples in group B?\nWe’ll Explore the DESeq2 package as one method to find differentially expressed genes. There is also the edgeR package.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#learning-objectives",
+    "href": "03-differential-expression.html#learning-objectives",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "",
+    "text": "Explore model results in DESeq2 and gain intuition for what the statistical model is doing\n\nExplain diagnosis plots such as Dispersion and MA plots and interpret them\n\nExplain the role of each DESeq2 step\n\nExtract DESeq2 results given a specific contrast for comparison\n\nPlot a Volcano plot and interpret it",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#deseq2-functions",
+    "href": "03-differential-expression.html#deseq2-functions",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "\n5.2 DESeq2 Functions",
+    "text": "5.2 DESeq2 Functions\nThese are the functions from the DESeq2 packages that we will cover\n\n\n\n\n\n\nStage\nFunction\n\n\n\nFilter low expressedcandidates\nrowSums() &lt; 5\n\n\nEstimate size factorsto normalize by librarysize\nestimateSizeFactors()\n\n\nEstimate dispersion function\n\nestimateDispersion(),plotDispEstimates()\n\n\n\nFit model to negative binomial distribution\nnbinomWaldTest()\n\n\nReturn model statistics given contrast\nresults()\n\n\nReturn Shrinkage Estimates\n\nshrinkage(), plotMA()\n\n\n\nPlot Volcano Plot of results\nEnhancedVolcano()\n\n\n\n\n\n\n\n\n\nAm I doing this right?\n\n\n\nIf you are new to differential expression, it is worth talking with the Bioinformatics Core about your experimental design and how to set up your model matrix and contrasts.\nYou did consult with them about the experimental design of your experiment before you sent the samples to be processed, I hope.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#setup",
+    "href": "03-differential-expression.html#setup",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "\n5.3 Setup",
+    "text": "5.3 Setup\nRemember, we started with a SummarizedExperiment object and now we have to transform it into an object that is usable with DESeq2.\n\nlibrary(SummarizedExperiment)\nlibrary(tidySummarizedExperiment)\nlibrary(tidyverse)\nlibrary(DESeq2)\n\nGSE96870 &lt;- readRDS(\"data/GSE96870_se.rds\")",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#deseq",
+    "href": "03-differential-expression.html#deseq",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "\n5.4 DESeq",
+    "text": "5.4 DESeq\nLast week, we talked about the uneven library sizes and how they can affect our expression estimates for each sample. Our solution to this was to scale each sample and expression estimates so the had the same library size.\n\n\ntidySummarizedExperiment says: A data frame is returned for independent data analysis.\n\n\n\n\n\n\n\n\nWarning in DESeq2::DESeqDataSet(GSE96870_filtered, design = ~sex + time): some\nvariables in design formula are characters, converting to factors\n\n\n# A SummarizedExperiment-tibble abstraction: 603,460 × 9\n# Features=27430 | Samples=22 | Assays=counts\n   .feature     .sample    counts sizeFactor seqnames  start    end width strand\n   &lt;chr&gt;        &lt;chr&gt;       &lt;int&gt;      &lt;dbl&gt; &lt;fct&gt;     &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;fct&gt; \n 1 Xkr4         GSM2545337   2410      0.909 1        3.67e6 3.67e6  1191 -     \n 2 LOC105243853 GSM2545337      0      0.909 1        3.36e6 3.37e6  9183 +     \n 3 LOC105242387 GSM2545337    121      0.909 1        3.66e6 3.67e6 11610 -     \n 4 LOC105242467 GSM2545337      5      0.909 1        4.23e6 4.23e6   293 -     \n 5 Rp1          GSM2545337      2      0.909 1        4.41e6 4.41e6    72 -     \n 6 Sox17        GSM2545337    239      0.909 1        4.50e6 4.50e6  1064 -     \n 7 Gm7357       GSM2545337      0      0.909 1        4.52e6 4.52e6   775 +     \n 8 LOC105243855 GSM2545337      3      0.909 1        4.59e6 4.59e6   801 -     \n 9 Gm6123       GSM2545337      7      0.909 1        4.77e6 4.77e6  1289 +     \n10 Mrpl15       GSM2545337   1019      0.909 1        4.79e6 4.79e6   154 -     \n# ℹ 40 more rows\n\n\n\n\n\n\n\n\n\n\nAs you can see, some, but not all of the intra-timepoint variation was removed, especially within the Day0 timepoint. We will attempt to account for this variability in our model.\nThis week we’ll talk about the model fitting procedure, which includes estimating the dispersion of the data, and conducting the statistical test.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#the-general-differential-expression-workflow",
+    "href": "03-differential-expression.html#the-general-differential-expression-workflow",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "\n5.5 The General Differential Expression Workflow",
+    "text": "5.5 The General Differential Expression Workflow\nIn the general workflow, we are in the grey box below.\n\n\n\n\n\ngraph TD\nA[Reading in Data] --&gt; B\nB[Metadata] --&gt; C\nC[Data Exploration] --&gt; D\nsubgraph DESeq2\nD[Filtering and Normalization] --&gt; E\nE[Design Matrix] --&gt; F\nF[Dispersion Estimation] --&gt; G\nG[Differential Expression]\nend\nG --&gt; H[Annotation and Gene Set Analysis]\nG --&gt; I[Clustering and Visualization]\nG --&gt; J[Pathway and Network Analysis]\nclassDef box fill:#DDD\nclass DESeq2 box",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#what-groups-are-we-going-to-compare",
+    "href": "03-differential-expression.html#what-groups-are-we-going-to-compare",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "\n5.6 What groups are we going to compare?",
+    "text": "5.6 What groups are we going to compare?\nIn our analysis, we are going to compare the two timepoints in our study: Day0 and Day8.\nWe want to find genes that have expression differences between these two timepoints.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#filtering-and-normalization",
+    "href": "03-differential-expression.html#filtering-and-normalization",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "\n5.7 Filtering and Normalization",
+    "text": "5.7 Filtering and Normalization\nWe already talked about filtering out low expression counts and normalizing by library size in the previous week.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#modeling-to-identify-candidate-genes",
+    "href": "03-differential-expression.html#modeling-to-identify-candidate-genes",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "\n5.8 Modeling to Identify Candidate Genes",
+    "text": "5.8 Modeling to Identify Candidate Genes\nWhen we are calculating differential expression, we are using our model fitting as a filter for good and bad candidates. Our statistical test will generate a p-value, and we somehow use this p-value as a filtering criteria.\nWe have two ways of filtering candidates:\n\nFilter by Mean Fold Change in expression (see below section)\nFilter by model fit (p-value)\n\nSo far, so good. What some things that might make the modeling difficult?\n\nVariation in library size (handled by normalization)\nLow expression counts or zero expression counts (handled by modeling)\n\nWe’ll explore the distinctions the model makes in the next section.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#fold-change",
+    "href": "03-differential-expression.html#fold-change",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "\n5.9 Fold Change",
+    "text": "5.9 Fold Change\nFold change represents the effect size, or our expression difference.\nWe calculate fold change by taking the mean expression for group 1 (Day0) and dividing it from the mean expression for group 2 (Day8).\nFor example, for Asl:\n\nGSE_means &lt;- GSE96870_normalized |&gt;\n  filter(time %in% c(\"Day0\", \"Day8\")) |&gt;\n  filter(.feature == \"Asl\") |&gt;\n  mutate(scaled = counts / sizeFactor, time=factor(time)) |&gt;\n  group_by(time) |&gt;\n  summarize(mean_expression = mean(scaled))\n\ntidySummarizedExperiment says: A data frame is returned for independent data analysis.\n\nGSE96870_normalized |&gt;\n    filter(.feature == \"Asl\") |&gt;\n     filter(time %in% c(\"Day0\", \"Day8\")) |&gt;\n    mutate(scaled = counts / sizeFactor) |&gt;\n    ggplot() +\n    geom_point(aes(x=time, y=scaled, color=time)) +\n    geom_errorbar(mapping=aes(x=time, \n                              ymin=mean_expression, \n                              ymax=mean_expression), \n                  data=GSE_means) +\n  annotate(geom=\"text\", x=1.2, y=490, label=\"Mean Day0\") +\n    annotate(geom=\"text\", x=2.2, y=1030, label=\"Mean Day8\") \n\n\n\n\n\n\n\nLet’s calculate the mean expression by time:\n\nGSE_means &lt;- GSE96870_normalized |&gt;\n  filter(time %in% c(\"Day0\", \"Day8\")) |&gt;\n  filter(.feature == \"Asl\") |&gt;\n  mutate(scaled = counts / sizeFactor, time=factor(time)) |&gt;\n  group_by(time) |&gt;\n  summarize(mean_expression = mean(scaled))\n\ntidySummarizedExperiment says: A data frame is returned for independent data analysis.\n\nGSE_means\n\n# A tibble: 2 × 2\n  time  mean_expression\n  &lt;fct&gt;           &lt;dbl&gt;\n1 Day0             466.\n2 Day8            1012.\n\n\nTo calculate the fold-change, we divide day8 mean expression (1012) by day0 mean expression (466), getting a fold change of 2.2. The positive value means that mean(day0) &lt; mean(day8).\nNote that a negative fold change means that the fold change is in the opposite direction: mean(day0) &gt; mean(day8).\nOne thing to note: for DESeq2, we don’t use the mean expression this way. We first need to fit the data using negative binomial distributions, and then report the fold change using the parameters of these distributions.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#volcano-plot",
+    "href": "03-differential-expression.html#volcano-plot",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "\n5.10 Volcano Plot",
+    "text": "5.10 Volcano Plot\nBelow is a Shiny app that lets you explore the two groups in our data, day0, and day8. Be patient, it takes a moment to load.\nVolcano plots are one way of displaying our results of differential expression analysis. They are a little bit hard to understand because they are on log scale, so let’s review what these axes represent.\n\nOn our x-axis, Log2 fold expression. A handy rule of thumb is that a fold change of 2 means log2(2) = 1 on our axes.\nOn our y-axis, -log2 p-value. The thing to remember, is as log2pvalue goes up, the lower the p-value.\n\nWe often put lines at log2foldchange = 1 and -1, and a line at log2(0.05), or our threshold for the p-value.\n\n\n\n\n\n\n\nExercise\n\n\n\n\nPick a high fold change / high log2pvalue candidate and click on it. Do you agree that it is a good expression candidate? Look at the overlap in expression values.\nPick a couple of high fold change / low log2pvalue candidates. Do you agree they are bad candidates? Why?\nPick one of the lowest p-value candidates and look at the expression differences.\n\n\n\nIt’s important to have an intuition for how the model is discriminating between expression candidates.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#estimating-dispersions-in-the-model",
+    "href": "03-differential-expression.html#estimating-dispersions-in-the-model",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "\n5.11 Estimating Dispersions in the model",
+    "text": "5.11 Estimating Dispersions in the model\nThe main thing we are fitting is the dispersion of the data, which is like the variance of the data. We do this by estimating a function to our data.\nOur function depends on the mean expression count of our candidate. That means we actually look across all genes that have a similar mean expression and use it to estimate the function, instead of a single gene.\nThe main thing to remember is that lower expression values are less reliable than the higher expression values. They will have an overall higher dispersion, and thus are more likely to be false positives:\nWe use estimateDispersions() in DESeq2 to fit our model.\n\nGSE96970_est &lt;- DESeq2::estimateDispersions(GSE96870_normalized)\n\ngene-wise dispersion estimates\n\n\nmean-dispersion relationship\n\n\nfinal dispersion estimates\n\nplotDispEsts(GSE96970_est)\n\n\n\n\n\n\n\nLet’s dive more into this plot. Each point represents the dispersion.\nOur model fits the overall dispersion across all genes and all mean expression counts.\nOur beginning points are highlighted in black. After fitting, our points become those in blue. Notice that our dispersion estimates are actually “shrinking”, especially for those candidates that have high dispersion.\nThis is a good plot to examine to ensure your data is a good fit for the DESeq2 model. Evaluate the plot to see if:\n\nThe data to generally scatter around the curve, with the dispersion decreasing with increasing mean expression levels.\nHow much shrinkage you get across the whole range of means in your data. For any experiment with low degrees of freedom, you will expect to see more shrinkage.\nThe data scatter in a cloud or different shapes, then you might want to explore your data more to see if you have contamination (mitochondrial, etc.) or outlier samples.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#model-fitting",
+    "href": "03-differential-expression.html#model-fitting",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "\n5.12 Model Fitting",
+    "text": "5.12 Model Fitting\nAfter calculating dispersion, the next step is to actually conduct the statistical test. This is done with a negative binomial test called the Wald test.\nThe Wald test incorporates the sizeFactors, the dispersion estimates, and the design matrix to model the data. The model is estimating the Fold Change of our gene candidates given this information.\nRemember, we are working towards identifying candidates that meet our log fold-change requirements and our model statistic.\n\nmodel_fit &lt;- DESeq2::nbinomWaldTest(GSE96970_est)\n\nAfter running the statistical test, we need to extract the comparison we’re interested in using the results() function. We need to specify the comparison and groups we’re interested in to the contrast argument, and can specify a log2 Fold Change threshold as an argument, as well as an alpha (significance cutoff).\nHere we are choosing a log2FC of 0.5 (which corresponds to a fold change of 2).\n\nGSE_results &lt;- DESeq2::results(model_fit, \n                               contrast = c(\"time\", \"Day8\", \"Day0\"), \n                               lfcThreshold = 1,\n                               alpha = 0.05)\nsummary(GSE_results)\n\n\nout of 27430 with nonzero total read count\nadjusted p-value &lt; 0.05\nLFC &gt; 1.00 (up)    : 34, 0.12%\nLFC &lt; -1.00 (down) : 31, 0.11%\noutliers [1]       : 10, 0.036%\nlow counts [2]     : 3723, 14%\n(mean count &lt; 1)\n[1] see 'cooksCutoff' argument of ?results\n[2] see 'independentFiltering' argument of ?results\n\nshrinkage &lt;- lfcShrink(model_fit, coef=\"time_Day8_vs_Day0\", lfcThreshold = 0.5)\n\nusing 'apeglm' for LFC shrinkage. If used in published research, please cite:\n    Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for\n    sequence count data: removing the noise and preserving large differences.\n    Bioinformatics. https://doi.org/10.1093/bioinformatics/bty895\n\n\ncomputing FSOS 'false sign or small' s-values (T=0.5)\n\n\nLooking at this result set, we see that we have 34 candidates with fold change &gt; 2, and 31 candidates with fold change &lt; 2, that meet our alpha cutoff of 0.05. Our original fold change",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#shrinkage-of-fold-change-estimates",
+    "href": "03-differential-expression.html#shrinkage-of-fold-change-estimates",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "\n5.13 Shrinkage of Fold Change estimates",
+    "text": "5.13 Shrinkage of Fold Change estimates\nThe model that we use in DESeq2 is to fit negative binomial distributions to the data. This is because:\n\nOur data begins at 0 and goes up\nIt is skewed (most of the genes have very low expression)\n\nWe incorporate the shrinkage information into our model. In effect, shrinkage reduces the fold-change estimates, but biased towards the high dispersion candidates.\nGenes with high dispersion experience the most amount of shrinkage. They actually pay a penalty in that their fold-change estimates shrink. The crucial thing to note is that low dispersion candidates experience very little shrinkage.\nWe can visualize the shrinkage directly by plotting before (black) and after (blue) fold change vs p-value.\n\n\nWarning: Removed 1 row containing missing values or values outside the scale range\n(`geom_point()`).\nRemoved 1 row containing missing values or values outside the scale range\n(`geom_point()`).\n\n\nWarning: Removed 1 row containing missing values or values outside the scale range\n(`geom_segment()`).\n\n\n\n\n\n\n\n\nAnother way to visualize shrinkage is with an MA plot - this plots the log2 fold change on the y-axis and mean of normalized counts on the y-axis.\n\nplotMA(GSE_results, main= \"Before Shrinkage\")\n\n\n\n\n\n\n\nBefore shrinkage, we can see there are a lot of high fold change candidates at low normalized counts. Compare this to after shrinkage:\n\nplotMA(shrinkage, main=\"After Shrinkage\")\n\nthresholding s-values on alpha=0.005 to color points\n\n\n\n\n\n\n\n\nWe can see that the shrinkage procedure has shrunk a lot of these high-fold change candidates at lower counts - notice the low counts look “tighter”.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#adjustment-for-multiple-comparisons",
+    "href": "03-differential-expression.html#adjustment-for-multiple-comparisons",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "\n5.14 Adjustment for multiple comparisons",
+    "text": "5.14 Adjustment for multiple comparisons\nThe last thing we need to do is adjust our p-values for multiple comparisons. We are doing over 20,000 statistical tests, and with each test we make, the probability that we have a false discovery increase. So we need a way to correct for multiple comparisons.\nWe adjust our p-value distribution using what’s called a FDR (False discovery rate) procedure. Here is the original p-value distribution, and the p-value distribution after adjustment.\n\nbefore &lt;- GSE_results |&gt;\n  ggplot() +\n  geom_histogram(aes(x=pvalue), fill=\"black\", alpha=0.5, bins=40) +\n  xlab(\"original p-value\") +\n  ylab(\"log2 Fold Change\")\n\nafter &lt;- GSE_results |&gt;\n  ggplot() +\n  geom_histogram(aes(x=padj), fill=\"blue\", alpha=0.5, bins=40) +\n  xlab(\"adjusted p-value\") +\n  ylab(\"log2 Fold Change\")\n\nbefore / after\n\nWarning: Removed 10 rows containing non-finite outside the scale range\n(`stat_bin()`).\n\n\nWarning: Removed 3733 rows containing non-finite outside the scale range\n(`stat_bin()`).\n\n\n\n\n\n\n\n\nNote that a lot of p-values get pushed towards a value of 1 - a lot more than the untransformed p-values.\nThe main thing to understand about this adjustment procedure is that it reduces the proportion of False Discoveries - which are candidates we think pass the p-value threshold but are not real discoveries. False discoveries are similar to False Positives, but with a different prioritization framework.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#going-back-to-volcano-plots",
+    "href": "03-differential-expression.html#going-back-to-volcano-plots",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "\n5.15 Going back to Volcano Plots",
+    "text": "5.15 Going back to Volcano Plots\nThis is beginning to look familiar, doesn’t it? If we transform padj by taking the -log10, we arrive at our transformed volcano plot:\n\nGSE_results |&gt;\n  ggplot() +\n  geom_point(aes(y=-log10(padj), x=log2FoldChange), color=\"black\") +\n  geom_hline(yintercept = -log10(0.05), lty=2) +\n  annotate(geom=\"text\", x=0, y=0.1, label=\"alpha\") +\n  xlab(\"log2 fold change\") +\n  geom_vline(xintercept = -1) +\n  geom_vline(xintercept = 1)\n\nWarning: Removed 3733 rows containing missing values or values outside the scale range\n(`geom_point()`).\n\n\n\n\n\n\n\n\nThis may not look like volcano plots you have seen before. Most volcano plots, we don’t show the transformed p-values or shrunken fold changes.\n\nGSE_results |&gt;\n  ggplot() +\n  geom_point(aes(y=-log10(pvalue), x=log2FoldChange), color=\"black\", alpha=0.5) +\n  geom_hline(yintercept = -log10(0.05), lty=2) +\n  annotate(geom=\"text\", x=0, y=0.1, label=\"alpha\") +\n  xlab(\"log2 fold change\") +\n  geom_vline(xintercept = -1) +\n  geom_vline(xintercept = 1)\n\nWarning: Removed 10 rows containing missing values or values outside the scale range\n(`geom_point()`).",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#enhancedvolcano",
+    "href": "03-differential-expression.html#enhancedvolcano",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "\n5.16 EnhancedVolcano",
+    "text": "5.16 EnhancedVolcano\nThere is a package called EnhancedVolcano that lets you plot volcano plots.\n\nlibrary(EnhancedVolcano)\n\nLoading required package: ggrepel\n\nEnhancedVolcano(GSE_results,  \n                lab = rownames(GSE_results),\n                x = 'log2FoldChange',\n                y = 'pvalue')\n\n\n\n\n\n\n\nThe plots are highly customizable, as you can see from the above link.\n\nEnhancedVolcano(GSE_results,  \n                lab = rownames(GSE_results),\n                x = 'log2FoldChange',\n                y = 'pvalue',\n                title=\"Day 0 vs Day 8\",\n                pCutoff = 1e-4,\n                FCcutoff= 2,\n                col=c('black', 'black', 'black', 'red3'),\n                colAlpha = 0.5)",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#the-entire-deseq2-workflow",
+    "href": "03-differential-expression.html#the-entire-deseq2-workflow",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "\n5.17 The Entire DESeq2 workflow",
+    "text": "5.17 The Entire DESeq2 workflow\nWe have taken apart the Differential expression process, but as you analyze your data, all of this is done within the DESeq() function:\n\nGSE96870_deseq &lt;- \n  DESeqDataSet(GSE96870, design = ~ sex + time)  #make DESeqDataset\n\nWarning in DESeqDataSet(GSE96870, design = ~sex + time): some variables in\ndesign formula are characters, converting to factors\n\nGSE96870_filtered &lt;- GSE96870_deseq[rowSums(assay(GSE96870_deseq)) &gt; 5,] #filter out low expressing candidates\n\nGSE96870_fit &lt;- DESeq(GSE96870_filtered) #run estimateSizeFactors, estimateDispersions, nbinomialWaldTest\n\nestimating size factors\n\n\nestimating dispersions\n\n\ngene-wise dispersion estimates\n\n\nmean-dispersion relationship\n\n\nfinal dispersion estimates\n\n\nfitting model and testing\n\nGSE_results &lt;- results(GSE96870_fit, \n                       contrast = c(\"time\", \"Day8\", \"Day0\"), \n                       lfcThreshold = 1,\n                       alpha = 0.05) #calculate results from the contrast\n\nEnhancedVolcano(GSE_results,  \n                lab = rownames(GSE_results),\n                x = 'log2FoldChange',\n                y = 'pvalue')",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
+    ]
+  },
+  {
+    "objectID": "03-differential-expression.html#take-home-points",
+    "href": "03-differential-expression.html#take-home-points",
+    "title": "\n5  Differential Expression using DESeq2/edgeR\n",
+    "section": "\n5.18 Take Home Points",
+    "text": "5.18 Take Home Points\n\nFold change represents the effect size - the mean expression value of 1 group divided by the mean expression value of the 2nd group.\nWe need to filter out those genes with low expression (low count number) before we run analysis.\nCount Data must be normalized by the library size to compare across samples.\nWe model data using the negative binomial distributions, and use the models to find expression differences.\nThere are two quantities we adjust during the modeling procedure:\n\n\nFold change using our dispersion estimation / shrinkage procedure, which penalizes lower count candidates by shrinking their fold change. Low dispersion candidates are not as penalized as much by the shrinkage procedure\n\nP-values using False Discovery Rate Adjustment, which adjusts for multiple comparisons\n\n\nIn the end, we have high fold-change, low p-value candidates for further downstream analysis.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Differential Expression using DESeq2/edgeR</span>"
     ]
   }
 ]

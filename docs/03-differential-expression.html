@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.6.42">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Differential Expression using DESeq2/edgeR</title>
+<title>5&nbsp; Differential Expression using DESeq2/edgeR – Bioconductor for Genomics</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -53,45 +53,148 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 </style>
 
-<script src="03-differential-expression_files/libs/clipboard/clipboard.min.js"></script>
-<script src="03-differential-expression_files/libs/quarto-html/quarto.js"></script>
-<script src="03-differential-expression_files/libs/quarto-html/popper.min.js"></script>
-<script src="03-differential-expression_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="03-differential-expression_files/libs/quarto-html/anchor.min.js"></script>
-<link href="03-differential-expression_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="03-differential-expression_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="03-differential-expression_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="03-differential-expression_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="03-differential-expression_files/libs/bootstrap/bootstrap-0b9e35696ea153a55a49e2492062f191.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script src="03-differential-expression_files/libs/quarto-diagram/mermaid.min.js"></script><script src="03-differential-expression_files/libs/quarto-diagram/mermaid-init.js"></script><link href="03-differential-expression_files/libs/quarto-diagram/mermaid.css" rel="stylesheet">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./02_week2.html" rel="prev">
+<link href="./img/favicon.ico" rel="icon">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-a1c1d0abbd8b67b8b47aad02bae1bfc9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><script src="site_libs/quarto-diagram/mermaid.min.js"></script><script src="site_libs/quarto-diagram/mermaid-init.js"></script><link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="nav-sidebar floating">
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-  <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./03-differential-expression.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Differential Expression using DESeq2/edgeR</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="https://hutchdatascience.org/" class="sidebar-logo-link">
+      <img src="./img/logo.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none"></a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Bioconductor for Genomics</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/fhdsl/bioconductor_genomics" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Bioconductor for Genomics</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./00_concepts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">RNAseq Concepts</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Introduction: Bioconductor S4 Objects / <code>SummarizedExperiment</code></span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_week2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Experimental Design / QC</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-differential-expression.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Differential Expression using DESeq2/edgeR</span></span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#deseq" id="toc-deseq" class="nav-link" data-scroll-target="#deseq">DESeq</a></li>
-  <li><a href="#the-general-differential-expression-workflow" id="toc-the-general-differential-expression-workflow" class="nav-link" data-scroll-target="#the-general-differential-expression-workflow">The General Differential Expression Workflow</a></li>
-  <li><a href="#what-groups-are-we-going-to-compare" id="toc-what-groups-are-we-going-to-compare" class="nav-link" data-scroll-target="#what-groups-are-we-going-to-compare">What groups are we going to compare?</a></li>
-  <li><a href="#filtering-and-normalization" id="toc-filtering-and-normalization" class="nav-link" data-scroll-target="#filtering-and-normalization">Filtering and Normalization</a></li>
-  <li><a href="#modeling-to-identify-candidate-genes" id="toc-modeling-to-identify-candidate-genes" class="nav-link" data-scroll-target="#modeling-to-identify-candidate-genes">Modeling to Identify Candidate Genes</a></li>
-  <li><a href="#fold-change" id="toc-fold-change" class="nav-link" data-scroll-target="#fold-change">Fold Change</a></li>
-  <li><a href="#volcano-plot" id="toc-volcano-plot" class="nav-link" data-scroll-target="#volcano-plot">Volcano Plot</a></li>
-  <li><a href="#estimating-dispersions-in-the-model" id="toc-estimating-dispersions-in-the-model" class="nav-link" data-scroll-target="#estimating-dispersions-in-the-model">Estimating Dispersions in the model</a></li>
-  <li><a href="#model-fitting" id="toc-model-fitting" class="nav-link" data-scroll-target="#model-fitting">Model Fitting</a></li>
-  <li><a href="#shrinkage-of-fold-change-estimates" id="toc-shrinkage-of-fold-change-estimates" class="nav-link" data-scroll-target="#shrinkage-of-fold-change-estimates">Shrinkage of Fold Change estimates</a></li>
-  <li><a href="#adjustment-for-multiple-comparisons" id="toc-adjustment-for-multiple-comparisons" class="nav-link" data-scroll-target="#adjustment-for-multiple-comparisons">Adjustment for multiple comparisons</a></li>
-  <li><a href="#going-back-to-volcano-plots" id="toc-going-back-to-volcano-plots" class="nav-link" data-scroll-target="#going-back-to-volcano-plots">Going back to Volcano Plots</a></li>
-  <li><a href="#enhancedvolcano" id="toc-enhancedvolcano" class="nav-link" data-scroll-target="#enhancedvolcano">EnhancedVolcano</a></li>
-  <li><a href="#the-entire-deseq2-workflow" id="toc-the-entire-deseq2-workflow" class="nav-link" data-scroll-target="#the-entire-deseq2-workflow">The Entire <code>DESeq2</code> workflow</a></li>
-  <li><a href="#take-home-points" id="toc-take-home-points" class="nav-link" data-scroll-target="#take-home-points">Take Home Points</a></li>
-  </ul></nav>
-</div>
+<li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">5.1</span> Learning Objectives</a></li>
+  <li><a href="#deseq2-functions" id="toc-deseq2-functions" class="nav-link" data-scroll-target="#deseq2-functions"><span class="header-section-number">5.2</span> DESeq2 Functions</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">5.3</span> Setup</a></li>
+  <li><a href="#deseq" id="toc-deseq" class="nav-link" data-scroll-target="#deseq"><span class="header-section-number">5.4</span> DESeq</a></li>
+  <li><a href="#the-general-differential-expression-workflow" id="toc-the-general-differential-expression-workflow" class="nav-link" data-scroll-target="#the-general-differential-expression-workflow"><span class="header-section-number">5.5</span> The General Differential Expression Workflow</a></li>
+  <li><a href="#what-groups-are-we-going-to-compare" id="toc-what-groups-are-we-going-to-compare" class="nav-link" data-scroll-target="#what-groups-are-we-going-to-compare"><span class="header-section-number">5.6</span> What groups are we going to compare?</a></li>
+  <li><a href="#filtering-and-normalization" id="toc-filtering-and-normalization" class="nav-link" data-scroll-target="#filtering-and-normalization"><span class="header-section-number">5.7</span> Filtering and Normalization</a></li>
+  <li><a href="#modeling-to-identify-candidate-genes" id="toc-modeling-to-identify-candidate-genes" class="nav-link" data-scroll-target="#modeling-to-identify-candidate-genes"><span class="header-section-number">5.8</span> Modeling to Identify Candidate Genes</a></li>
+  <li><a href="#fold-change" id="toc-fold-change" class="nav-link" data-scroll-target="#fold-change"><span class="header-section-number">5.9</span> Fold Change</a></li>
+  <li><a href="#volcano-plot" id="toc-volcano-plot" class="nav-link" data-scroll-target="#volcano-plot"><span class="header-section-number">5.10</span> Volcano Plot</a></li>
+  <li><a href="#estimating-dispersions-in-the-model" id="toc-estimating-dispersions-in-the-model" class="nav-link" data-scroll-target="#estimating-dispersions-in-the-model"><span class="header-section-number">5.11</span> Estimating Dispersions in the model</a></li>
+  <li><a href="#model-fitting" id="toc-model-fitting" class="nav-link" data-scroll-target="#model-fitting"><span class="header-section-number">5.12</span> Model Fitting</a></li>
+  <li><a href="#shrinkage-of-fold-change-estimates" id="toc-shrinkage-of-fold-change-estimates" class="nav-link" data-scroll-target="#shrinkage-of-fold-change-estimates"><span class="header-section-number">5.13</span> Shrinkage of Fold Change estimates</a></li>
+  <li><a href="#adjustment-for-multiple-comparisons" id="toc-adjustment-for-multiple-comparisons" class="nav-link" data-scroll-target="#adjustment-for-multiple-comparisons"><span class="header-section-number">5.14</span> Adjustment for multiple comparisons</a></li>
+  <li><a href="#going-back-to-volcano-plots" id="toc-going-back-to-volcano-plots" class="nav-link" data-scroll-target="#going-back-to-volcano-plots"><span class="header-section-number">5.15</span> Going back to Volcano Plots</a></li>
+  <li><a href="#enhancedvolcano" id="toc-enhancedvolcano" class="nav-link" data-scroll-target="#enhancedvolcano"><span class="header-section-number">5.16</span> EnhancedVolcano</a></li>
+  <li><a href="#the-entire-deseq2-workflow" id="toc-the-entire-deseq2-workflow" class="nav-link" data-scroll-target="#the-entire-deseq2-workflow"><span class="header-section-number">5.17</span> The Entire <code>DESeq2</code> workflow</a></li>
+  <li><a href="#take-home-points" id="toc-take-home-points" class="nav-link" data-scroll-target="#take-home-points"><span class="header-section-number">5.18</span> Take Home Points</a></li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/fhdsl/bioconductor_genomics/edit/main/03-differential-expression.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
+    </div>
+<!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title">Differential Expression using DESeq2/edgeR</h1>
+<h1 class="title">
+<span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Differential Expression using DESeq2/edgeR</span>
+</h1>
 </div>
 
 
@@ -105,9 +208,70 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   
 
 
-</header><p>Last week we talked about Experimental Design. This week we’re going to apply that knowledge to finding <em>differential expressed</em> genes or transcripts - finding those genes or transcripts that are expressed differently between groups in our experimental design.</p>
+</header><section id="learning-objectives" class="level2" data-number="5.1"><h2 data-number="5.1" class="anchored" data-anchor-id="learning-objectives">
+<span class="header-section-number">5.1</span> Learning Objectives</h2>
+<ul>
+<li>
+<strong>Explore</strong> model results in <code>DESeq2</code> and <strong>gain intuition</strong> for what the statistical model is doing</li>
+<li>
+<strong>Explain</strong> diagnosis plots such as Dispersion and MA plots and <strong>interpret</strong> them</li>
+<li>
+<strong>Explain</strong> the role of each <code>DESeq2</code> step</li>
+<li>
+<strong>Extract</strong> <code>DESeq2</code> results given a specific contrast for comparison</li>
+<li>
+<strong>Plot</strong> a Volcano plot and <strong>interpret</strong> it</li>
+</ul>
+<p>Last week we talked about Experimental Design. This week we’re going to apply that knowledge to finding <em>differential expressed</em> genes or transcripts - finding those genes or transcripts that are expressed differently between groups in our experimental design.</p>
 <p>That is, in general, are there genes for the samples in group A that have different counts than the samples in group B?</p>
 <p>We’ll Explore the <code>DESeq2</code> package as one method to find differentially expressed genes. There is also the <code>edgeR</code> package.</p>
+</section><section id="deseq2-functions" class="level2" data-number="5.2"><h2 data-number="5.2" class="anchored" data-anchor-id="deseq2-functions">
+<span class="header-section-number">5.2</span> DESeq2 Functions</h2>
+<p>These are the functions from the <code>DESeq2</code> packages that we will cover</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 53%">
+<col style="width: 46%">
+</colgroup>
+<thead><tr class="header">
+<th>Stage</th>
+<th>Function</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Filter low expressed<br>candidates</td>
+<td><code>rowSums() &lt; 5</code></td>
+</tr>
+<tr class="even">
+<td>Estimate size factors<br>to normalize by library<br>size</td>
+<td><code>estimateSizeFactors()</code></td>
+</tr>
+<tr class="odd">
+<td>Estimate dispersion function</td>
+<td>
+<code>estimateDispersion()</code>,<br><code>plotDispEstimates()</code>
+</td>
+</tr>
+<tr class="even">
+<td>Fit model to negative binomial distribution</td>
+<td><code><a href="https://rdrr.io/pkg/DESeq2/man/nbinomWaldTest.html">nbinomWaldTest()</a></code></td>
+</tr>
+<tr class="odd">
+<td>Return model statistics given contrast</td>
+<td><code><a href="https://rdrr.io/pkg/DESeq2/man/results.html">results()</a></code></td>
+</tr>
+<tr class="even">
+<td>Return Shrinkage Estimates</td>
+<td>
+<code>shrinkage()</code>, <code><a href="https://rdrr.io/pkg/BiocGenerics/man/plotMA.html">plotMA()</a></code>
+</td>
+</tr>
+<tr class="odd">
+<td>Plot Volcano Plot of results</td>
+<td><code><a href="https://rdrr.io/pkg/EnhancedVolcano/man/EnhancedVolcano.html">EnhancedVolcano()</a></code></td>
+</tr>
+</tbody>
+</table>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -122,7 +286,8 @@ Am I doing this right?
 <p>You did consult with them about the experimental design of your experiment before you sent the samples to be processed, I hope.</p>
 </div>
 </div>
-<section id="setup" class="level2"><h2 class="anchored" data-anchor-id="setup">Setup</h2>
+</section><section id="setup" class="level2" data-number="5.3"><h2 data-number="5.3" class="anchored" data-anchor-id="setup">
+<span class="header-section-number">5.3</span> Setup</h2>
 <p>Remember, we started with a <code>SummarizedExperiment</code> object and now we have to transform it into an object that is usable with <code>DESeq2</code>.</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/SummarizedExperiment">SummarizedExperiment</a></span><span class="op">)</span></span>
@@ -132,7 +297,8 @@ Am I doing this right?
 <span></span>
 <span><span class="va">GSE96870</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="st">"data/GSE96870_se.rds"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="deseq" class="level2"><h2 class="anchored" data-anchor-id="deseq">DESeq</h2>
+</section><section id="deseq" class="level2" data-number="5.4"><h2 data-number="5.4" class="anchored" data-anchor-id="deseq">
+<span class="header-section-number">5.4</span> DESeq</h2>
 <p>Last week, we talked about the uneven library sizes and how they can affect our expression estimates for each sample. Our solution to this was to <em>scale</em> each sample and expression estimates so the had the same library size.</p>
 <div class="cell">
 <div class="cell-output cell-output-stderr">
@@ -175,8 +341,9 @@ variables in design formula are characters, converting to factors</code></pre>
 </div>
 </div>
 <p>As you can see, some, but not all of the intra-timepoint variation was removed, especially within the <code>Day0</code> timepoint. We will attempt to account for this variability in our model.</p>
-<p>This week we’ll talk about the model fitting procedure, which includes estimating the dispersion of the data.</p>
-</section><section id="the-general-differential-expression-workflow" class="level2"><h2 class="anchored" data-anchor-id="the-general-differential-expression-workflow">The General Differential Expression Workflow</h2>
+<p>This week we’ll talk about the model fitting procedure, which includes estimating the dispersion of the data, and conducting the statistical test.</p>
+</section><section id="the-general-differential-expression-workflow" class="level2" data-number="5.5"><h2 data-number="5.5" class="anchored" data-anchor-id="the-general-differential-expression-workflow">
+<span class="header-section-number">5.5</span> The General Differential Expression Workflow</h2>
 <p>In the general workflow, we are in the grey box below.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -204,12 +371,15 @@ class DESeq2 box
 </div>
 </div>
 </div>
-</section><section id="what-groups-are-we-going-to-compare" class="level2"><h2 class="anchored" data-anchor-id="what-groups-are-we-going-to-compare">What groups are we going to compare?</h2>
+</section><section id="what-groups-are-we-going-to-compare" class="level2" data-number="5.6"><h2 data-number="5.6" class="anchored" data-anchor-id="what-groups-are-we-going-to-compare">
+<span class="header-section-number">5.6</span> What groups are we going to compare?</h2>
 <p>In our analysis, we are going to compare the two timepoints in our study: <code>Day0</code> and <code>Day8</code>.</p>
 <p>We want to find genes that have expression differences between these two timepoints.</p>
-</section><section id="filtering-and-normalization" class="level2"><h2 class="anchored" data-anchor-id="filtering-and-normalization">Filtering and Normalization</h2>
+</section><section id="filtering-and-normalization" class="level2" data-number="5.7"><h2 data-number="5.7" class="anchored" data-anchor-id="filtering-and-normalization">
+<span class="header-section-number">5.7</span> Filtering and Normalization</h2>
 <p>We already talked about filtering out low expression counts and normalizing by library size in the previous week.</p>
-</section><section id="modeling-to-identify-candidate-genes" class="level2"><h2 class="anchored" data-anchor-id="modeling-to-identify-candidate-genes">Modeling to Identify Candidate Genes</h2>
+</section><section id="modeling-to-identify-candidate-genes" class="level2" data-number="5.8"><h2 data-number="5.8" class="anchored" data-anchor-id="modeling-to-identify-candidate-genes">
+<span class="header-section-number">5.8</span> Modeling to Identify Candidate Genes</h2>
 <p>When we are calculating differential expression, we are using our model fitting as a filter for good and bad candidates. Our statistical test will generate a <em>p-value</em>, and we somehow use this p-value as a filtering criteria.</p>
 <p>We have two ways of filtering candidates:</p>
 <ol type="1">
@@ -222,7 +392,8 @@ class DESeq2 box
 <li>Low expression counts or zero expression counts (handled by modeling)</li>
 </ol>
 <p>We’ll explore the distinctions the model makes in the next section.</p>
-</section><section id="fold-change" class="level2"><h2 class="anchored" data-anchor-id="fold-change">Fold Change</h2>
+</section><section id="fold-change" class="level2" data-number="5.9"><h2 data-number="5.9" class="anchored" data-anchor-id="fold-change">
+<span class="header-section-number">5.9</span> Fold Change</h2>
 <p>Fold change represents the <strong>effect size</strong>, or our expression difference.</p>
 <p>We calculate fold change by taking the mean expression for group 1 (<code>Day0</code>) and dividing it from the mean expression for group 2 (<code>Day8</code>).</p>
 <p>For example, for <code>Asl</code>:</p>
@@ -278,7 +449,8 @@ class DESeq2 box
 <p>To calculate the fold-change, we divide <code>day8</code> mean expression (1012) by <code>day0</code> mean expression (466), getting a fold change of 2.2. The positive value means that <code>mean(day0)</code> &lt; <code>mean(day8)</code>.</p>
 <p>Note that a negative fold change means that the fold change is in the opposite direction: <code>mean(day0)</code> &gt; <code>mean(day8)</code>.</p>
 <p>One thing to note: for <code>DESeq2</code>, we don’t use the mean expression this way. We first need to fit the data using negative binomial distributions, and then report the fold change using the parameters of these distributions.</p>
-</section><section id="volcano-plot" class="level2"><h2 class="anchored" data-anchor-id="volcano-plot">Volcano Plot</h2>
+</section><section id="volcano-plot" class="level2" data-number="5.10"><h2 data-number="5.10" class="anchored" data-anchor-id="volcano-plot">
+<span class="header-section-number">5.10</span> Volcano Plot</h2>
 <p>Below is a Shiny app that lets you explore the two groups in our data, <code>day0</code>, and <code>day8</code>. Be patient, it takes a moment to load.</p>
 <p>Volcano plots are one way of displaying our results of differential expression analysis. They are a little bit hard to understand because they are on log scale, so let’s review what these axes represent.</p>
 <ol type="1">
@@ -305,8 +477,10 @@ Exercise
 </div>
 </div>
 <p>It’s important to have an intuition for how the model is discriminating between expression candidates.</p>
-</section><section id="estimating-dispersions-in-the-model" class="level2"><h2 class="anchored" data-anchor-id="estimating-dispersions-in-the-model">Estimating Dispersions in the model</h2>
-<p>The main thing we are fitting is the <em>dispersion of the data</em>, which is like the variance of the data. We do this by estimating a function to our data. Our function depends on the mean expression count of our candidate.</p>
+</section><section id="estimating-dispersions-in-the-model" class="level2" data-number="5.11"><h2 data-number="5.11" class="anchored" data-anchor-id="estimating-dispersions-in-the-model">
+<span class="header-section-number">5.11</span> Estimating Dispersions in the model</h2>
+<p>The main thing we are fitting is the <em>dispersion of the data</em>, which is like the variance of the data. We do this by estimating a function to our data.</p>
+<p>Our function depends on the mean expression count of our candidate. That means we actually look across all genes that have a similar mean expression and use it to estimate the function, instead of a single gene.</p>
 <p>The main thing to remember is that lower expression values are less reliable than the higher expression values. They will have an overall higher dispersion, and thus are more likely to be false positives:</p>
 <p>We use <code>estimateDispersions()</code> in <code>DESeq2</code> to fit our model.</p>
 <div class="cell">
@@ -331,7 +505,13 @@ Exercise
 <p>Let’s dive more into this plot. Each point represents the dispersion.</p>
 <p>Our model fits the overall dispersion across all genes and all mean expression counts.</p>
 <p>Our beginning points are highlighted in black. After fitting, our points become those in blue. Notice that our dispersion estimates are actually “shrinking”, especially for those candidates that have high dispersion.</p>
-</section><section id="model-fitting" class="level2"><h2 class="anchored" data-anchor-id="model-fitting">Model Fitting</h2>
+<p>This is a good plot to examine to ensure your data is a good fit for the DESeq2 model. Evaluate the plot to see if:</p>
+<ul>
+<li>The data to generally scatter around the curve, with the dispersion decreasing with increasing mean expression levels.</li>
+<li>How much shrinkage you get across the whole range of means in your data. For any experiment with low degrees of freedom, you will expect to see more shrinkage.</li>
+<li>The data scatter in a cloud or different shapes, then you might want to explore your data more to see if you have contamination (mitochondrial, etc.) or outlier samples.</li>
+</ul></section><section id="model-fitting" class="level2" data-number="5.12"><h2 data-number="5.12" class="anchored" data-anchor-id="model-fitting">
+<span class="header-section-number">5.12</span> Model Fitting</h2>
 <p>After calculating dispersion, the next step is to actually conduct the statistical test. This is done with a negative binomial test called the Wald test.</p>
 <p>The Wald test incorporates the sizeFactors, the dispersion estimates, and the design matrix to model the data. The model is estimating the Fold Change of our gene candidates given this information.</p>
 <p>Remember, we are working towards identifying candidates that meet our log fold-change requirements and our model statistic.</p>
@@ -370,7 +550,8 @@ low counts [2]     : 3723, 14%
 </div>
 </div>
 <p>Looking at this result set, we see that we have 34 candidates with fold change &gt; 2, and 31 candidates with fold change &lt; 2, that meet our alpha cutoff of 0.05. Our original fold change</p>
-</section><section id="shrinkage-of-fold-change-estimates" class="level2"><h2 class="anchored" data-anchor-id="shrinkage-of-fold-change-estimates">Shrinkage of Fold Change estimates</h2>
+</section><section id="shrinkage-of-fold-change-estimates" class="level2" data-number="5.13"><h2 data-number="5.13" class="anchored" data-anchor-id="shrinkage-of-fold-change-estimates">
+<span class="header-section-number">5.13</span> Shrinkage of Fold Change estimates</h2>
 <p>The model that we use in <code>DESeq2</code> is to fit negative binomial distributions to the data. This is because:</p>
 <ol type="1">
 <li>Our data begins at 0 and goes up</li>
@@ -421,7 +602,8 @@ Removed 1 row containing missing values or values outside the scale range
 </div>
 </div>
 <p>We can see that the shrinkage procedure has shrunk a lot of these high-fold change candidates at lower counts - notice the low counts look “tighter”.</p>
-</section><section id="adjustment-for-multiple-comparisons" class="level2"><h2 class="anchored" data-anchor-id="adjustment-for-multiple-comparisons">Adjustment for multiple comparisons</h2>
+</section><section id="adjustment-for-multiple-comparisons" class="level2" data-number="5.14"><h2 data-number="5.14" class="anchored" data-anchor-id="adjustment-for-multiple-comparisons">
+<span class="header-section-number">5.14</span> Adjustment for multiple comparisons</h2>
 <p>The last thing we need to do is adjust our p-values for multiple comparisons. We are doing over 20,000 statistical tests, and with each test we make, the probability that we have a <em>false discovery</em> increase. So we need a way to correct for multiple comparisons.</p>
 <p>We adjust our p-value distribution using what’s called a FDR (False discovery rate) procedure. Here is the original p-value distribution, and the p-value distribution after adjustment.</p>
 <div class="cell">
@@ -455,7 +637,8 @@ Removed 1 row containing missing values or values outside the scale range
 </div>
 <p>Note that a lot of p-values get pushed towards a value of 1 - a lot more than the untransformed p-values.</p>
 <p>The main thing to understand about this adjustment procedure is that it reduces the proportion of <em>False Discoveries</em> - which are candidates we think pass the p-value threshold but are not real discoveries. False discoveries are similar to False Positives, but with a different prioritization framework.</p>
-</section><section id="going-back-to-volcano-plots" class="level2"><h2 class="anchored" data-anchor-id="going-back-to-volcano-plots">Going back to Volcano Plots</h2>
+</section><section id="going-back-to-volcano-plots" class="level2" data-number="5.15"><h2 data-number="5.15" class="anchored" data-anchor-id="going-back-to-volcano-plots">
+<span class="header-section-number">5.15</span> Going back to Volcano Plots</h2>
 <p>This is beginning to look familiar, doesn’t it? If we transform <code>padj</code> by taking the -log10, we arrive at our transformed volcano plot:</p>
 <div class="cell">
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE_results</span> <span class="op">|&gt;</span></span>
@@ -498,7 +681,8 @@ Removed 1 row containing missing values or values outside the scale range
 </div>
 </div>
 </div>
-</section><section id="enhancedvolcano" class="level2"><h2 class="anchored" data-anchor-id="enhancedvolcano">EnhancedVolcano</h2>
+</section><section id="enhancedvolcano" class="level2" data-number="5.16"><h2 data-number="5.16" class="anchored" data-anchor-id="enhancedvolcano">
+<span class="header-section-number">5.16</span> EnhancedVolcano</h2>
 <p>There is a package called <a href="https://bioconductor.org/packages/release/bioc/vignettes/EnhancedVolcano/inst/doc/EnhancedVolcano.html">EnhancedVolcano</a> that lets you plot volcano plots.</p>
 <div class="cell">
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/kevinblighe/EnhancedVolcano">EnhancedVolcano</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -534,7 +718,8 @@ Removed 1 row containing missing values or values outside the scale range
 </div>
 </div>
 </div>
-</section><section id="the-entire-deseq2-workflow" class="level2"><h2 class="anchored" data-anchor-id="the-entire-deseq2-workflow">The Entire <code>DESeq2</code> workflow</h2>
+</section><section id="the-entire-deseq2-workflow" class="level2" data-number="5.17"><h2 data-number="5.17" class="anchored" data-anchor-id="the-entire-deseq2-workflow">
+<span class="header-section-number">5.17</span> The Entire <code>DESeq2</code> workflow</h2>
 <p>We have taken apart the Differential expression process, but as you analyze your data, all of this is done within the <code><a href="https://rdrr.io/pkg/DESeq2/man/DESeq.html">DESeq()</a></code> function:</p>
 <div class="cell">
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870_deseq</span> <span class="op">&lt;-</span> </span>
@@ -580,7 +765,8 @@ design formula are characters, converting to factors</code></pre>
 </div>
 </div>
 </div>
-</section><section id="take-home-points" class="level2"><h2 class="anchored" data-anchor-id="take-home-points">Take Home Points</h2>
+</section><section id="take-home-points" class="level2" data-number="5.18"><h2 data-number="5.18" class="anchored" data-anchor-id="take-home-points">
+<span class="header-section-number">5.18</span> Take Home Points</h2>
 <ul>
 <li>Fold change represents the effect size - the mean expression value of 1 group divided by the mean expression value of the 2nd group.</li>
 <li>We need to filter out those genes with low expression (low count number) before we run analysis.</li>
@@ -595,7 +781,10 @@ design formula are characters, converting to factors</code></pre>
 </ul>
 </li>
 <li>In the end, we have high fold-change, low p-value candidates for further downstream analysis.</li>
-</ul></section></main><!-- /main column --><script id="quarto-html-after-body" type="application/javascript">
+</ul>
+
+
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -1016,9 +1205,40 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./02_week2.html" class="pagination-link" aria-label="Experimental Design / QC">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Experimental Design / QC</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
 </div> <!-- /content -->
-
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">
+<p>This book was built with <a href="https://quarto.org/" style="color: #fff;">Quarto</a> using <a href="https://github.com/fhdsl/OTTR_Quarto" style="color: #fff;">OTTR</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+<p>All illustrations <a href="https://creativecommons.org/licenses/by/4.0/" style="color: #fff;">CC-BY. </a> <br> All other materials <a href="https://creativecommons.org/licenses/by/4.0/" style="color: #fff;"> CC-BY </a> unless noted otherwise.</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/fhdsl/bioconductor_genomics/edit/main/03-differential-expression.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/fhdsl/intro_to_sql">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://fhdata.slack.com/join/signup#/domain-signup">
+      <i class="bi bi-slack" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+</div>
+  </div>
+</footer>
 
 
 </body></html>
