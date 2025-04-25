@@ -157,15 +157,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#what-are-we-measuring-in-an-rna-seq-experiment" id="toc-what-are-we-measuring-in-an-rna-seq-experiment" class="nav-link active" data-scroll-target="#what-are-we-measuring-in-an-rna-seq-experiment"><span class="header-section-number">3</span> What are we measuring in an RNA-seq experiment?</a></li>
-  <li><a href="#rna-seq-quantification-from-reads-to-count-matrix" id="toc-rna-seq-quantification-from-reads-to-count-matrix" class="nav-link" data-scroll-target="#rna-seq-quantification-from-reads-to-count-matrix"><span class="header-section-number">4</span> RNA-seq quantification: from reads to count matrix</a>
+  <li><a href="#what-are-we-measuring-in-an-rna-seq-experiment" id="toc-what-are-we-measuring-in-an-rna-seq-experiment" class="nav-link active" data-scroll-target="#what-are-we-measuring-in-an-rna-seq-experiment"><span class="header-section-number">2.1</span> What are we measuring in an RNA-seq experiment?</a></li>
+  <li><a href="#rna-seq-quantification-from-reads-to-count-matrix" id="toc-rna-seq-quantification-from-reads-to-count-matrix" class="nav-link" data-scroll-target="#rna-seq-quantification-from-reads-to-count-matrix"><span class="header-section-number">2.2</span> RNA-seq quantification: from reads to count matrix</a></li>
+  <li><a href="#the-analysis-process" id="toc-the-analysis-process" class="nav-link" data-scroll-target="#the-analysis-process"><span class="header-section-number">2.3</span> The Analysis Process</a></li>
+  <li><a href="#finding-the-reference-sequences" id="toc-finding-the-reference-sequences" class="nav-link" data-scroll-target="#finding-the-reference-sequences"><span class="header-section-number">3</span> Finding the reference sequences</a>
   <ul class="collapse">
-  <li><a href="#challenge-discuss-the-following-points-with-your-neighbor" id="toc-challenge-discuss-the-following-points-with-your-neighbor" class="nav-link" data-scroll-target="#challenge-discuss-the-following-points-with-your-neighbor"><span class="header-section-number">4.1</span> Challenge: Discuss the following points with your neighbor</a></li>
-  <li><a href="#the-analysis-process" id="toc-the-analysis-process" class="nav-link" data-scroll-target="#the-analysis-process"><span class="header-section-number">4.2</span> The Analysis Process</a></li>
-  </ul></li>
-  <li><a href="#finding-the-reference-sequences" id="toc-finding-the-reference-sequences" class="nav-link" data-scroll-target="#finding-the-reference-sequences"><span class="header-section-number">5</span> Finding the reference sequences</a>
-  <ul class="collapse">
-  <li><a href="#challenge" id="toc-challenge" class="nav-link" data-scroll-target="#challenge"><span class="header-section-number">5.1</span> Challenge</a></li>
+  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements"><span class="header-section-number">3.1</span> Acknowledgements</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/fhdsl/bioconductor_genomics/edit/main/00_concepts.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
@@ -193,8 +190,8 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>This section covers some basics of the RNA-seq process, including how we go from making an RNA-seq library to making a count matrix.</p>
-<section id="what-are-we-measuring-in-an-rna-seq-experiment" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> What are we measuring in an RNA-seq experiment?</h1>
+<section id="what-are-we-measuring-in-an-rna-seq-experiment" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="what-are-we-measuring-in-an-rna-seq-experiment"><span class="header-section-number">2.1</span> What are we measuring in an RNA-seq experiment?</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/alternative_splicing_sub.png" class="img-fluid figure-img"></p>
@@ -219,8 +216,8 @@ ul.task-list li input[type="checkbox"] {
 <p>Millions of such reads (or pairs of reads) will be generated in an experiment, and these will be represented in a (pair of) FASTQ files.</p>
 <p>Each read is represented by four consecutive lines in such a file: first a line with a unique read identifier, next the inferred sequence of the read, then another identifier line, and finally a line containing the base quality for each inferred nucleotide, representing the probability that the nucleotide in the corresponding position has been correctly identified.</p>
 </section>
-<section id="rna-seq-quantification-from-reads-to-count-matrix" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> RNA-seq quantification: from reads to count matrix</h1>
+<section id="rna-seq-quantification-from-reads-to-count-matrix" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="rna-seq-quantification-from-reads-to-count-matrix"><span class="header-section-number">2.2</span> RNA-seq quantification: from reads to count matrix</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/rna-quant.jpeg" class="img-fluid figure-img"></p>
@@ -241,16 +238,9 @@ ul.task-list li input[type="checkbox"] {
 <p>Other tools used in RNA-seq quantification include: TopHat2, bowtie2, kallisto, HTseq, among many others.</p>
 <p>The choice of an appropriate RNA-seq quantification depends on the quality of the transcriptome annotation, the quality of the RNA-seq library preparation, the presence of contaminating sequences, among many factors. Often, it can be informative to compare the quantification results of multiple approaches.</p>
 <p>Because the best quantification method is species- and experiment-dependent, and often requires large amounts of computing resources, this workshop will not cover any specifics of how to generate the counts. Instead, we recommend checking out the references above and consulting with a local bioinformatics expert if you need help.</p>
-<section id="challenge-discuss-the-following-points-with-your-neighbor" class="level2 challenge" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="challenge-discuss-the-following-points-with-your-neighbor"><span class="header-section-number">4.1</span> Challenge: Discuss the following points with your neighbor</h2>
-<ol type="1">
-<li>Which of the mentioned RNA-Seq quantification tools have you heard about? Do you know other pros and cons of the methods?</li>
-<li>Have you done your own RNA-Seq experiment? If so, what quantification tool did you use and why did you choose it?</li>
-<li>Do you have access to specific tools / local bioinformatics expert / computational resources for quantification? If you don’t, how might you gain access?</li>
-</ol>
 </section>
-<section id="the-analysis-process" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="the-analysis-process"><span class="header-section-number">4.2</span> The Analysis Process</h2>
+<section id="the-analysis-process" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="the-analysis-process"><span class="header-section-number">2.3</span> The Analysis Process</h2>
 <p>Once we have the count matrix, this is where Bioconductor comes in. Keep in mind the basic Analysis process:</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -258,11 +248,20 @@ ul.task-list li input[type="checkbox"] {
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">graph TD
-  A[Count Matrix] --&gt; B
-  B[QC and Exploration] --&gt; C
-  C[Normalization] --normalized counts--&gt; D
-  D[Differential Expression] --gene sets--&gt; E
-  E[Annotation of Gene Sets]
+A[Reading in Data] --&gt; B
+B[Metadata] --&gt; C
+C[Data Exploration] --&gt; D
+subgraph DESeq2
+D[Filtering and Normalization] --&gt; E
+E[Design Matrix] --&gt; F
+F[Dispersion Estimation] --&gt; G
+G[Differential Expression]
+end
+G --&gt; H[Annotation and Gene Set Analysis]
+G --&gt; I[Clustering and Visualization]
+G --&gt; J[Pathway and Network Analysis]
+classDef box fill:#DDD
+class DESeq2 box
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -270,9 +269,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-</section>
-<section id="finding-the-reference-sequences" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Finding the reference sequences</h1>
+<section id="finding-the-reference-sequences" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Finding the reference sequences</h1>
 <p>In order to quantify abundances of known genes or transcripts from RNA-seq data, we need a reference database informing us of the sequence of these features, to which we can then compare our reads.</p>
 <p>This information can be obtained from different online repositories.</p>
 <p>It is highly recommended to choose one of these for a particular project, and not mix information from different sources.</p>
@@ -283,12 +281,12 @@ ul.task-list li input[type="checkbox"] {
 <li><a href="https://www.ensembl.org/info/data/ftp/index.html">Ensembl</a> provides reference files for a large set of organisms, including <a href="https://plants.ensembl.org/info/data/ftp/index.html">plants</a> and <a href="https://fungi.ensembl.org/info/data/ftp/index.html">fungi</a>.</li>
 <li><a href="https://hgdownload.soe.ucsc.edu/downloads.html">UCSC</a> also provides reference files for many organisms.</li>
 </ul>
-<section id="challenge" class="level2 challenge" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="challenge"><span class="header-section-number">5.1</span> Challenge</h2>
-<p>Download the latest mouse transcriptome fasta file from GENCODE. What do the entries look like? Tip: to read the file into R, consider the <code>readDNAStringSet()</code> function from the <code>Biostrings</code> package.</p>
+<section id="acknowledgements" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="acknowledgements"><span class="header-section-number">3.1</span> Acknowledgements</h2>
+<p>This section was adapted from The Carpentries lesson on RNAseq: <a href="https://github.com/carpentries-incubator/bioc-rnaseq/blob/main/episodes/01-intro-to-rnaseq.Rmd" class="uri">https://github.com/carpentries-incubator/bioc-rnaseq/blob/main/episodes/01-intro-to-rnaseq.Rmd</a></p>
+
+
 </section>
-
-
 </section>
 
 </main> <!-- /main -->

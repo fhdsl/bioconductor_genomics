@@ -166,7 +166,8 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#posit-cloud-intro" id="toc-posit-cloud-intro" class="nav-link" data-scroll-target="#posit-cloud-intro"><span class="header-section-number">0.8</span> Posit Cloud Intro</a></li>
   <li><a href="#culture-of-the-course" id="toc-culture-of-the-course" class="nav-link" data-scroll-target="#culture-of-the-course"><span class="header-section-number">0.9</span> Culture of the course</a></li>
   <li><a href="#badge-of-completion" id="toc-badge-of-completion" class="nav-link" data-scroll-target="#badge-of-completion"><span class="header-section-number">0.10</span> Badge of completion</a></li>
-  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements"><span class="header-section-number">0.11</span> Acknowledgements</a></li>
+  <li><a href="#first-class-survey" id="toc-first-class-survey" class="nav-link" data-scroll-target="#first-class-survey"><span class="header-section-number">0.11</span> First Class Survey</a></li>
+  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements"><span class="header-section-number">0.12</span> Acknowledgements</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/fhdsl/bioconductor_genomics/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -194,6 +195,7 @@ ul.task-list li input[type="checkbox"] {
 
 <p>This course will introduce you to the basic data structures and genomic data analysis in Bioconductor. Specifically, we will focus on the basics of RNAseq analysis, including differential expression, annotation, and gene set analysis. We will also focus on loading data and metadata into data structures such as <code>SummarizedExperiment</code>. By the end of this course, you should be familiar with a basic RNAseq analysis workflow utilizing RNAseq count data.</p>
 <p>Please note that this course requires the <a href="https://hutchdatascience.org/Intro_to_R">Intro to R</a> course as a prerequisite, or the equivalent course. Please note that this course does not cover RNAseq workflows such as MultiQC and alignment.</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/cHx9TGtUD2M" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
 <section id="learning-objectives" class="level2" data-number="0.1">
 <h2 data-number="0.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">0.1</span> Learning Objectives</h2>
 <ul>
@@ -211,13 +213,13 @@ ul.task-list li input[type="checkbox"] {
 <pre class="mermaid mermaid-js">graph TD
 A[Reading in Data] --&gt; B
 B[Metadata] --&gt; C
-subgraph DESeq2
 C[Data Exploration] --&gt; D
-D[Review Experiment Design] --&gt; E
-end
-E[Filtering and Normalization] --&gt; F
+subgraph DESeq2
+D[Filtering and Normalization] --&gt; E
+E[Design Matrix] --&gt; F
 F[Dispersion Estimation] --&gt; G
 G[Differential Expression]
+end
 G --&gt; H[Annotation and Gene Set Analysis]
 G --&gt; I[Clustering and Visualization]
 G --&gt; J[Pathway and Network Analysis]
@@ -271,7 +273,7 @@ class DESeq2 box
 <td>Week 1*</td>
 <td>April 23</td>
 <td><a href="01_introduction.html">Bioconductor Data Structures / What you need to know about S4 classes / <code>SummarizedExperiment</code></a> (Ted)</td>
-<td></td>
+<td><a href="https://youtu.be/9llOhaZ-jno">Video</a></td>
 <td></td>
 </tr>
 <tr class="odd">
@@ -365,12 +367,18 @@ class DESeq2 box
 <p>Requirements:</p>
 <ul>
 <li>Complete badge-required sections of the exercises for 4 out of 5 assignments. We’ll cover this in class.</li>
-<li>Submit assignments (rendered HTML) via Teams Classroom. All assignments must have a short 2-3 description of the code and what you accomplished, or will not be accepted.</li>
+<li>If you are participating, then message me when you are done with your assignment in Posit.cloud - I will take a look and check you off as submitted.</li>
 <li>Assignments are due at 11:59 PM the Tuesday before class.</li>
 </ul>
+<p>To participate, please mention your interest in the first class survey below.</p>
 </section>
-<section id="acknowledgements" class="level2" data-number="0.11">
-<h2 data-number="0.11" class="anchored" data-anchor-id="acknowledgements"><span class="header-section-number">0.11</span> Acknowledgements</h2>
+<section id="first-class-survey" class="level2" data-number="0.11">
+<h2 data-number="0.11" class="anchored" data-anchor-id="first-class-survey"><span class="header-section-number">0.11</span> First Class Survey</h2>
+<p><a href="https://docs.google.com/forms/d/e/1FAIpQLSfBiLniOTl1G2j2IeQ8to41JC0D38cdUnT3Dy9UN2jVET0bAQ/viewform?usp=dialog">Please fill out this survey</a>. It helps us know how to best help you, and tailor the course.</p>
+<p>If you want to participate in the badging, please fill out the form.</p>
+</section>
+<section id="acknowledgements" class="level2" data-number="0.12">
+<h2 data-number="0.12" class="anchored" data-anchor-id="acknowledgements"><span class="header-section-number">0.12</span> Acknowledgements</h2>
 <p>This course is derived from the following sources:</p>
 <ul>
 <li><a href="https://github.com/carpentries-incubator/bioc-rnaseq/tree/main">RNA-seq analysis with Bioconductor</a></li>

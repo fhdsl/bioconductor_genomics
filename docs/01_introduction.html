@@ -232,7 +232,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   
 
 
-</header><section id="learning-objectives" class="level2" data-number="3.1"><h2 data-number="3.1" class="anchored" data-anchor-id="learning-objectives">
+</header><div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/9llOhaZ-jno" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<section id="learning-objectives" class="level2" data-number="3.1"><h2 data-number="3.1" class="anchored" data-anchor-id="learning-objectives">
 <span class="header-section-number">3.1</span> Learning Objectives</h2>
 <ul>
 <li>
@@ -249,13 +250,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="header-section-number">3.2</span> General Purpose of RNAseq Experiments</h2>
 <p>Bulk RNAseq experiments are meant to distinguish expression differences between samples or groups of samples.</p>
 <p><a href="00_concepts.html">Please see the concepts section</a> for more in depth details of the processing of RNA-seq experiments.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Here is an example of a large expression difference (Tubb2a).</p>
+<p><img src="images/tubb2b.png" class="img-fluid"></p>
+</div><div class="column" style="width:50%;">
+<p>Here is an example of a questionable expression difference (myl7).</p>
+<p><img src="images/myl7.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Take a second and think about what makes Tubb2a a better candidate than myl7.</p>
 </section><section id="what-are-we-trying-to-accomplish" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="what-are-we-trying-to-accomplish">
 <span class="header-section-number">3.3</span> What are we trying to accomplish?</h2>
 <p>In RNAseq, we are interested in assessing <em>expression differences</em> between samples at either the gene or transcript level.</p>
 <p>In order to do this, we need <em>phenotype information</em> about the samples in our experiment. Specifically, we need to have information about:</p>
 <ul>
-<li>conditions (Tissue type)</li>
-<li>possible confounders (gender, time)</li>
+<li>conditions (infection, time)</li>
+<li>possible confounders (gender)</li>
 </ul></section><section id="experimental-design-of-rnaseq-experiments" class="level2" data-number="3.4"><h2 data-number="3.4" class="anchored" data-anchor-id="experimental-design-of-rnaseq-experiments">
 <span class="header-section-number">3.4</span> Experimental Design of RNAseq Experiments</h2>
 <p>When we design our RNAseq experiment, we want to be able to:</p>
@@ -306,7 +317,7 @@ What is a method?
 <span>                     colData<span class="op">=</span><span class="fu">DataFrame</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                     metadata<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                     checkDimnames<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Each argument to the <code>SummarizedExperiment</code> constructor defines restrictions on that slot. For example, there is a slot called <code>assays</code></p>
+<p>Each argument to the <code>SummarizedExperiment</code> constructor defines restrictions on that slot. For example, there is a slot called <code>assays</code>.</p>
 <p>The <code>checkDimnames</code> argument is critical. In order to do any work with an experiment you need to map samples to <code>colNames</code> (the experimental matrix). For example, to calculate differential expression between samples, you need to specify the different groups to compare and which samples map to which groups. Thus, the column names in the AssayData must be identical to the row names in <code>colData</code>.</p>
 <div class="callout callout-style-simple callout-none no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -717,26 +728,18 @@ A Common Bioconductor Pattern
 <span class="header-section-number">3.11.3</span> Try it out</h3>
 <p>Try summarizing the <code>total_counts</code> by <code>sex</code> or by <code>infection</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A SummarizedExperiment-tibble abstraction: 919,292 × 23
-# Features=41786 | Samples=22 | Assays=counts
-   .feature    .sample counts title geo_accession organism age   sex   infection
-   &lt;chr&gt;       &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    
- 1 Xkr4        GSM254…   2410 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…
- 2 LOC1052438… GSM254…      0 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…
- 3 LOC1052423… GSM254…    121 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…
- 4 LOC1052424… GSM254…      5 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…
- 5 Rp1         GSM254…      2 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…
- 6 Sox17       GSM254…    239 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…
- 7 Gm7357      GSM254…      0 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…
- 8 LOC1052438… GSM254…      3 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…
- 9 LOC1052438… GSM254…      0 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…
-10 Gm7369      GSM254…      1 CNS_… GSM2545337    Mus mus… 8 we… Fema… NonInfec…
-# ℹ 40 more rows
-# ℹ 14 more variables: strain &lt;chr&gt;, time &lt;chr&gt;, tissue &lt;chr&gt;, mouse &lt;int&gt;,
-#   Label &lt;fct&gt;, Group &lt;fct&gt;, ENTREZID &lt;chr&gt;, product &lt;chr&gt;, gbkey &lt;chr&gt;,
-#   seqnames &lt;fct&gt;, start &lt;int&gt;, end &lt;int&gt;, width &lt;int&gt;, strand &lt;fct&gt;</code></pre>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">sex</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">summarize</span><span class="op">(</span>total_counts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>tidySummarizedExperiment says: A data frame is returned for independent data analysis.</code></pre>
+</div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["total_counts"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Female","2":"440881903"},{"1":"Male","2":"362166871"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 </div>
 </div>
 </section><section id="plotting" class="level3" data-number="3.11.4"><h3 data-number="3.11.4" class="anchored" data-anchor-id="plotting">
@@ -774,10 +777,10 @@ A Common Bioconductor Pattern
 <span class="header-section-number">3.11.5</span> Try it Out</h3>
 <p>Try mapping another variable to <code>fill</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>GSE96870 <span class="sc">|&gt;</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y=</span><span class="fu">log2</span>(counts <span class="sc">+</span> <span class="dv">1</span>), <span class="at">group=</span>.sample, <span class="at">fill=</span><span class="sc">------</span>)) <span class="sc">+</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GSE96870</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="va">counts</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span>, group<span class="op">=</span><span class="va">.sample</span>, fill<span class="op">=</span><span class="va">sex</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_boxplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section></section><section id="take-home-messages" class="level2" data-number="3.12"><h2 data-number="3.12" class="anchored" data-anchor-id="take-home-messages">
 <span class="header-section-number">3.12</span> Take Home Messages</h2>
