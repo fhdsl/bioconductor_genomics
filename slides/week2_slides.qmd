@@ -1,0 +1,312 @@
+---
+title: "W2: Experimental Design and QC"
+format: 
+  revealjs:
+    smaller: true
+    scrollable: true
+    echo: true
+output-location: fragment
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+## Our experiment
+
+-   The goal of this
+    [study](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE96870)
+    was to determine the effect of an upper-respiratory infection on
+    changes in RNA transcription occurring in the cerebellum on mouse
+    models. Control mice were inoculated with saline at Day 0 and
+    measured on the same day.
+
+. . .
+
+-   Case mice were inoculated with Influenza A and measured at days 4
+    and 8 post-infection.
+
+. . .
+
+-   For the purpose of this class, we focus on the comparison between
+    Control mice and Case mice at 8 days post-infection.
+
+. . .
+
+Look for differentially expressed genes, such as this:
+
+![](https://bioconductor-genomics.netlify.app/images/tubb2b.png)
+
+## Background: Statistical inference
+
+Let's start with a single, randomized group. Once we are comfortable
+with this, then we will return to a two group comparison in differential
+gene expression.
+
+. . .
+
+When we run experiments, we use **samples** to estimate a property about
+the **population.**
+
+**Population:** The entire collection of individual units that a
+researcher is interested to study.
+
+**Sample:** A smaller collection of individual units that the researcher
+has selected to study.
+
+. . .
+
+We perform some form of measurement on our samples, such as a gene's
+expression, then use a statistical summary across our samples such as
+the **mean** **gene expression** and **variance of gene expression**.
+
+. . .
+
+This **sample mean** is our best guess at the **population mean**, the
+**sample variance** is our best guess at **population variance**.
+
+## Background: Law of large numbers
+
+As the sample size gets larger, then the sample mean approaches the
+population mean, and sample variance approaches the population variance.
+This is called the **Law of Large Numbers**.
+
+. . .
+
+Let's look at the gene "Asl"'s expression for our Control Samples:
+
+-   If we had more samples, what will happen according to the Law of
+    Large Numbers?
+
+```{r, echo=FALSE}
+#| warning: false
+#| message: false
+library(SummarizedExperiment)
+library(tidySummarizedExperiment)
+library(tidyverse)
+library(DESeq2)
+
+GSE96870 <- readRDS("../data/GSE96870_se.rds")
+GSE96870_Case_Control <- GSE96870 |> filter(time %in% c("Day0", "Day8"))
+
+expression_plot <- 
+  GSE96870_Case_Control |>
+    filter(.feature == "Asl" & time == "Day0") |>
+    ggplot(aes(x = Label, y = counts)) +
+    geom_point() +
+    ggtitle("Day 0 Control Samples for gene Asl") + 
+    theme_minimal() + theme(axis.text.x = element_text(angle = 90))
+
+expression_plot
+```
+
+## More samples, more accurate?
+
+It is obvious that the more samples, the better, one might say.
+
+. . .
+
+But what if your choice of samples don't fully reflect the population
+you really want to estimate?
+
+. . .
+
+Would you rather: *Sequence 3 replicates of the same control mouse
+sample, or sequence one replicate each of 3 different control mouse
+samples?*
+
+-   What is the "population" represented in each of these two
+    experiments?
+
+![](https://hbctraining.github.io/Intro-to-DGE/img/replicates.png){width="400"}
+
+## Replicates
+
+In light of this example, let's define two types of replicates:
+
+-   **Technical replicates:** use the same biological sample to repeat
+    the technical or experimental steps in order to accurately measure
+    experimental variation.
+
+. . .
+
+-   **Biological replicates:** use different biological samples of the
+    same condition to measure the biological variation between samples.
+
+## Two-group comparisons
+
+![](https://bioconductor-genomics.netlify.app/images/tubb2b.png)
+
+-   Our case samples arise from the case population, and our control
+    samples arise from the control population.
+
+. . .
+
+-   When we look at the measurements of a gene, we look at the
+    *difference* of sample mean between case and controls, which is on a
+    log-transformed scale called **log-fold change**.
+
+. . .
+
+-   As the sample size gets larger, our gene's sample log-fold change
+    gets closer to the population log-fold change. Similarly, the sample
+    variance for from case and control groups for this gene gets closer
+    to their respective population variances.
+
+## Confounding in Two-group comparisons
+
+In the ideal experimental set-up, you want all of your samples to be
+randomly sampled and differ only by the case and control conditions.
+This rarely happens in practice, though.
+
+. . .
+
+There are other variables lurking, also known as **confounding
+variables,** that may also have an impact on the outcome you want to
+measure.
+
+. . .
+
+![](https://web.stanford.edu/class/bios221/book/13-chap_files/figure-html/fig-confounding-1-1.png){alt="Source: Modern Statistics for Modern Biology, Chapter 13"
+width="350"}
+
+## Common Confounders in Differential Gene Expression analysis
+
+![](https://web.stanford.edu/class/bios221/book/13-chap_files/figure-html/fig-confounding-1-1.png){alt="Source: Modern Statistics for Modern Biology, Chapter 13"
+width="350"}
+
+-   Batch effects: the date of the experiment conducted, the person who
+    performed the experiment, the reagents used, etc.
+
+. . .
+
+-   Any relevant metadata, such as age, sex, subtype
+
+. . .
+
+-   The sequencing technology
+
+. . .
+
+-   The amount of sequencing the sample received (more on this later in
+    Normalization)
+
+## Solutions to Confounding
+
+-   Ensure that the samples in all experimental conditions have the same
+    values for the confounding variable - ie. all of the same sex, all
+    of the same batch.
+
+. . .
+
+-   If not possible, make sure that all experimental conditions have a
+    similar amount of variability of the confounding variable - ie. the
+    both case and control groups have a balance of males and females,
+    and various batches.
+
+    ![](https://web.stanford.edu/class/bios221/book/13-chap_files/figure-html/fig-blockbox-1.png){width="350"}
+
+## Do we have confounding?
+
+Let's look at our experimental design. Have our potential confounders
+been accounted for?
+
+```{r}
+as.data.frame(colData(GSE96870_Case_Control)) |> select(sex, infection, time, tissue)
+```
+
+## Confounding issues in RNA-seq experiments
+
+Besides looking at our metadata, there are two confounding variables
+that happen in nearly every RNA-seq experiment:
+
+. . .
+
+**Library Size**
+
+Each sample will receive different number of reads for sequencing, and
+that may confound the our desired measurement of log-fold change. The
+total number of reads a sample received for sequencing is called the
+**library size**.
+
+. . .
+
+```{r, echo=F}
+library(patchwork)
+
+expression_plot <- 
+  GSE96870_Case_Control |>
+    filter(.feature == "Asl") |>
+    ggplot(aes(x = Label, y = counts, color = time)) +
+    geom_point() + theme_minimal() +
+    theme(axis.text.x = element_blank(),  axis.title.x=element_blank()) + 
+    ggtitle("Asl Expression count") 
+
+count_plot <- 
+  GSE96870_Case_Control |>
+    group_by(Label, time) |>
+    summarise(total_counts=sum(counts)) |>
+    ggplot() +
+    aes(x=Label, y=total_counts, fill=time) +
+    geom_bar(stat="identity") + theme_minimal() +
+    theme(axis.text.x = element_text(angle = 90), axis.title.x=element_blank()) +
+    ggtitle("Library Size for each Sample") 
+
+expression_plot/count_plot 
+```
+
+There appears to be a difference in expression across the samples by
+timepoint, but is that due to the experimental condition (Day 0 is
+control, Day 8 is case), or due to the number of sequencing reads each
+sample received?
+
+## Confounding issues in RNA-seq experiments
+
+**RNA Composition**
+
+Within a sample, the reads each gene received is a relative measurement
+to other genes. If a sample received 1 million reads, and has Genes X,
+Y, Z, and DE, then each Gene will receive some proportion of those 1
+million reads.
+
+. . .
+
+Then, if a highly expressed Gene DE consume a substantial proportion of
+the total library size, this will cause the remaining genes to receive
+less reads.
+
+. . .
+
+![](https://hbctraining.github.io/Intro-to-DGE/img/normalization_methods_composition.png){width="450"}
+
+Suppose that every gene except for Gene DE presents similar expression
+level between Sample A and B.
+
+. . .
+
+Sample A and Sample B are sequenced with similar library sizes.
+
+. . .
+
+The counts in Sample B would be greatly skewed by the Gene DE, which
+takes up most of the counts.
+
+. . .
+
+Other genes for Sample B would therefore appear to be less expressed
+than those same genes in Sample A.
+
+## Solution to Library Size and RNA composition confounding
+
+-   The way we deal with this type of confounding is to make the
+    assumption that *most* genes do not exhibit differential expression.
+
+. . .
+
+-   DESeq2 divides gene count of each sample by its "size factor", which
+    is related to the sample's library size for non-differentially
+    expressed genes.
+
+. . .
+
+-   If you want to see how it is calculated, this is a [great
+    tutorial](https://hbctraining.github.io/Intro-to-DGE/lessons/02_DGE_count_normalization.html).

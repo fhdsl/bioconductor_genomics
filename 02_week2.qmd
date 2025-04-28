@@ -40,8 +40,6 @@ G --> J[Pathway and Network Analysis]
 
 Today, we will look how experimental design plays a large role in the way we analyze RNA-seq data. Experimental design seeks to make sense data variation via careful design of conditions.
 
-If you are not familiar with some of these technical terms in the quote, we will go over them shortly.
-
 ## Background: What are we estimating?
 
 ### Single, randomized group
@@ -198,7 +196,7 @@ The easiest way to remove this confounder is to divide gene count of each sample
 
 The second source of confounding has to do with the relative measurement of RNA-seq. Consider a single sample you just perforemd RNA-seq on. The assay provides a measure of the relative abundance of each gene in each RNA sample, but does not provide any measure of the total RNA output - it is a relative measurement. That is, the proportion of reads attributed to a given gene in a library depends on the expression properties of the whole sample rather than just the expression level of that gene.
 
-Then, if a small proportion of highly expressed genes consume a substantial proportion of the total library size for a particular sample, this will cause the remaining genes to be under-sampled for that sample, confounding our analysis analysis.
+Then, if a small proportion of highly expressed genes consume a substantial proportion of the total library size for a particular sample, this will cause the remaining genes to be under-sampled for that sample, confounding our analysis.
 
 ![Source: Harvard Bioinformatics Training. Imagine the sequencing depths are similar between Sample A and Sample B, and every gene except for gene differentially expressed presents similar expression level between samples. The counts in Sample B would be greatly skewed by the differentially expressed gene, which takes up most of the counts. Other genes for Sample B would therefore appear to be less expressed than those same genes in Sample A.](https://hbctraining.github.io/Intro-to-DGE/img/normalization_methods_composition.png){width="450"}
 
