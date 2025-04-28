@@ -587,12 +587,21 @@ GSM2545347   Male  InfluenzaA Day8 Cerebellum</code></pre>
 <section id="confounding-issues-in-rna-seq-experiments-1" class="slide level2">
 <h2>Confounding issues in RNA-seq experiments</h2>
 <p><strong>RNA Composition</strong></p>
-<p>Within a sample, the reads each gene received is a relative measurement to other genes. If a sample received 1 million reads, and has Gene X, Y, and Z, then each Gene will receive some proportion of those 1 million reads.</p>
+<p>Within a sample, the reads each gene received is a relative measurement to other genes. If a sample received 1 million reads, and has Genes X, Y, Z, and DE, then each Gene will receive some proportion of those 1 million reads.</p>
 <div class="fragment">
-<p>Then, if a highly expressed gene consume a substantial proportion of the total library size for a particular sample, this will cause the remaining genes to be under-sampled for that sample, confounding our analysis.</p>
+<p>Then, if a highly expressed Gene DE consume a substantial proportion of the total library size, this will cause the remaining genes to receive less reads.</p>
+</div>
+<div class="fragment">
 <p><img data-src="https://hbctraining.github.io/Intro-to-DGE/img/normalization_methods_composition.png" width="450"></p>
-<p>Imagine the sequencing depths are similar between Sample A and Sample B, and every gene except for gene differentially expressed presents similar expression level between samples.</p>
-<p>The counts in Sample B would be greatly skewed by the differentially expressed gene, which takes up most of the counts.</p>
+<p>Suppose that every gene except for Gene DE presents similar expression level between Sample A and B.</p>
+</div>
+<div class="fragment">
+<p>Sample A and Sample B are sequenced with similar library sizes.</p>
+</div>
+<div class="fragment">
+<p>The counts in Sample B would be greatly skewed by the Gene DE, which takes up most of the counts.</p>
+</div>
+<div class="fragment">
 <p>Other genes for Sample B would therefore appear to be less expressed than those same genes in Sample A.</p>
 </div>
 </section>
