@@ -40,8 +40,6 @@ G --> J[Pathway and Network Analysis]
 
 Today, we will look how experimental design plays a large role in the way we analyze RNA-seq data. Experimental design seeks to make sense data variation via careful design of conditions.
 
-If you are not familiar with some of these technical terms in the quote, we will go over them shortly.
-
 ## Background: What are we estimating?
 
 ### Single, randomized group
@@ -198,7 +196,7 @@ The easiest way to remove this confounder is to divide gene count of each sample
 
 The second source of confounding has to do with the relative measurement of RNA-seq. Consider a single sample you just perforemd RNA-seq on. The assay provides a measure of the relative abundance of each gene in each RNA sample, but does not provide any measure of the total RNA output - it is a relative measurement. That is, the proportion of reads attributed to a given gene in a library depends on the expression properties of the whole sample rather than just the expression level of that gene.
 
-Then, if a small proportion of highly expressed genes consume a substantial proportion of the total library size for a particular sample, this will cause the remaining genes to be under-sampled for that sample, confounding our analysis analysis.
+Then, if a small proportion of highly expressed genes consume a substantial proportion of the total library size for a particular sample, this will cause the remaining genes to be under-sampled for that sample, confounding our analysis.
 
 ![Source: Harvard Bioinformatics Training. Imagine the sequencing depths are similar between Sample A and Sample B, and every gene except for gene differentially expressed presents similar expression level between samples. The counts in Sample B would be greatly skewed by the differentially expressed gene, which takes up most of the counts. Other genes for Sample B would therefore appear to be less expressed than those same genes in Sample A.](https://hbctraining.github.io/Intro-to-DGE/img/normalization_methods_composition.png){width="450"}
 
@@ -289,9 +287,9 @@ Here's a nice summary of what we covered to ensure good experimental designs: "G
 
 ## Appendix: How do I know how many samples to use?
 
-Define "power":
+**Statistical** **Power** is the probability of detecting a given effect (if that effect actually exists) using a statistical test. In our context, power is the probability of detecting a certain log-fold change in differential gene expression. People often use power to gauge their needed sample sizes and other experimental conditions.
 
-Reference to some packages for power calculations, such as [PROPER](https://bioconductor.org/packages/release/bioc/html/PROPER.html). Takes consideration of:
+There are Bioconductor packages that does power calculations for differential gene expression, such as [PROPER](https://bioconductor.org/packages/release/bioc/html/PROPER.html). PROPER takes consideration of:
 
 -   Number of samples
 
@@ -309,6 +307,8 @@ Reference to some packages for power calculations, such as [PROPER](https://bioc
 
     -   Probability we detect at least X% of genes that are truly different (at least some FC)
 
+Let's look at an example from PROPER:
+
 ```{r}
 library(PROPER)
 sim.opts.Cheung = RNAseq.SimOptions.2grp(ngenes = 20000, p.DE=0.05, lOD="cheung", lBaselineExpr="cheung")
@@ -322,10 +322,14 @@ This suggests that you get more power out of more samples, rather than sequencin
 
 The most rigorous power benchmarks are to use controlled labatory experiments, with many samples and sequencing, and then downsample.
 
-## Appendix: Dimension Reduction to explore your data
-
 ## Appendix: Other confounding factors to consider
 
--   Unobserved confounders
+-   Sometimes, there may be unobserved confounders in your experimental design. For instance, perhaps nobody recorded the batch information in your experiments. There are tools that can check whether there may be unobserved confounders and correct for them:
 
--   Are the demarcation of groups I'm comparing is independent of my molecular measurements? (double dipping): https://stat.uw.edu/seminars/double-dipping-problems-and-solutions-application-single-cell-rna-sequencing-data, https://anna-neufeld.github.io/datathin/
+    -   [https://biodatascience.github.io/compbio/dist/sva.html](https://biodatascience.github.io/compbio/dist/sva.htmlhttps://biodatascience.github.io/compbio/dist/sva.html)
+
+-   A common experimental design problem in differential gene expression and single cell analysis is that the demarcation of groups arise from the same experiment. For instance, someone uses the same RNA-seq dataset to figure out the subtype of their samples, and then perhaps differential gene expression between the subtypes. This is not recommended:
+
+    -   <https://stat.uw.edu/seminars/double-dipping-problems-and-solutions-application-single-cell-rna-sequencing-data>
+
+    -   <https://anna-neufeld.github.io/datathin/>
